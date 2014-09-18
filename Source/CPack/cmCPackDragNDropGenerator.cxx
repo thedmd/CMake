@@ -308,6 +308,7 @@ int cmCPackDragNDropGenerator::CreateDMG(const std::string& src_dir,
 
   // Optionally add a custom background image ...
   // Make sure the background file type is the same as the custom image
+  // and that the file is hidden so it doesn't show up.
   if(!cpack_dmg_background_image.empty())
     {
     const std::string extension =
@@ -317,7 +318,7 @@ int cmCPackDragNDropGenerator::CreateDMG(const std::string& src_dir,
 
     cmOStringStream package_background_destination;
     package_background_destination << staging.str()
-                                   << "/background" << extension;
+                                   << "/.background/background" << extension;
 
     if(!this->CopyFile(package_background_source,
         package_background_destination))
@@ -326,21 +327,6 @@ int cmCPackDragNDropGenerator::CreateDMG(const std::string& src_dir,
         "Error copying disk volume background image.  "
                     "Check the value of CPACK_DMG_BACKGROUND_IMAGE."
         << std::endl);
-
-      return 0;
-      }
-
-    cmOStringStream temp_background_hiding_command;
-    temp_background_hiding_command << this->GetOption("CPACK_COMMAND_SETFILE");
-    temp_background_hiding_command << " -a V \"";
-    temp_background_hiding_command << package_background_destination.str();
-    temp_background_hiding_command << "\"";
-
-    if(!this->RunCommand(temp_background_hiding_command))
-      {
-        cmCPackLogger(cmCPackLog::LOG_ERROR,
-          "Error setting attributes on disk volume background image."
-          << std::endl);
 
       return 0;
       }
