@@ -246,6 +246,10 @@ int cmCPackDragNDropGenerator::CreateDMG(const std::string& src_dir,
     this->GetOption("CPACK_DMG_DS_STORE")
     ? this->GetOption("CPACK_DMG_DS_STORE") : "";
 
+  const std::string cpack_dmg_ds_store_setup_script =
+    this->GetOption("CPACK_DMG_DS_STORE_SETUP_SCRIPT")
+    ? this->GetOption("CPACK_DMG_DS_STORE_SETUP_SCRIPT") : "";
+
   // only put license on dmg if is user provided
   if(!cpack_license_file.empty() &&
       cpack_license_file.find("CPack.GenericLicense.txt") != std::string::npos)
@@ -284,28 +288,6 @@ int cmCPackDragNDropGenerator::CreateDMG(const std::string& src_dir,
       return 0;
       }
     }
-
-  // Optionally add a custom .DS_Store file
-  // (e.g. for setting background/layout) ...
-  if(!cpack_dmg_ds_store.empty())
-    {
-    cmOStringStream package_settings_source;
-    package_settings_source << cpack_dmg_ds_store;
-
-    cmOStringStream package_settings_destination;
-    package_settings_destination << staging.str() << "/.DS_Store";
-
-    if(!this->CopyFile(package_settings_source, package_settings_destination))
-      {
-      cmCPackLogger(cmCPackLog::LOG_ERROR,
-        "Error copying disk volume settings file.  "
-                    "Check the value of CPACK_DMG_DS_STORE."
-        << std::endl);
-
-      return 0;
-      }
-    }
-
   // Optionally add a custom background image ...
   // Make sure the background file type is the same as the custom image
   // and that the file is hidden so it doesn't show up.
@@ -331,6 +313,47 @@ int cmCPackDragNDropGenerator::CreateDMG(const std::string& src_dir,
       return 0;
       }
     }
+
+  // Figure out if we have a .DS_Store to install or if we need to run
+  // an apple-script to generate a .DS_Store
+  if(!cpack_dmg_ds_store.empty())
+    {
+    // Optionally add a custom .DS_Store file
+    // (e.g. for setting background/layout) ...
+    cmOStringStream package_settings_source;
+    package_settings_source << cpack_dmg_ds_store;
+
+    cmOStringStream package_settings_destination;
+    package_settings_destination << staging.str() << "/.DS_Store";
+
+    if(!this->CopyFile(package_settings_source, package_settings_destination))
+      {
+      cmCPackLogger(cmCPackLog::LOG_ERROR,
+        "Error copying disk volume settings file.  "
+                    "Check the value of CPACK_DMG_DS_STORE."
+        << std::endl);
+
+      return 0;
+      }
+    }
+  else if(!cpack_dmg_ds_store_setup_script.empty())
+    {
+    //If you don't have a custom .DS_Store file
+    //we can execute a custom apple script to generate the .DS_Store for
+    //the application
+    cmOStringStream setup_script_command;
+    setup_script_command << "osascript "
+                           << cpack_dmg_ds_store_setup_script;
+    if(!this->RunCommand(setup_script_command))
+      {
+      cmCPackLogger(cmCPackLog::LOG_ERROR,
+        "Error executing custom script on disk image."
+        << std::endl);
+
+      return 0;
+      }
+    }
+
 
   // Create a temporary read-write disk image ...
   std::string temp_image = this->GetOption("CPACK_TOPLEVEL_DIRECTORY");
