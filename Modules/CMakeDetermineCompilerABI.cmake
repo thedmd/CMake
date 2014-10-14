@@ -28,7 +28,7 @@ function(CMAKE_DETERMINE_COMPILER_ABI lang src)
     if(DEFINED CMAKE_${lang}_VERBOSE_FLAG)
       set(CMAKE_FLAGS "-DCMAKE_EXE_LINKER_FLAGS=${CMAKE_${lang}_VERBOSE_FLAG}")
     endif()
-    if(NOT "x${CMAKE_${lang}_COMPILER_ID}" STREQUAL "xMSVC")
+    if(NOT CMAKE_${lang}_COMPILER_ID STREQUAL "MSVC")
       # Avoid adding our own platform standard libraries for compilers
       # from which we might detect implicit link libraries.
       list(APPEND CMAKE_FLAGS "-DCMAKE_${lang}_STANDARD_LIBRARIES=")
