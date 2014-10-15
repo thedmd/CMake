@@ -1253,6 +1253,8 @@ void cmGlobalGenerator::Generate()
   // Create per-target generator information.
   this->CreateGeneratorTargets();
 
+  this->ProcessEvaluationFiles();
+
   this->ForceLinkerLanguages();
 
 #ifdef CMAKE_BUILD_WITH_CMAKE
@@ -1275,8 +1277,6 @@ void cmGlobalGenerator::Generate()
     {
     this->LocalGenerators[i]->GenerateTargetManifest();
     }
-
-  this->ProcessEvaluationFiles();
 
   // Compute the inter-target dependencies.
   if(!this->ComputeTargetDepends())
