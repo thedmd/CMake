@@ -8,6 +8,7 @@ run_cmake(EmptyCondition1)
 run_cmake(EmptyCondition2)
 run_cmake(BadCondition)
 run_cmake(DebugEvaluate)
+run_cmake(GenerateSource)
 
 set(timeformat "%Y%j%H%M%S")
 
