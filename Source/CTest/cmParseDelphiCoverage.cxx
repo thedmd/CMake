@@ -206,7 +206,8 @@ class cmParseDelphiCoverage::HTMLParser
              if(lineresult == "covered")
              {
                afterLineNum = line.find('<',endcovpos+5);
-               filelineoffset= line.substr(endcovpos+5,afterLineNum-(endcovpos+5));
+               filelineoffset= line.substr(endcovpos+5,
+                 afterLineNum-(endcovpos+5));
                coverageVector[atoi(filelineoffset.c_str())-1] = 1;
              }
           }
