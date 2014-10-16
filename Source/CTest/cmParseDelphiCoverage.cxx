@@ -94,18 +94,16 @@ class cmParseDelphiCoverage::HTMLParser
       }
     bool ParseFile(const char* file)
       {
-        std::string line;
+        std::string line=file;
         std::string lineresult;
         std::string lastroutine;
         std::string filename;
         std::string filelineoffset;
-        int afterLineNum;
+        size_t afterLineNum = 0;
         size_t lastoffset = 0;
-        int endcovpos = 0;
-        int endnamepos = 0;
-        int pos = 0;
-        int count =1;
-        line=file;
+        size_t endcovpos = 0;
+        size_t endnamepos = 0;
+        size_t pos = 0;
 
         /*
         *  This first 'while' section goes through the found HTML
@@ -140,7 +138,6 @@ class cmParseDelphiCoverage::HTMLParser
           pos = lastoffset+1;
           endnamepos = 0;
           lastoffset =0;
-          count++;
         }
         /*
         *  Glob through the source directory for the
