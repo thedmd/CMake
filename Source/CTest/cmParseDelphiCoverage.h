@@ -25,21 +25,22 @@
  *
  * https://code.google.com/p/delphi-code-coverage/
  */
+
 class cmParseDelphiCoverage
-{
-public:
-  cmParseDelphiCoverage(cmCTestCoverageHandlerContainer& cont,
+  {
+  public:
+    cmParseDelphiCoverage(cmCTestCoverageHandlerContainer& cont,
         cmCTest* ctest);
-  bool LoadCoverageData(const std::vector<std::string> files);
-  bool ReadDelphiHTML(const char* file);
-  // Read a single mcov file
-  bool ReadHTMLFile(const char* f);
+    bool LoadCoverageData(const std::vector<std::string> files);
+    bool ReadDelphiHTML(const char* file);
+    // Read a single HTML file from output
+    bool ReadHTMLFile(const char* f);
 
 
-protected:
+  protected:
 
-  class HTMLParser;
-  cmCTestCoverageHandlerContainer& Coverage;
-  cmCTest* CTest;
-};
+    class HTMLParser;
+    cmCTestCoverageHandlerContainer& Coverage;
+    cmCTest* CTest;
+  };
 #endif
