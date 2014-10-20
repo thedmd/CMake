@@ -377,6 +377,61 @@ bool cmQtAutoGenerators::InitializeAutogenTarget(cmTarget* target)
         }
       }
     }
+#endif
+
+  std::vector<std::string> rcc_output;
+  if(makefile->GetLocalGenerator()->GetGlobalGenerator()->GetName() == "Ninja"
+#if defined(_WIN32) && !defined(__CYGWIN__)
+        || usePRE_BUILD
+#endif
+        )
+    {
+    std::vector<cmSourceFile*> srcFiles;
+    target->GetConfigCommonSourceFiles(srcFiles);
+    for(std::vector<cmSourceFile*>::const_iterator fileIt = srcFiles.begin();
+        fileIt != srcFiles.end();
+        ++fileIt)
+      {
+      cmSourceFile* sf = *fileIt;
+      std::string absFile = cmsys::SystemTools::GetRealPath(
+                                                sf->GetFullPath().c_str());
+
+      std::string ext = sf->GetExtension();
+
+      if (target->GetPropertyAsBool("AUTORCC"))
+        {
+        if (ext == "qrc"
+            && !cmSystemTools::IsOn(sf->GetPropertyForUser("SKIP_AUTORCC")))
+          {
+          std::string basename = cmsys::SystemTools::
+                                  GetFilenameWithoutLastExtension(absFile);
+
+          std::string rcc_output_dir = target->GetSupportDirectory();
+          cmSystemTools::MakeDirectory(rcc_output_dir.c_str());
+          std::string rcc_output_file = rcc_output_dir;
+          rcc_output_file += "/qrc_" + basename + ".cpp";
+          rcc_output.push_back(rcc_output_file);
+
+          if (!cmSystemTools::IsOn(sf->GetPropertyForUser("GENERATED")))
+            {
+            if (qtMajorVersion == "5")
+              {
+              this->ListQt5RccInputs(sf, target, depends);
+              }
+            else
+              {
+              this->ListQt4RccInputs(sf, depends);
+              }
+#if defined(_WIN32) && !defined(__CYGWIN__)
+            usePRE_BUILD = false;
+#endif
+            }
+          }
+        }
+      }
+    }
+
+#if defined(_WIN32) && !defined(__CYGWIN__)
   if(usePRE_BUILD)
     {
     // Add the pre-build command directly to bypass the OBJECT_LIBRARY
@@ -394,51 +449,6 @@ bool cmQtAutoGenerators::InitializeAutogenTarget(cmTarget* target)
 #endif
     {
     cmTarget* autogenTarget = 0;
-    std::vector<std::string> rcc_output;
-    if(makefile->GetLocalGenerator()
-                                 ->GetGlobalGenerator()->GetName() == "Ninja")
-      {
-      std::vector<cmSourceFile*> srcFiles;
-      target->GetConfigCommonSourceFiles(srcFiles);
-      for(std::vector<cmSourceFile*>::const_iterator fileIt = srcFiles.begin();
-          fileIt != srcFiles.end();
-          ++fileIt)
-        {
-        cmSourceFile* sf = *fileIt;
-        std::string absFile = cmsys::SystemTools::GetRealPath(
-                                                  sf->GetFullPath().c_str());
-
-        std::string ext = sf->GetExtension();
-
-        if (target->GetPropertyAsBool("AUTORCC"))
-          {
-          if (ext == "qrc"
-              && !cmSystemTools::IsOn(sf->GetPropertyForUser("SKIP_AUTORCC")))
-            {
-            std::string basename = cmsys::SystemTools::
-                                    GetFilenameWithoutLastExtension(absFile);
-
-            std::string rcc_output_dir = target->GetSupportDirectory();
-            cmSystemTools::MakeDirectory(rcc_output_dir.c_str());
-            std::string rcc_output_file = rcc_output_dir;
-            rcc_output_file += "/qrc_" + basename + ".cpp";
-            rcc_output.push_back(rcc_output_file);
-
-            if (!cmSystemTools::IsOn(sf->GetPropertyForUser("GENERATED")))
-              {
-              if (qtMajorVersion == "5")
-                {
-                this->ListQt5RccInputs(sf, target, depends);
-                }
-              else
-                {
-                this->ListQt4RccInputs(sf, depends);
-                }
-              }
-            }
-          }
-        }
-      }
     if (!rcc_output.empty())
       {
       makefile->AddCustomCommandToOutput(rcc_output, depends, "",
