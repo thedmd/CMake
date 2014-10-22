@@ -34,6 +34,7 @@ public:
 protected:
   void PrintFindStuff();
   void ExpandPaths();
+  void AddPathSuffixes();
 
   // see if the VariableName is already set in the cache,
   // also copy the documentation from the cache to VariableDocumentation
@@ -54,12 +55,18 @@ protected:
   bool AlreadyInCacheWithoutMetaInfo;
 private:
   // Add pieces of the search.
-  void FillCMakeVariablePath();
-  void FillCMakeEnvironmentPath();
-  void FillUserHintsPath();
-  void FillSystemEnvironmentPath();
-  void FillCMakeSystemVariablePath();
-  void FillUserGuessPath();
+  void AddCMakeEnvironmentPath();
+  void AddCMakeVariablePath();
+  void AddSystemEnvironmentPath();
+  void AddCMakeSystemVariablePath();
+  void AddUserHintsPath();
+  void AddUserGuessPath();
+
+  // Helpers.
+  void AddCMakePrefixPath(const std::string& variable);
+  void AddEnvPrefixPath(const std::string& variable);
+  void AddPrefixPaths(std::vector<std::string> const& in_paths,
+                      PathType pathType);
 };
 
 
