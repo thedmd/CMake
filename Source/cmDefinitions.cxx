@@ -79,7 +79,7 @@ const char* cmDefinitions::Get(const std::string& key) const
 //----------------------------------------------------------------------------
 void cmDefinitions::Pull(const std::string& key)
 {
-  if (this->Up)
+  if (this->Up && this->Map.find(key) == this->Map.end())
     {
     Def const& def = this->Up->GetInternal(key);
     if (def.Exists)
