@@ -31,18 +31,18 @@
  *  http://visionmedia.github.io/mocha/
  */
 class cmParseBlanketJSCoverage
-  {
-  public:
-    cmParseBlanketJSCoverage(cmCTestCoverageHandlerContainer& cont,
-         cmCTest* ctest);
-    bool LoadCoverageData(std::vector<std::string> files);
-    //  Read the JSON output
-    bool ReadJSONFile(std::string file);
+{
+public:
+  cmParseBlanketJSCoverage(cmCTestCoverageHandlerContainer& cont,
+       cmCTest* ctest);
+  bool LoadCoverageData(std::vector<std::string> files);
+  //  Read the JSON output
+  bool ReadJSONFile(std::string file);
 
-  protected:
+protected:
 
-    class JSONParser;
-    cmCTestCoverageHandlerContainer& Coverage;
-    cmCTest* CTest;
-  };
+  class JSONParser;
+  cmCTestCoverageHandlerContainer& Coverage;
+  cmCTest* CTest;
+};
 #endif

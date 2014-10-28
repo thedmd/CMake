@@ -21,119 +21,114 @@
 
 class cmParseBlanketJSCoverage::JSONParser
   {
-  public:
-    typedef cmCTestCoverageHandlerContainer::
-        SingleFileCoverageVector
-       FileLinesType;
-    JSONParser(cmCTest* ctest, cmCTestCoverageHandlerContainer& cont)
-       : CTest(ctest), Coverage(cont)
+public:
+  typedef cmCTestCoverageHandlerContainer::
+      SingleFileCoverageVector FileLinesType;
+  JSONParser(cmCTestCoverageHandlerContainer& cont)
+      : Coverage(cont)
+    {
+    }
+
+  virtual ~JSONParser()
+    {
+    }
+
+  std::string getValue(std::string line, int type)
+    {
+    size_t begIndex;
+    size_t endIndex;
+    endIndex = line.rfind(',');
+    begIndex = line.find_first_of(':');
+    if(type == 0)
       {
+      //  A unique substring to remove the extra characters
+      //  around the files name in the JSON (extra " and ,)
+      std::string foundFileName =
+          line.substr(begIndex+3,endIndex-(begIndex+4));
+      return foundFileName;
       }
-
-    virtual ~JSONParser()
+    else
       {
+      return line.substr(begIndex,line.npos);
       }
+    }
+  bool ParseFile(std::string file)
+    {
+    FileLinesType localCoverageVector;
+    std::string filename;
+    bool foundFile = false;
+    bool inSource  = false;
+    std::string covResult;
+    std::string line;
 
-    std::string getValue(std::string line, int type)
+    cmsys::ifstream in(file.c_str());
+    if(!in)
       {
-        size_t begIndex;
-        size_t endIndex;
-
-        endIndex = line.rfind(',');
-        begIndex = line.find_first_of(':');
-        if(type == 0)
+      return false;
+      }
+    while(  cmSystemTools::GetLineFromStream(in, line))
+      {
+      if(line.find("filename") != line.npos)
+        {
+        if(foundFile)
           {
-          //  A unique substring to remove the extra characters
-          //  around the files name in the JSON (extra " and ,)
-          std::string foundFileName =
-              line.substr(begIndex+3,endIndex-(begIndex+4));
-          return foundFileName;
+          /*
+          * Upon finding a second file name, generate a
+          * vector within the total coverage to capture the
+          * information in the local vector
+          */
+          FileLinesType& CoverageVector =
+              this->Coverage.TotalCoverage[filename.c_str()];
+          CoverageVector = localCoverageVector;
+          localCoverageVector.clear();
+          foundFile=false;
+          }
+        foundFile= true;
+        inSource = false;
+        filename = getValue(line,0).c_str();
+        }
+      else if((line.find("coverage") != line.npos) && foundFile && inSource )
+        {
+        /*
+        *  two types of "coverage" in the JSON structure
+        *
+        *  The coverage result over the file or set of files
+        *  and the coverage for each individual line
+        *
+        *  FoundFile and foundSource ensure that
+        *  only the value of the line coverage is captured
+        */
+        std::string result = getValue(line,1).c_str();
+        result = result.substr(2,result.npos);
+        if(result == "\"\"")
+          {
+          // Empty quotation marks indicate that the
+          // line is not executable
+          localCoverageVector.push_back(-1);
           }
         else
           {
-          return line.substr(begIndex,line.npos);
-          }
-      }
-    bool ParseFile(std::string file)
-      {
-      FileLinesType localCoverageVector;
-      std::string filename;
-      bool foundFile = false;
-      bool inSource  = false;
-      std::string covResult;
-      std::string line;
-
-      cmsys::ifstream in(file.c_str());
-      if(!in)
-        {
-        return false;
-        }
-      while(  cmSystemTools::GetLineFromStream(in, line))
-        {
-
-        if(line.find("filename") != line.npos)
-          {
-          if(foundFile)
-            {
-            /*
-            * Upon finding a second file name, generate a
-            * vector within the total coverage to capture the
-            * information in the local vector
-            */
-            FileLinesType& CoverageVector =
-                this->Coverage.TotalCoverage[filename.c_str()];
-            CoverageVector = localCoverageVector;
-            localCoverageVector.clear();
-            foundFile=false;
-            }
-          foundFile= true;
-          inSource = false;
-          filename = getValue(line,0).c_str();
-          }
-        else if((line.find("coverage") != line.npos) && foundFile && inSource )
-          {
-          /*
-          *  two types of "coverage" in the JSON structure
-          *
-          *  The coverage result over the file or set of files
-          *  and the coverage for each individual line
-          *
-          *  FoundFile and foundSource ensure that
-          *  only the value of the line coverage is captured
-          */
-          std::string result = getValue(line,1).c_str();
-          result = result.substr(2,result.npos);
-
-          if(result == "\"\"")
-            {
-            // Empty quotation marks indicate that the
-            // line is not executable
-            localCoverageVector.push_back(-1);
-            }
-          else
-            {
-            // Else, it contains the number of time executed
-            localCoverageVector.push_back(atoi(result.c_str()));
-            }
-          }
-        else if(line.find("source") != line.npos)
-          {
-          inSource=true;
+          // Else, it contains the number of time executed
+          localCoverageVector.push_back(atoi(result.c_str()));
           }
         }
-
-      // On exit, capture end of last file covered.
-      FileLinesType& CoverageVector =
-          this->Coverage.TotalCoverage[filename.c_str()];
-      CoverageVector = localCoverageVector;
-      foundFile=false;
-      localCoverageVector.clear();
-      return true;
+      else if(line.find("source") != line.npos)
+        {
+        inSource=true;
+        }
       }
-  private:
-    cmCTest* CTest;
-    cmCTestCoverageHandlerContainer& Coverage;
-  };
+
+    // On exit, capture end of last file covered.
+    FileLinesType& CoverageVector =
+        this->Coverage.TotalCoverage[filename.c_str()];
+    CoverageVector = localCoverageVector;
+    foundFile=false;
+    localCoverageVector.clear();
+    return true;
+    }
+private:
+  cmCTestCoverageHandlerContainer& Coverage;
+};
 
 cmParseBlanketJSCoverage::cmParseBlanketJSCoverage(
   cmCTestCoverageHandlerContainer& cont,  cmCTest* ctest)
@@ -163,7 +158,7 @@ bool cmParseBlanketJSCoverage::LoadCoverageData(std::vector<std::string> files)
 bool cmParseBlanketJSCoverage::ReadJSONFile(std::string file)
   {
   cmParseBlanketJSCoverage::JSONParser parser
-     (this->CTest,this->Coverage);
+     (this->Coverage);
   cmCTestLog(this->CTest,HANDLER_VERBOSE_OUTPUT,
        "Parsing " << file << std::endl);
   parser.ParseFile(file);
