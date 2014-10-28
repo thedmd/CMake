@@ -33,6 +33,10 @@ public:
 protected:
   friend class cmSearchPath;
 
+/* VS6 is broken and can't pass protected class definitions to child classes */
+#if defined(_MSC_VER) && (_MSC_VER < 1300)
+public:
+#endif
   /** Used to define groups of path labels */
   class PathGroup : public cmPathLabel
   {
@@ -57,6 +61,9 @@ protected:
     static PathLabel CMakeSystem;
     static PathLabel Guess;
   };
+#if defined(_MSC_VER) && (_MSC_VER < 1300)
+protected:
+#endif
 
   enum RootPathMode { RootPathModeNever,
                       RootPathModeOnly,
