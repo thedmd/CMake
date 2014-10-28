@@ -16,15 +16,16 @@
 cmPathLabel::cmPathLabel(const std::string& label)
 : Label(label), Hash(0)
 {
+  // Use a Jenkeins one-at-a-time hash with under/over-flow protection
   for(size_t i = 0; i < this->Label.size(); ++i)
     {
     this->Hash += this->Label[i];
-    this->Hash += (this->Hash << 10);
-    this->Hash ^= (this->Hash >> 6);
+    this->Hash += ((this->Hash & 0x003FFFFF) << 10);
+    this->Hash ^= ((this->Hash & 0xFFFFFFC0) >> 6);
     }
-  this->Hash += (this->Hash << 3);
-  this->Hash ^= (this->Hash >> 11);
-  this->Hash += (this->Hash << 15);
+  this->Hash += ((this->Hash & 0x1FFFFFFF) << 3);
+  this->Hash ^= ((this->Hash & 0xFFFFF800) >> 11);
+  this->Hash += ((this->Hash & 0x0001FFFF) << 15);
 }
 
 //----------------------------------------------------------------------------
