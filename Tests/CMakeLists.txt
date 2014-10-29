@@ -1782,7 +1782,7 @@ ${CMake_BINARY_DIR}/bin/cmake -DDIR=dev -P ${CMake_SOURCE_DIR}/Utilities/Release
 
   if(WIN32)
     # Macro to search for available Windows CE SDKs in the windows Registry
-    macro(select_wince_sdk selected_sdk)
+    macro(select_wince_sdk selected_reg selected_sdk)
       if(CMAKE_HOST_WIN32)
         execute_process(COMMAND reg QUERY "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows CE Tools\\SDKs"
                     OUTPUT_VARIABLE sdk_reg
@@ -1790,8 +1790,15 @@ ${CMake_BINARY_DIR}/bin/cmake -DDIR=dev -P ${CMake_SOURCE_DIR}/Utilities/Release
         string(REGEX REPLACE "HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Windows CE Tools\\\\SDKs\\\\"  ";" sdk_list "${sdk_reg}")
         list(LENGTH sdk_list sdk_list_len)
         if (${sdk_list_len} GREATER 1)
-          list(GET sdk_list 1 ${selected_sdk}) # The first entry is always empty due to the regex replace above
+          list(GET sdk_list 1 _sdk) # The first entry is always empty due to the regex replace above
+          string(STRIP ${_sdk} _sdk) # Make sure there is no newline in the SDK name
         endif()
+        # Build a key to be used by get_filename_component that is pointing to the SDK directory
+        set(_reg "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows CE Tools\\SDKs\\${_sdk}]")
+
+        # Set return values
+        set(${selected_reg} ${_reg})
+        set(${selected_sdk} ${_sdk})
       endif(CMAKE_HOST_WIN32)
     endmacro(select_wince_sdk)
 
@@ -1802,7 +1809,7 @@ ${CMake_BINARY_DIR}/bin/cmake -DDIR=dev -P ${CMake_SOURCE_DIR}/Utilities/Release
     set(reg_ws81 "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft SDKs\\Windows\\v8.1;InstallationFolder]")
     set(reg_wp80 "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft SDKs\\WindowsPhone\\v8.0;InstallationFolder]")
     set(reg_wp81 "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft SDKs\\WindowsPhone\\v8.1;InstallationFolder]")
-    select_wince_sdk(reg_wince)
+    select_wince_sdk(reg_wince wince_sdk)
     set(reg_tegra "[HKEY_LOCAL_MACHINE\\SOFTWARE\\NVIDIA Corporation\\Nsight Tegra;sdkRoot]")
     foreach(reg vs10 vs11 vs12 ws80 ws81 wp80 wp81 wince tegra)
       get_filename_component(r "${reg_${reg}}" ABSOLUTE)
@@ -1850,7 +1857,7 @@ ${CMake_BINARY_DIR}/bin/cmake -DDIR=dev -P ${CMake_SOURCE_DIR}/Utilities/Release
     endif()
   endif()
 
-  if(WIN32 AND reg_wince)
+  if(WIN32 AND wince)
     macro(add_test_VSWinCE name generator systemName systemVersion generatorPlatform)
       # TODO: Fix the tutorial to make it work in cross compile
       # currently the MakeTable is build for target and can not be used on the host
@@ -1871,11 +1878,11 @@ ${CMake_BINARY_DIR}/bin/cmake -DDIR=dev -P ${CMake_SOURCE_DIR}/Utilities/Release
     endmacro()
 
     if(vs11)
-      add_test_VSWinCE(vs11-ce80-ARM "Visual Studio 11 2012" WindowsCE 8.0 ${reg_wince})
+      add_test_VSWinCE(vs11-ce80-ARM "Visual Studio 11 2012" WindowsCE 8.0 ${wince_sdk})
     endif()
 
     if(vs12)
-      add_test_VSWinCE(vs12-ce80-ARM "Visual Studio 12 2013" WindowsCE 8.0 ${reg_wince})
+      add_test_VSWinCE(vs12-ce80-ARM "Visual Studio 12 2013" WindowsCE 8.0 ${wince_sdk})
     endif()
   endif()
 
