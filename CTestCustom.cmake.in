@@ -54,7 +54,6 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   "cc-3968 CC: WARNING File.*" # "implicit" truncation by static_cast
   "ld: warning: directory not found for option .-(F|L)"
   "warning.*This version of Mac OS X is unsupported"
-  "WARNING: favicon file 'cmake-favicon.ico' does not exist"
   "clang.*: warning: argument unused during compilation: .-g"
   "note: in expansion of macro" # diagnostic context note
   "cm(StringCommand|CTestTestHandler)\\.cxx.*warning.*rand.*isn.*t random" # we do not do crypto
