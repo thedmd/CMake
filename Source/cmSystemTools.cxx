@@ -2634,16 +2634,16 @@ bool cmSystemTools::ChangeRPath(std::string const& file,
 bool cmSystemTools::VersionCompare(cmSystemTools::CompareOp op,
                                    const char* lhss, const char* rhss)
 {
-  char *endl = const_cast<char *>(lhss);
-  char *endr = const_cast<char *>(rhss);
+  const char *endl = lhss;
+  const char *endr = rhss;
   unsigned long lhs, rhs;
 
   while (((*endl >= '0') && (*endl <= '9')) ||
          ((*endr >= '0') && (*endr <= '9')))
     {
     // Do component-wise comparison.
-    lhs = strtoul(endl, &endl, 10);
-    rhs = strtoul(endr, &endr, 10);
+    lhs = strtoul(endl, const_cast<char**>(&endl), 10);
+    rhs = strtoul(endr, const_cast<char**>(&endr), 10);
 
     if(lhs < rhs)
       {
