@@ -10,19 +10,6 @@
   See the License for more information.
 ============================================================================*/
 #include "cmFindCommon.h"
-#include <functional>
-#include <algorithm>
-
-//----------------------------------------------------------------------------
-cmFindCommon::PathGroup cmFindCommon::PathGroup::All("ALL");
-cmFindCommon::PathLabel cmFindCommon::PathLabel::CMake("CMAKE");
-cmFindCommon::PathLabel
-  cmFindCommon::PathLabel::CMakeEnvironment("CMAKE_ENVIRONMENT");
-cmFindCommon::PathLabel cmFindCommon::PathLabel::Hints("HINTS");
-cmFindCommon::PathLabel
-  cmFindCommon::PathLabel::SystemEnvironment("SYSTM_ENVIRONMENT");
-cmFindCommon::PathLabel cmFindCommon::PathLabel::CMakeSystem("CMAKE_SYSTEM");
-cmFindCommon::PathLabel cmFindCommon::PathLabel::Guess("GUESS");
 
 //----------------------------------------------------------------------------
 cmFindCommon::cmFindCommon()
@@ -47,8 +34,6 @@ cmFindCommon::cmFindCommon()
   this->SearchFrameworkLast = false;
   this->SearchAppBundleOnly = false;
   this->SearchAppBundleLast = false;
-
-  this->InitializeSearchPathGroups();
 }
 
 //----------------------------------------------------------------------------
@@ -57,42 +42,11 @@ cmFindCommon::~cmFindCommon()
 }
 
 //----------------------------------------------------------------------------
-void cmFindCommon::InitializeSearchPathGroups()
-{
-  std::vector<PathLabel>* labels;
-
-  // Define the varoius different groups of path types
-
-  // All search paths
-  labels = &this->PathGroupLabelMap[PathGroup::All];
-  labels->push_back(PathLabel::CMake);
-  labels->push_back(PathLabel::CMakeEnvironment);
-  labels->push_back(PathLabel::Hints);
-  labels->push_back(PathLabel::SystemEnvironment);
-  labels->push_back(PathLabel::CMakeSystem);
-  labels->push_back(PathLabel::Guess);
-
-  // Define the search group order
-  this->PathGroupOrder.push_back(PathGroup::All);
-
-  // Create the idividual labeld search paths
-  this->LabeledPaths.insert(std::make_pair(PathLabel::CMake,
-    cmSearchPath(this)));
-  this->LabeledPaths.insert(std::make_pair(PathLabel::CMakeEnvironment,
-    cmSearchPath(this)));
-  this->LabeledPaths.insert(std::make_pair(PathLabel::Hints,
-    cmSearchPath(this)));
-  this->LabeledPaths.insert(std::make_pair(PathLabel::SystemEnvironment,
-    cmSearchPath(this)));
-  this->LabeledPaths.insert(std::make_pair(PathLabel::CMakeSystem,
-    cmSearchPath(this)));
-  this->LabeledPaths.insert(std::make_pair(PathLabel::Guess,
-    cmSearchPath(this)));
-}
-
-//----------------------------------------------------------------------------
 void cmFindCommon::SelectDefaultRootPathMode()
 {
+  // Use both by default.
+  this->FindRootPathMode = RootPathModeBoth;
+
   // Check the policy variable for this find command type.
   std::string findRootPathVar = "CMAKE_FIND_ROOT_PATH_MODE_";
   findRootPathVar += this->CMakePathName;
@@ -100,11 +54,11 @@ void cmFindCommon::SelectDefaultRootPathMode()
     this->Makefile->GetSafeDefinition(findRootPathVar);
   if (rootPathMode=="NEVER")
     {
-    this->FindRootPathMode = RootPathModeNever;
+    this->FindRootPathMode = RootPathModeNoRootPath;
     }
   else if (rootPathMode=="ONLY")
     {
-    this->FindRootPathMode = RootPathModeOnly;
+    this->FindRootPathMode = RootPathModeOnlyRootPath;
     }
   else if (rootPathMode=="BOTH")
     {
@@ -178,12 +132,12 @@ void cmFindCommon::RerootPaths(std::vector<std::string>& paths)
     fprintf(stderr, "[%s]\n", i->c_str());
     }
 #endif
+
   // Short-circuit if there is nothing to do.
-  if(this->FindRootPathMode == RootPathModeNever)
+  if(this->FindRootPathMode == RootPathModeNoRootPath)
     {
     return;
     }
-
   const char* sysroot =
     this->Makefile->GetDefinition("CMAKE_SYSROOT");
   const char* rootPath =
@@ -258,19 +212,23 @@ void cmFindCommon::RerootPaths(std::vector<std::string>& paths)
 }
 
 //----------------------------------------------------------------------------
-void cmFindCommon::FilterPaths(const std::vector<std::string>& inPaths,
-                               const std::set<std::string>& ignore,
-                               std::vector<std::string>& outPaths)
+void cmFindCommon::FilterPaths(std::vector<std::string>& paths,
+                               const std::set<std::string>& ignore)
 {
-  for(std::vector<std::string>::const_iterator i = inPaths.begin();
-      i != inPaths.end(); ++i)
+  // Now filter out anything that's in the ignore set.
+  std::vector<std::string> unfiltered;
+  unfiltered.swap(paths);
+
+  for(std::vector<std::string>::iterator pi = unfiltered.begin();
+      pi != unfiltered.end(); ++pi)
     {
-    if(ignore.count(*i) == 0)
+    if (ignore.count(*pi) == 0)
       {
-      outPaths.push_back(*i);
+      paths.push_back(*pi);
       }
     }
 }
+
 
 //----------------------------------------------------------------------------
 void cmFindCommon::GetIgnoredPaths(std::vector<std::string>& ignore)
@@ -308,6 +266,8 @@ void cmFindCommon::GetIgnoredPaths(std::set<std::string>& ignore)
   ignore.insert(ignoreVec.begin(), ignoreVec.end());
 }
 
+
+
 //----------------------------------------------------------------------------
 bool cmFindCommon::CheckCommonArgument(std::string const& arg)
 {
@@ -331,13 +291,13 @@ bool cmFindCommon::CheckCommonArgument(std::string const& arg)
     {
     this->NoCMakeSystemPath = true;
     }
-    else if(arg == "NO_CMAKE_FIND_ROOT_PATH")
+  else if(arg == "NO_CMAKE_FIND_ROOT_PATH")
     {
-    this->FindRootPathMode = RootPathModeNever;
+    this->FindRootPathMode = RootPathModeNoRootPath;
     }
   else if(arg == "ONLY_CMAKE_FIND_ROOT_PATH")
     {
-    this->FindRootPathMode = RootPathModeOnly;
+    this->FindRootPathMode = RootPathModeOnlyRootPath;
     }
   else if(arg == "CMAKE_FIND_ROOT_PATH_BOTH")
     {
@@ -385,34 +345,116 @@ void cmFindCommon::AddPathSuffix(std::string const& arg)
 }
 
 //----------------------------------------------------------------------------
-void AddTrailingSlash(std::string& s)
+void cmFindCommon::AddUserPath(std::string const& p,
+                               std::vector<std::string>& paths)
 {
-  if(!s.empty() && *s.rbegin() != '/')
+  // We should view the registry as the target application would view
+  // it.
+  cmSystemTools::KeyWOW64 view = cmSystemTools::KeyWOW64_32;
+  cmSystemTools::KeyWOW64 other_view = cmSystemTools::KeyWOW64_64;
+  if(this->Makefile->PlatformIs64Bit())
     {
-    s += '/';
+    view = cmSystemTools::KeyWOW64_64;
+    other_view = cmSystemTools::KeyWOW64_32;
+    }
+
+  // Expand using the view of the target application.
+  std::string expanded = p;
+  cmSystemTools::ExpandRegistryValues(expanded, view);
+  cmSystemTools::GlobDirs(expanded, paths);
+
+  // Executables can be either 32-bit or 64-bit, so expand using the
+  // alternative view.
+  if(expanded != p && this->CMakePathName == "PROGRAM")
+    {
+    expanded = p;
+    cmSystemTools::ExpandRegistryValues(expanded, other_view);
+    cmSystemTools::GlobDirs(expanded, paths);
     }
 }
-void cmFindCommon::ComputeFinalPaths()
-{
-  // Filter out ignored paths from the prefix list
-  std::set<std::string> ignored;
-  this->GetIgnoredPaths(ignored);
 
-  // Combine the seperate path types, filtering out ignores
-  this->SearchPaths.clear();
-  std::vector<PathLabel>& allLabels = this->PathGroupLabelMap[PathGroup::All];
-  for(std::vector<PathLabel>::const_iterator l = allLabels.begin();
-      l != allLabels.end(); ++l)
+//----------------------------------------------------------------------------
+void cmFindCommon::AddCMakePath(const std::string& variable)
+{
+  // Get a path from a CMake variable.
+  if(const char* varPath = this->Makefile->GetDefinition(variable))
     {
-    this->LabeledPaths[*l].ExtractWithout(ignored, this->SearchPaths);
+    std::vector<std::string> tmp;
+    cmSystemTools::ExpandListArgument(varPath, tmp);
+
+    // Relative paths are interpreted with respect to the current
+    // source directory.
+    this->AddPathsInternal(tmp, CMakePath);
+    }
+}
+
+//----------------------------------------------------------------------------
+void cmFindCommon::AddEnvPath(const char* variable)
+{
+  // Get a path from the environment.
+  std::vector<std::string> tmp;
+  cmSystemTools::GetPath(tmp, variable);
+  // Relative paths are interpreted with respect to the current
+  // working directory.
+  this->AddPathsInternal(tmp, EnvPath);
+}
+
+//----------------------------------------------------------------------------
+void cmFindCommon::AddPathsInternal(std::vector<std::string> const& in_paths,
+                                    PathType pathType)
+{
+  for(std::vector<std::string>::const_iterator i = in_paths.begin();
+      i != in_paths.end(); ++i)
+    {
+    this->AddPathInternal(*i, pathType);
+    }
+}
+
+//----------------------------------------------------------------------------
+void cmFindCommon::AddPathInternal(std::string const& in_path,
+                                   PathType pathType)
+{
+  if(in_path.empty())
+    {
+    return;
     }
 
+  // Select the base path with which to interpret relative paths.
+  const char* relbase = 0;
+  if(pathType == CMakePath)
+    {
+    relbase = this->Makefile->GetCurrentDirectory();
+    }
+
+  // Convert to clean full path.
+  std::string fullPath =
+    cmSystemTools::CollapseFullPath(in_path, relbase);
+
+  // Insert the path if has not already been emitted.
+  if(this->SearchPathsEmitted.insert(fullPath).second)
+    {
+    this->SearchPaths.push_back(fullPath);
+    }
+}
+
+//----------------------------------------------------------------------------
+void cmFindCommon::ComputeFinalPaths()
+{
+  std::vector<std::string>& paths = this->SearchPaths;
+
   // Expand list of paths inside all search roots.
-  this->RerootPaths(this->SearchPaths);
+  this->RerootPaths(paths);
 
   // Add a trailing slash to all paths to aid the search process.
-  std::for_each(this->SearchPaths.begin(), this->SearchPaths.end(),
-                &AddTrailingSlash);
+  for(std::vector<std::string>::iterator i = paths.begin();
+      i != paths.end(); ++i)
+    {
+    std::string& p = *i;
+    if(!p.empty() && p[p.size()-1] != '/')
+      {
+      p += "/";
+      }
+    }
 }
 
 //----------------------------------------------------------------------------

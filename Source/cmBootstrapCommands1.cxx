@@ -52,8 +52,6 @@
 #include "cmFindProgramCommand.cxx"
 #include "cmForEachCommand.cxx"
 #include "cmFunctionCommand.cxx"
-#include "cmPathLabel.cxx"
-#include "cmSearchPath.cxx"
 
 void GetBootstrapCommands1(std::list<cmCommand*>& commands)
 {
