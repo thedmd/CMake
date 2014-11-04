@@ -2983,6 +2983,32 @@ std::string cmGlobalGenerator::EscapeJSON(const std::string& s) {
 }
 
 //----------------------------------------------------------------------------
+void cmGlobalGenerator::SetFilenameTargetDepends(cmSourceFile* sf,
+                                              std::set<cmTarget const*> tgts)
+{
+  this->FilenameTargetDepends[sf] = tgts;
+}
+
+//----------------------------------------------------------------------------
+std::set<cmTarget const*> const&
+cmGlobalGenerator::GetFilenameTargetDepends(cmSourceFile* sf) const {
+  return this->FilenameTargetDepends[sf];
+}
+
+//----------------------------------------------------------------------------
+void cmGlobalGenerator::CreateEvaluationSourceFiles(
+                                              std::string const& config) const
+{
+  for(std::vector<cmGeneratorExpressionEvaluationFile*>::const_iterator
+      li = this->EvaluationFiles.begin();
+      li != this->EvaluationFiles.end();
+      ++li)
+    {
+    (*li)->CreateOutputFile(config);
+    }
+}
+
+//----------------------------------------------------------------------------
 void cmGlobalGenerator::AddEvaluationFile(const std::string &inputFile,
                     cmsys::auto_ptr<cmCompiledGeneratorExpression> outputExpr,
                     cmMakefile *makefile,
