@@ -9,7 +9,7 @@ Add a target with no output so it will always be built.
                     [COMMAND command2 [args2...] ...]
                     [DEPENDS depend depend depend ... ]
                     [WORKING_DIRECTORY dir]
-                    [COMMENT comment] [VERBATIM]
+                    [COMMENT comment] [VERBATIM] [USES_TERMINAL]
                     [SOURCES src1 [src2...]])
 
 Adds a target with the given name that executes the given commands.
@@ -38,6 +38,10 @@ even sees the arguments.  Use of VERBATIM is recommended as it enables
 correct behavior.  When VERBATIM is not given the behavior is platform
 specific because there is no protection of tool-specific special
 characters.
+
+If USES_TERMINAL is given, the command will be given direct access to the
+terminal if possible. With the Ninja generator, this places the command in
+the ``console`` pool.
 
 The SOURCES option specifies additional source files to be included in
 the custom target.  Specified source files will be added to IDE

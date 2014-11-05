@@ -34,7 +34,8 @@ cmCustomCommand::cmCustomCommand(const cmCustomCommand& r):
   WorkingDirectory(r.WorkingDirectory),
   EscapeAllowMakeVars(r.EscapeAllowMakeVars),
   EscapeOldStyle(r.EscapeOldStyle),
-  Backtrace(r.Backtrace)
+  Backtrace(r.Backtrace),
+  UsesTerminal(r.UsesTerminal)
 {
 }
 
@@ -56,6 +57,7 @@ cmCustomCommand& cmCustomCommand::operator=(cmCustomCommand const& r)
   this->EscapeOldStyle = r.EscapeOldStyle;
   this->ImplicitDepends = r.ImplicitDepends;
   this->Backtrace = r.Backtrace;
+  this->UsesTerminal = r.UsesTerminal;
 
   return *this;
 }
@@ -183,4 +185,16 @@ void cmCustomCommand::AppendImplicitDepends(ImplicitDependsList const& l)
 {
   this->ImplicitDepends.insert(this->ImplicitDepends.end(),
                                l.begin(), l.end());
+}
+
+//----------------------------------------------------------------------------
+bool cmCustomCommand::GetUsesTerminal() const
+{
+  return this->UsesTerminal;
+}
+
+//----------------------------------------------------------------------------
+void cmCustomCommand::SetUsesTerminal(bool b)
+{
+  this->UsesTerminal = b;
 }
