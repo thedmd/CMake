@@ -702,14 +702,7 @@ cmMakefileTargetGenerator
 
   vars.Defines = definesString.c_str();
 
-  // At the moment, it is assumed that C, C++, and Fortran have both
-  // assembly and preprocessor capabilities. The same is true for the
-  // ability to export compile commands
-  bool lang_has_preprocessor = ((lang == "C") ||
-                                (lang == "CXX") ||
-                                (lang == "Fortran"));
-  bool const lang_has_assembly = lang_has_preprocessor;
-  bool const lang_can_export_cmds = lang_has_preprocessor;
+  bool lang_is_c_or_cxx = ((lang == "C") || (lang == "CXX"));
 
   // Construct the compile rules.
   {
@@ -722,7 +715,7 @@ cmMakefileTargetGenerator
   cmSystemTools::ExpandListArgument(compileRule, compileCommands);
 
   if (this->Makefile->IsOn("CMAKE_EXPORT_COMPILE_COMMANDS") &&
-      lang_can_export_cmds && compileCommands.size() == 1)
+      lang_is_c_or_cxx && compileCommands.size() == 1)
     {
     std::string compileCommand = compileCommands[0];
     this->LocalGenerator->ExpandRuleVariables(compileCommand, vars);
@@ -778,9 +771,9 @@ cmMakefileTargetGenerator
       }
     }
 
-  bool do_preprocess_rules = lang_has_preprocessor &&
+  bool do_preprocess_rules = lang_is_c_or_cxx &&
     this->LocalGenerator->GetCreatePreprocessedSourceRules();
-  bool do_assembly_rules = lang_has_assembly &&
+  bool do_assembly_rules = lang_is_c_or_cxx &&
     this->LocalGenerator->GetCreateAssemblySourceRules();
   if(do_preprocess_rules || do_assembly_rules)
     {
