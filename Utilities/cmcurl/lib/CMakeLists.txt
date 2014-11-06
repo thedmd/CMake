@@ -13,8 +13,10 @@ list(APPEND HHEADERS
   ${CURL_BINARY_DIR}/include/curl/curlbuild.h
   )
 
+if(0) # This code not needed for building within CMake.
 if(MSVC)
   list(APPEND CSOURCES libcurl.rc)
+endif()
 endif()
 
 # SET(CSOURCES
@@ -94,10 +96,18 @@ add_library(
   ${HHEADERS} ${CSOURCES}
   )
 
+if(0) # This code not needed for building within CMake.
+if(MSVC AND CURL_STATICLIB)
+  set_target_properties(${LIB_NAME} PROPERTIES STATIC_LIBRARY_FLAGS ${CMAKE_EXE_LINKER_FLAGS})
+endif()
+endif()
+
 target_link_libraries(${LIB_NAME} ${CURL_LIBS})
 
+if(0) # This code not needed for building within CMake.
 if(WIN32)
   add_definitions( -D_USRDLL )
+endif()
 endif()
 
 set_target_properties(${LIB_NAME} PROPERTIES COMPILE_DEFINITIONS BUILDING_LIBCURL)
