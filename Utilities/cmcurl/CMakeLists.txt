@@ -404,7 +404,7 @@ endif()
 
 #-----------------------------------------------------------------------------
 
-option(CMAKE_USE_OPENSSL "Use OpenSSL code. Experimental" ON)
+option(CMAKE_USE_OPENSSL "Use OpenSSL code. Experimental" OFF)
 mark_as_advanced(CMAKE_USE_OPENSSL)
 
 set(USE_SSLEAY OFF)
