@@ -66,7 +66,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "HP-UX" AND CMAKE_CXX_COMPILER_ID MATCHES "HP")
 endif()
 
 # Workaround for short jump tables on PA-RISC
-if(CMAKE_SYSTEM_PROCESSOR STREQUAL parisc)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^parisc")
   if(CMAKE_COMPILER_IS_GNUC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mlong-calls")
   endif()
