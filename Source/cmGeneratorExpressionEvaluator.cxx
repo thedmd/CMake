@@ -1289,8 +1289,10 @@ static const struct TargetObjectsNode : public cmGeneratorExpressionNode
     for(std::vector<cmSourceFile const*>::const_iterator it
         = objectSources.begin(); it != objectSources.end(); ++it)
       {
-      std::map<cmSourceFile const*, std::string>::const_iterator map_it;
-      map_it = mapping.find(*it);
+      // Find the object file name corresponding to this source file.
+      std::map<cmSourceFile const*, std::string>::const_iterator
+        map_it = mapping.find(*it);
+      // It must exist because we populated the mapping just above.
       assert(!map_it->second.empty());
       result += sep;
       std::string objFile = obj_dir + map_it->second;
