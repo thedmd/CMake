@@ -134,19 +134,18 @@ if echo "${cmake_system}" | grep Linux >/dev/null 2>&1; then
   cmake_system_linux=true
 else
   cmake_system_linux=false
-fi
+ fi
 
 # Determine whether this is a PA-RISC machine
+# This only works for Linux or HP-UX, not other PA-RISC OSs (BSD maybe?). Also
+# may falsely detect parisc on HP-UX m68k
+cmake_machine_parisc=false
 if ${cmake_system_linux}; then
   if uname -m | grep parisc >/dev/null 2>&1; then
     cmake_machine_parisc=true
-  else
-    cmake_machine_parisc=false
   fi
 elif ${cmake_system_hpux}; then
-  if uname -m | grep ia64 >/dev/null 2>&1; then
-    cmake_machine_parisc=false
-  else
+  if !(uname -m | grep ia64 >/dev/null 2>&1); then
     cmake_machine_parisc=true
   fi
 fi
