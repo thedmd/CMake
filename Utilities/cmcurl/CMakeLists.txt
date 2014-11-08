@@ -992,7 +992,7 @@ endif()
 #-----------------------------------------------------------------------------
 # CMake-specific curl code.
 add_executable(LIBCURL curltest.c)
-target_link_libraries(LIBCURL cmcurl ${CMAKE_DL_LIBS})
+target_link_libraries(LIBCURL cmcurl)
 
 if(CMAKE_CURL_TEST_URL)
   add_test(curl LIBCURL ${CMAKE_CURL_TEST_URL})
