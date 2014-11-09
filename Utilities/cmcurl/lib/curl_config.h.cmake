@@ -861,6 +861,9 @@
 /* The size of `size_t', as computed by sizeof. */
 @SIZEOF_SIZE_T_CODE@
 
+/* The size of `ssize_t', as computed by sizeof. */
+@SIZEOF_SSIZE_T_CODE@
+
 /* The size of `time_t', as computed by sizeof. */
 @SIZEOF_TIME_T_CODE@
 
