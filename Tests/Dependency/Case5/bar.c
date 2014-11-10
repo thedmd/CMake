@@ -1,10 +1,12 @@
-#include "bar.h"
+#ifdef _WIN32
+__declspec(dllimport)
+#endif
+void foo(void);
 
-#include <foo.h>
 #include <stdio.h>
 
-void bar()
+void bar(void)
 {
-    foo();
-    printf("bar()\n");
+  foo();
+  printf("bar()\n");
 }

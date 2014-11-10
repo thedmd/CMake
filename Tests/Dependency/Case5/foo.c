@@ -1,8 +1,9 @@
-#include "foo.h"
-
 #include <stdio.h>
 
-void foo()
+#ifdef _WIN32
+__declspec(dllexport)
+#endif
+void foo(void)
 {
-    printf("foo()\n");
+  printf("foo()\n");
 }

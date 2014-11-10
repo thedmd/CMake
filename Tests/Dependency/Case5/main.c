@@ -1,7 +1,7 @@
-#include <bar.h>
+void bar(void);
 
 int main(int argc, char *argv[])
 {
-    bar();
-    return 0;
+  bar();
+  return 0;
 }
