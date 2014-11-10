@@ -1500,16 +1500,6 @@ ${CMake_BINARY_DIR}/bin/cmake -DDIR=dev -P ${CMake_SOURCE_DIR}/Utilities/Release
   set_tests_properties ( linkorder2 PROPERTIES DEPENDS linkorder1)
   set_tests_properties ( SimpleInstall-Stage2 PROPERTIES DEPENDS SimpleInstall)
 
-  add_test(LinkMixed  ${CMAKE_CTEST_COMMAND}
-    --build-and-test
-    "${CMake_SOURCE_DIR}/Tests/LinkMixed"
-    "${CMake_BINARY_DIR}/Tests/LinkMixed"
-    ${build_generator_args}
-    --build-project LinkMixed
-    --build-options ${build_options}
-    --test-command exec
-  )
-
   # Test static linking on toolchains known to support it.
   if("${CMAKE_C_COMPILER_ID}" MATCHES "^(GNU)$"
       AND NOT APPLE AND NOT WIN32 AND NOT CYGWIN
