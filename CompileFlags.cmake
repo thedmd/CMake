@@ -75,6 +75,16 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "^parisc")
   endif()
 endif()
 
+# Workaround for short jump tables on PA-RISC
+if(CMAKE_SYSTEM_PROCESSOR STREQUAL parisc)
+  if(CMAKE_COMPILER_IS_GNUC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mlong-calls")
+  endif()
+  if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mlong-calls")
+  endif()
+endif()
+
 # use the ansi CXX compile flag for building cmake
 if (CMAKE_ANSI_CXXFLAGS)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_ANSI_CXXFLAGS}")
