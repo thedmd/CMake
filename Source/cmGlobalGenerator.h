@@ -343,8 +343,10 @@ public:
 
   void CreateEvaluationSourceFiles(std::string const& config) const;
 
-  void SetFilenameTargetDepends(cmSourceFile* sf, std::set<cmTarget const*> tgts);
-  std::set<cmTarget const*> const& GetFilenameTargetDepends(cmSourceFile* sf) const;
+  void SetFilenameTargetDepends(cmSourceFile* sf,
+                                std::set<cmTarget const*> tgts);
+  std::set<cmTarget const*> const&
+  GetFilenameTargetDepends(cmSourceFile* sf) const;
 
 protected:
   virtual void Generate();
