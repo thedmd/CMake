@@ -226,11 +226,10 @@ cmGlobalVisualStudio12Generator::IsWindowsDesktopToolsetInstalled() const
   const char desktop81Key[] = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
                               "VisualStudio\\12.0\\VC\\LibraryDesktop";
 
-  std::string path;
-  cmSystemTools::ReadRegistryValue(desktop81Key,
-                                   path,
-                                   cmSystemTools::KeyWOW64_32);
-  return !path.empty();
+  std::vector<std::string> subkeys;
+  return cmSystemTools::GetRegistrySubKeys(desktop81Key,
+                                           subkeys,
+                                           cmSystemTools::KeyWOW64_32);
 }
 
 //----------------------------------------------------------------------------
