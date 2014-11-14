@@ -22,6 +22,7 @@ cmCustomCommand::cmCustomCommand()
   this->HaveComment = false;
   this->EscapeOldStyle = true;
   this->EscapeAllowMakeVars = false;
+  this->UsesTerminal = false;
 }
 
 //----------------------------------------------------------------------------
