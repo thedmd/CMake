@@ -351,6 +351,11 @@ bool cmAddCustomCommandCommand
         }
       }
     }
+  else if (uses_terminal)
+    {
+    this->SetError("USES_TERMINAL may not be used with SOURCE signatures");
+    return false;
+    }
   else
     {
     bool issueMessage = true;

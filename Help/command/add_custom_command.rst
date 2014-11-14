@@ -157,7 +157,8 @@ target is already built, the command will not execute.
                      COMMAND command1 [ARGS] [args1...]
                      [COMMAND command2 [ARGS] [args2...] ...]
                      [WORKING_DIRECTORY dir]
-                     [COMMENT comment] [VERBATIM])
+                     [COMMENT comment]
+                     [VERBATIM] [USES_TERMINAL])
 
 This defines a new command that will be associated with building the
 specified target.  When the command will happen is determined by which
