@@ -18,7 +18,7 @@ The first signature is for adding a custom command to produce an output::
                      [IMPLICIT_DEPENDS <lang1> depend1
                                       [<lang2> depend2] ...]
                      [WORKING_DIRECTORY dir]
-                     [COMMENT comment] [VERBATIM] [APPEND])
+                     [COMMENT comment] [VERBATIM] [APPEND] [USES_TERMINAL])
 
 This defines a command to generate specified ``OUTPUT`` file(s).
 A target created in the same directory (``CMakeLists.txt`` file)
@@ -117,6 +117,11 @@ The options are:
   If the output of the custom command is not actually created
   as a file on disk it should be marked with the :prop_sf:`SYMBOLIC`
   source file property.
+
+``USES_TERMINAL``
+  The command will be given direct access to the terminal if possible.
+  With the Ninja generator, this places the command in the ``console``
+  pool.
 
 ``VERBATIM``
   All arguments to the commands will be escaped properly for the
