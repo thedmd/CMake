@@ -1,7 +1,8 @@
 console-pool
 ------------
 
-* A USES_TERMINAL flag has been added to the add_custom_command and
-  add_custom_target commands. The flag gives the command direct access to
-  the terminal if possible. With the Ninja generator, it places the command
-  in the console pool.
+* The :command:`add_custom_command` and :command:`add_custom_target`
+  commands learned a new ``USES_TERMINAL`` option to request that
+  the command be given direct access to the terminal if possible.
+  The :generator:`Ninja` generator will places such commands in the
+  ``console`` pool.
