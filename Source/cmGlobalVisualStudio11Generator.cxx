@@ -192,7 +192,8 @@ cmGlobalVisualStudio11Generator::SelectWindowsPhoneToolset(
       return false;
       }
     }
-  return this->cmGlobalVisualStudio10Generator::SelectWindowsPhoneToolset(toolset);
+  return
+    this->cmGlobalVisualStudio10Generator::SelectWindowsPhoneToolset(toolset);
 }
 
 //----------------------------------------------------------------------------
@@ -213,7 +214,8 @@ cmGlobalVisualStudio11Generator::SelectWindowsStoreToolset(
       return false;
       }
     }
-  return this->cmGlobalVisualStudio10Generator::SelectWindowsStoreToolset(toolset);
+  return
+    this->cmGlobalVisualStudio10Generator::SelectWindowsStoreToolset(toolset);
 }
 
 //----------------------------------------------------------------------------
@@ -299,12 +301,12 @@ cmGlobalVisualStudio11Generator::NeedsDeploy(cmTarget::TargetType type) const
 bool
 cmGlobalVisualStudio11Generator::IsWindowsDesktopToolsetInstalled() const
 {
-  const char desktop80Key[] = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
-                              "VisualStudio\\11.0\\VC\\Libraries\\Extended";
-
-  const char VS2012DesktopExpressKey[] = "HKEY_LOCAL_MACHINE\\SOFTWARE\\"
-                                         "Microsoft\\WDExpress\\11.0;"
-                                         "InstallDir";
+  const char desktop80Key[] =
+    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
+    "VisualStudio\\11.0\\VC\\Libraries\\Extended";
+  const char VS2012DesktopExpressKey[] =
+    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
+    "WDExpress\\11.0;InstallDir";
 
   std::vector<std::string> subkeys;
   std::string path;
@@ -320,9 +322,10 @@ cmGlobalVisualStudio11Generator::IsWindowsDesktopToolsetInstalled() const
 bool
 cmGlobalVisualStudio11Generator::IsWindowsPhoneToolsetInstalled() const
 {
-  const char wp80Key[] = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
-                         "Microsoft SDKs\\WindowsPhone\\v8.0\\"
-                         "Install Path;Install Path";
+  const char wp80Key[] =
+    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
+    "Microsoft SDKs\\WindowsPhone\\v8.0\\"
+    "Install Path;Install Path";
 
   std::string path;
   cmSystemTools::ReadRegistryValue(wp80Key,
@@ -335,8 +338,9 @@ cmGlobalVisualStudio11Generator::IsWindowsPhoneToolsetInstalled() const
 bool
 cmGlobalVisualStudio11Generator::IsWindowsStoreToolsetInstalled() const
 {
-  const char win80Key[] = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
-                          "VisualStudio\\11.0\\VC\\Libraries\\Core\\Arm";
+  const char win80Key[] =
+    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
+    "VisualStudio\\11.0\\VC\\Libraries\\Core\\Arm";
 
   std::vector<std::string> subkeys;
   return cmSystemTools::GetRegistrySubKeys(win80Key,
