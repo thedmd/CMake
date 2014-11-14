@@ -172,7 +172,8 @@ cmGlobalVisualStudio12Generator::SelectWindowsPhoneToolset(
       return false;
       }
     }
-  return this->cmGlobalVisualStudio11Generator::SelectWindowsPhoneToolset(toolset);
+  return
+    this->cmGlobalVisualStudio11Generator::SelectWindowsPhoneToolset(toolset);
 }
 
 //----------------------------------------------------------------------------
@@ -193,7 +194,8 @@ cmGlobalVisualStudio12Generator::SelectWindowsStoreToolset(
       return false;
       }
     }
-  return this->cmGlobalVisualStudio11Generator::SelectWindowsStoreToolset(toolset);
+  return
+    this->cmGlobalVisualStudio11Generator::SelectWindowsStoreToolset(toolset);
 }
 
 //----------------------------------------------------------------------------
@@ -223,8 +225,9 @@ cmLocalGenerator *cmGlobalVisualStudio12Generator::CreateLocalGenerator()
 bool
 cmGlobalVisualStudio12Generator::IsWindowsDesktopToolsetInstalled() const
 {
-  const char desktop81Key[] = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
-                              "VisualStudio\\12.0\\VC\\LibraryDesktop";
+  const char desktop81Key[] =
+    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
+    "VisualStudio\\12.0\\VC\\LibraryDesktop";
 
   std::vector<std::string> subkeys;
   return cmSystemTools::GetRegistrySubKeys(desktop81Key,
@@ -236,8 +239,9 @@ cmGlobalVisualStudio12Generator::IsWindowsDesktopToolsetInstalled() const
 bool
 cmGlobalVisualStudio12Generator::IsWindowsPhoneToolsetInstalled() const
 {
-  const char wp81Key[] = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
-                         "Microsoft SDKs\\WindowsPhone\\v8.1\\Install Path;Install Path";
+  const char wp81Key[] =
+    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
+    "Microsoft SDKs\\WindowsPhone\\v8.1\\Install Path;Install Path";
 
   std::string path;
   cmSystemTools::ReadRegistryValue(wp81Key,
@@ -250,8 +254,9 @@ cmGlobalVisualStudio12Generator::IsWindowsPhoneToolsetInstalled() const
 bool
 cmGlobalVisualStudio12Generator::IsWindowsStoreToolsetInstalled() const
 {
-  const char win81Key[] = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
-                          "VisualStudio\\12.0\\VC\\Libraries\\Core\\Arm";
+  const char win81Key[] =
+    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
+    "VisualStudio\\12.0\\VC\\Libraries\\Core\\Arm";
 
   std::vector<std::string> subkeys;
   return cmSystemTools::GetRegistrySubKeys(win81Key,
