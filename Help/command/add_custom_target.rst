@@ -9,7 +9,8 @@ Add a target with no output so it will always be built.
                     [COMMAND command2 [args2...] ...]
                     [DEPENDS depend depend depend ... ]
                     [WORKING_DIRECTORY dir]
-                    [COMMENT comment] [VERBATIM] [USES_TERMINAL]
+                    [COMMENT comment]
+                    [VERBATIM] [USES_TERMINAL]
                     [SOURCES src1 [src2...]])
 
 Adds a target with the given name that executes the given commands.
@@ -76,8 +77,8 @@ The options are:
 
 ``USES_TERMINAL``
   The command will be given direct access to the terminal if possible.
-  With the Ninja generator, this places the command in the ``console``
-  pool.
+  With the :generator:`Ninja` generator, this places the command in
+  the ``console`` pool.
 
 ``WORKING_DIRECTORY``
   Execute the command with the given current working directory.

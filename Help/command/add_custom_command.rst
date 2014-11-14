@@ -18,7 +18,8 @@ The first signature is for adding a custom command to produce an output::
                      [IMPLICIT_DEPENDS <lang1> depend1
                                       [<lang2> depend2] ...]
                      [WORKING_DIRECTORY dir]
-                     [COMMENT comment] [VERBATIM] [APPEND] [USES_TERMINAL])
+                     [COMMENT comment]
+                     [VERBATIM] [APPEND] [USES_TERMINAL])
 
 This defines a command to generate specified ``OUTPUT`` file(s).
 A target created in the same directory (``CMakeLists.txt`` file)
@@ -122,8 +123,8 @@ The options are:
 
 ``USES_TERMINAL``
   The command will be given direct access to the terminal if possible.
-  With the Ninja generator, this places the command in the ``console``
-  pool.
+  With the :generator:`Ninja` generator, this places the command in
+  the ``console`` pool.
 
 ``VERBATIM``
   All arguments to the commands will be escaped properly for the
@@ -156,7 +157,8 @@ target is already built, the command will not execute.
                      COMMAND command1 [ARGS] [args1...]
                      [COMMAND command2 [ARGS] [args2...] ...]
                      [WORKING_DIRECTORY dir]
-                     [COMMENT comment] [VERBATIM])
+                     [COMMENT comment]
+                     [VERBATIM] [USES_TERMINAL])
 
 This defines a new command that will be associated with building the
 specified target.  When the command will happen is determined by which

@@ -227,6 +227,13 @@ bool cmAddCustomTargetCommand
       cmSystemTools::CollapseFullPath(working_directory, build_dir);
     }
 
+  if (commandLines.empty() && uses_terminal)
+    {
+    this->Makefile->IssueMessage(cmake::FATAL_ERROR,
+      "USES_TERMINAL may not be specified without any COMMAND");
+    return true;
+    }
+
   // Add the utility target to the makefile.
   bool escapeOldStyle = !verbatim;
   cmTarget* target =
