@@ -81,8 +81,13 @@ add_custom_command(OUTPUT timestamp8.txt
 
 # Generate the library file of an imported target as a byproduct
 # of an external project.
+if(CMAKE_CONFIGURATION_TYPES)
+  set(cfg /${CMAKE_CFG_INTDIR})
+else()
+  set(cfg)
+endif()
 set(ExternalLibrary_LIBRARY
-  ${CMAKE_CURRENT_BINARY_DIR}/External-build/${CMAKE_CFG_INTDIR}/${CMAKE_STATIC_LIBRARY_PREFIX}ExternalLibrary${CMAKE_STATIC_LIBRARY_SUFFIX}
+  ${CMAKE_CURRENT_BINARY_DIR}/External-build${cfg}/${CMAKE_STATIC_LIBRARY_PREFIX}ExternalLibrary${CMAKE_STATIC_LIBRARY_SUFFIX}
   )
 include(ExternalProject)
 ExternalProject_Add(ExternalTarget
