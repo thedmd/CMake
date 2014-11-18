@@ -1,6 +1,6 @@
 
 #if DEFAULT_CXX14
-#  if __cplusplus <= 201402L
+#  if __cplusplus != 201402L
 #    error Unexpected value for __cplusplus.
 #  endif
 #elif DEFAULT_CXX11
