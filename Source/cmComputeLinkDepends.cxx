@@ -266,10 +266,9 @@ cmComputeLinkDepends::Compute()
   // Iterate in reverse order so we can keep only the last occurrence
   // of a shared library.
   std::set<int> emmitted;
-  for(std::vector<int>::const_reverse_iterator
-        li = this->FinalLinkOrder.rbegin(),
-        le = this->FinalLinkOrder.rend();
-      li != le; ++li)
+  const std::vector<int> &cFLO = this->FinalLinkOrder;
+  for(std::vector<int>::const_reverse_iterator li = cFLO.rbegin();
+      li != cFLO.rend(); ++li)
     {
     int i = *li;
     LinkEntry const& e = this->EntryList[i];
