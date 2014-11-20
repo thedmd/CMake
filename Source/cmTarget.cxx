@@ -2908,14 +2908,14 @@ bool cmTarget::HandleLocationPropertyPolicy(cmMakefile* context) const
 static void MakePropertyList(std::string& output,
     std::vector<cmTargetInternals::TargetPropertyEntry*> const& values)
 {
-  output = "";
+  output.clear();
   std::string sep;
   for (std::vector<cmTargetInternals::TargetPropertyEntry*>::const_iterator
        it = values.begin(), end = values.end();
        it != end; ++it)
     {
-    output += sep;
-    output += (*it)->ge->GetInput();
+    output.append(sep);
+    output.append((*it)->ge->GetInput());
     sep = ";";
     }
 }
