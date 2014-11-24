@@ -874,19 +874,19 @@ endfunction()
 
 
 function(list_prerequisites target)
-  if(NOT ARGV1)
+  if("${ARGV1}" STREQUAL "")
     set(all 1)
   else()
     set(all "${ARGV1}")
   endif()
 
-  if(NOT ARGV2)
+  if("${ARGV2}" STREQUAL "")
     set(exclude_system 0)
   else()
     set(exclude_system "${ARGV2}")
   endif()
 
-  if(NOT ARGV3)
+  if("${ARGV3}" STREQUAL "")
     set(verbose 0)
   else()
     set(verbose "${ARGV3}")
