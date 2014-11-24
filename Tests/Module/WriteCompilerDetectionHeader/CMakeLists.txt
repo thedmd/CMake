@@ -79,6 +79,7 @@ write_compiler_detection_header(
 )
 
 add_executable(multi_files multi_files.cpp)
+set_property(TARGET multi_files PROPERTY CXX_STANDARD 98)
 target_include_directories(multi_files PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/compiler_multi_files)
 set_defines(multi_files "${true_defs}" "${false_defs}")
 
