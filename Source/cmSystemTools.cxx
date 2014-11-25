@@ -2923,3 +2923,11 @@ std::vector<std::string> cmSystemTools::tokenize(const std::string& str,
     }
   return tokens;
 }
+
+//----------------------------------------------------------------------------
+bool cmSystemTools::StringToInt(const char* str, int* value)
+{
+  char unused;
+  const int result = sscanf(str, "%d%c", value, &unused);
+  return (result == 1);
+}
