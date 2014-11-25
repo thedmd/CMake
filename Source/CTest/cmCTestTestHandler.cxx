@@ -2164,11 +2164,7 @@ bool cmCTestTestHandler::SetTestsProperties(
             std::vector<std::string> lval;
             cmSystemTools::ExpandListArgument(val, lval);
 
-            for(std::vector<std::string>::iterator f = lval.begin();
-                f != lval.end(); ++f)
-              {
-              rtit->LockedResources.insert(*f);
-              }
+            rtit->LockedResources.insert(lval.begin(), lval.end());
             }
           if ( key == "TIMEOUT" )
             {
