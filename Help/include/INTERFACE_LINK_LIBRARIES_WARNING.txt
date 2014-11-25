@@ -10,7 +10,7 @@ generate :manual:`cmake-packages(7)`:
 .. code-block:: cmake
 
   target_link_libraries(mylib INTERFACE
-    ${Boost_LIBRARIES};${OtherDep_LIBRARIES}>
+    ${Boost_LIBRARIES};${OtherDep_LIBRARIES}
   )
 
 Dependencies must provide their own :ref:`IMPORTED targets <Imported Targets>`
