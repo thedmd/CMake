@@ -9,6 +9,7 @@ Set a named property in a given scope.
                 DIRECTORY [dir]                   |
                 TARGET    [target1 [target2 ...]] |
                 SOURCE    [src1 [src2 ...]]       |
+                INSTALL   [file1 [file2 ...]]       |
                 TEST      [test1 [test2 ...]]     |
                 CACHE     [entry1 [entry2 ...]]>
                [APPEND] [APPEND_STRING]
@@ -33,6 +34,10 @@ be one of the following:
   Scope may name zero or more source files.  Note that source
   file properties are visible only to targets added in the same
   directory (CMakeLists.txt).
+
+``INSTALL``
+  Scope may name zero or more installed file paths.
+  These are made available to CPack to influence packaging.
 
 ``TEST``
   Scope may name zero or more existing tests.
