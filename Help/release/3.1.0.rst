@@ -363,19 +363,6 @@ Deprecated and Removed Features
   The module also provided compatibility support for finding VTK 4.0.
   This capability has been dropped.
 
-* On case-insensitive filesystems CMake unofficially tolerates
-  specification of source files with casing not matching that
-  on disk, such as "mysource.c" when the actual file name is
-  "MySource.c".  This has never been officially supported or
-  guaranteed to work.  CMake 3.1 and above are less tolerant of
-  this practice than CMake 3.0 and below were due to refactoring
-  needed to support the :command:`target_sources` command and
-  generator expressions in the :prop_tgt:`SOURCES` target property.
-
-  Projects depending on this behavior should be fixed to name
-  their sources with casing matching that on disk.  This will
-  make them portable to case-sensitive filesystems too.
-
 Other Changes
 =============
 
