@@ -10,7 +10,7 @@ Get a property.
                 DIRECTORY [dir]    |
                 TARGET    <target> |
                 SOURCE    <source> |
-                INSTALL   <file> |
+                INSTALL   <file>   |
                 TEST      <test>   |
                 CACHE     <entry>  |
                 VARIABLE>
