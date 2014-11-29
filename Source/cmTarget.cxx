@@ -685,19 +685,19 @@ static bool processSources(cmTarget const* tgt,
 
       if (!targetName.empty() && !cmSystemTools::FileIsFullPath(src.c_str()))
         {
-        cmOStringStream e;
+        cmOStringStream err;
         if (!targetName.empty())
           {
-          e << "Target \"" << targetName << "\" contains relative "
+          err << "Target \"" << targetName << "\" contains relative "
             "path in its INTERFACE_SOURCES:\n"
             "  \"" << src << "\"";
           }
         else
           {
-          e << "Found relative path while evaluating sources of "
+          err << "Found relative path while evaluating sources of "
           "\"" << tgt->GetName() << "\":\n  \"" << src << "\"\n";
           }
-        tgt->GetMakefile()->IssueMessage(cmake::FATAL_ERROR, e.str());
+        tgt->GetMakefile()->IssueMessage(cmake::FATAL_ERROR, err.str());
         return contextDependent;
         }
       src = fullPath;
