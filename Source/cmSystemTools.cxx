@@ -2927,7 +2927,7 @@ std::vector<std::string> cmSystemTools::tokenize(const std::string& str,
 //----------------------------------------------------------------------------
 bool cmSystemTools::StringToInt(const char* str, int* value)
 {
-  char unused;
-  const int result = sscanf(str, "%d%c", value, &unused);
-  return (result == 1);
+  char *endp;
+  *value = static_cast<int>(strtol(str, &endp, 10));
+  return (*endp == '\0') && (endp != str);
 }
