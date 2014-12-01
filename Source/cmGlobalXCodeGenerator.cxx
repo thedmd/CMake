@@ -2458,6 +2458,7 @@ cmGlobalXCodeGenerator::CreateUtilityTarget(cmTarget& cmtarget)
   target->AddAttribute("name", this->CreateString(cmtarget.GetName()));
   target->AddAttribute("productName",this->CreateString(cmtarget.GetName()));
   target->SetTarget(&cmtarget);
+  this->XCodeObjectMap[&cmtarget] = target;
 
   // Add source files without build rules for editing convenience.
   if(cmtarget.GetType() == cmTarget::UTILITY)
@@ -2661,6 +2662,7 @@ cmGlobalXCodeGenerator::CreateXCodeTarget(cmTarget& cmtarget,
     target->AddAttribute("productType", this->CreateString(productType));
     }
   target->SetTarget(&cmtarget);
+  this->XCodeObjectMap[&cmtarget] = target;
   target->SetId(this->GetOrCreateId(
     cmtarget.GetName(), target->GetId()).c_str());
   return target;
@@ -2673,16 +2675,14 @@ cmXCodeObject* cmGlobalXCodeGenerator::FindXCodeTarget(cmTarget const* t)
     {
     return 0;
     }
-  for(std::vector<cmXCodeObject*>::iterator i = this->XCodeObjects.begin();
-      i != this->XCodeObjects.end(); ++i)
+
+  std::map<cmTarget const*, cmXCodeObject*>::const_iterator const i =
+    this->XCodeObjectMap.find(t);
+  if (i == this->XCodeObjectMap.end())
     {
-    cmXCodeObject* o = *i;
-    if(o->GetTarget() == t)
-      {
-      return o;
-      }
+    return 0;
     }
-  return 0;
+  return i->second;
 }
 
 //----------------------------------------------------------------------------
