@@ -557,6 +557,7 @@ void cmGlobalXCodeGenerator::ClearXCodeObjects()
     }
   this->XCodeObjects.clear();
   this->XCodeObjectIDs.clear();
+  this->XCodeObjectMap.clear();
   this->GroupMap.clear();
   this->GroupNameMap.clear();
   this->TargetGroup.clear();
