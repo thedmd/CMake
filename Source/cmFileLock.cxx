@@ -22,6 +22,7 @@ cmFileLock::~cmFileLock()
   if (!this->Filename.empty())
     {
     const cmFileLockResult result = this->Release();
+    static_cast<void>(result);
     assert(result.IsOk());
     }
 }

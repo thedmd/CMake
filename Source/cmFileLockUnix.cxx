@@ -96,7 +96,7 @@ int cmFileLock::LockFile(int cmd, int type)
   lock.l_start = 0;
   lock.l_len = 0; // lock all bytes
   lock.l_pid = 0; // unused (for F_GETLK only)
-  lock.l_type = type; // exclusive lock
+  lock.l_type = static_cast<short>(type); // exclusive lock
   lock.l_whence = SEEK_SET;
   return ::fcntl(this->File, cmd, &lock);
 }
