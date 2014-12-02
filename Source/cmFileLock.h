@@ -23,7 +23,7 @@ class cmFileLockResult;
 
 /**
   * @brief Cross-platform file locking.
-  * @detail Under the hood this class use 'fcntl' for Unix-like platforms and
+  * @details Under the hood this class use 'fcntl' for Unix-like platforms and
   * 'LockFileEx'/'UnlockFileEx' for Win32 platform. Locks are exclusive and
   * advisory.
   */
@@ -46,7 +46,7 @@ class cmFileLock
 
   /**
     * @brief Check file is locked by this class.
-    * @detail This function helps to find double locks (deadlocks) and to do
+    * @details This function helps to find double locks (deadlocks) and to do
     * explicit unlocks.
     */
   bool IsLocked(const std::string& filename) const;
