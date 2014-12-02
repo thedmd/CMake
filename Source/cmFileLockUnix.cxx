@@ -72,7 +72,7 @@ cmFileLockResult cmFileLock::LockWithTimeout(unsigned seconds)
     {
     if (this->LockFile(F_SETLK, F_WRLCK) == -1)
       {
-      if (errno != EAGAIN)
+      if (errno != EACCES && errno != EAGAIN)
         {
         return cmFileLockResult::MakeSystem();
         }
