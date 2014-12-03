@@ -4901,7 +4901,7 @@ void cmMakefile::StoreMatches(cmsys::RegularExpression& re)
       std::string const& var = matchVariables[i];
       this->AddDefinition(var, m.c_str());
       this->MarkVariableAsUsed(var);
-      highest = '0' + i;
+      highest = static_cast<char>('0' + i);
       }
     }
   char nMatches[] = {highest, '\0'};
