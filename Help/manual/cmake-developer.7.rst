@@ -1072,7 +1072,7 @@ populated:
         IMPORTED_CONFIGURATIONS RELEASE
       )
       set_target_properties(Foo::Foo PROPERTIES
-        IMPORTED_LOCATION "${Foo_LIBRARY_RELEASE}"
+        IMPORTED_LOCATION_RELEASE "${Foo_LIBRARY_RELEASE}"
       )
     endif()
     if (Foo_LIBRARY_DEBUG)
@@ -1080,7 +1080,7 @@ populated:
         IMPORTED_CONFIGURATIONS DEBUG
       )
       set_target_properties(Foo::Foo PROPERTIES
-        IMPORTED_LOCATION "${Foo_LIBRARY_DEBUG}"
+        IMPORTED_LOCATION_DEBUG "${Foo_LIBRARY_DEBUG}"
       )
     endif()
     set_target_properties(Foo::Foo PROPERTIES
