@@ -1,0 +1,10 @@
+CMake Warning \(dev\) in CMakeLists.txt:
+  Target "somelib" is installed as part of export set "exp" with an INCLUDES
+  DESTINATION containing relative path
+
+    "include"
+
+  The export set "exp" is installed with an absolute path as its DESTINATION.
+  This mixing of absolute and relative paths creates unusable target export
+  files.
+This warning is for project developers.  Use -Wno-dev to suppress it.
