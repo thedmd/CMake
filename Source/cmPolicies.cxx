@@ -377,7 +377,7 @@ cmPolicies::cmPolicies()
 
   this->DefinePolicy(
     CMP0057, "CMP0057",
-    "Error on export with bad INCLUDES DESTINATION.",
+    "Error on absolute export with relative usage requirements.",
     3,2,0, cmPolicies::WARN);
 }
 
