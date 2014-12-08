@@ -1,12 +1,12 @@
 CMake Warning \(dev\) in CMakeLists.txt:
-  Policy CMP0057 is not set: Error on export with bad INCLUDES DESTINATION.
-  Run "cmake --help-policy CMP0057" for policy details.  Use the cmake_policy
-  command to set the policy and suppress this warning.
+  Policy CMP0057 is not set: Error on absolute export with relative usage
+  requirements.  Run "cmake --help-policy CMP0057" for policy details.  Use
+  the cmake_policy command to set the policy and suppress this warning.
 
   Target "somelib" is installed with a path relative to the installation
   prefix
 
-    "\${_IMPORT_PREFIX}/include"
+    "include"
 
   in its INTERFACE_INCLUDE_DIRECTORIES property.  The target is part of
   export set "exp" which is installed with an absolute path as its

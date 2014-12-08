@@ -1,7 +1,7 @@
 CMP0057
 -------
 
-Error on export with bad INCLUDES DESTINATION.
+Error on absolute export with relative usage requirements.
 
 CMake 3.1 and lower generated unusable files with the
 :command:`install(EXPORT)` command if an absolute ``DESTINATION`` was used
