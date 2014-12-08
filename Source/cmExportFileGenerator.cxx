@@ -171,7 +171,7 @@ void cmExportFileGenerator::PopulateInterfaceProperty(
                                                            preprocessRule);
     if (!prepro.empty())
       {
-      this->ResolveTargetsInGeneratorExpressions(prepro, target,
+      this->ResolveTargetsInGeneratorExpressions(propName, prepro, target,
                                                  missingTargets);
       properties[outputName] = prepro;
       }
@@ -205,7 +205,8 @@ bool cmExportFileGenerator::PopulateInterfaceLinkLibrariesProperty(
                                                            preprocessRule);
     if (!prepro.empty())
       {
-      this->ResolveTargetsInGeneratorExpressions(prepro, target,
+      this->ResolveTargetsInGeneratorExpressions("INTERFACE_LINK_LIBRARIES",
+                                                 prepro, target,
                                                  missingTargets,
                                                  ReplaceFreeTargets);
       properties["INTERFACE_LINK_LIBRARIES"] = prepro;
@@ -383,7 +384,8 @@ void cmExportFileGenerator::PopulateIncludeDirectoriesInterface(
                                             tei->InterfaceIncludeDirectories,
                                             preprocessRule,
                                             true);
-  this->ReplaceInstallPrefix(dirs);
+  this->ReplaceInstallPrefix(tei->Target, "INTERFACE_INCLUDE_DIRECTORIES",
+                             dirs);
   cmsys::auto_ptr<cmCompiledGeneratorExpression> cge = ge.Parse(dirs);
   std::string exportDirs = cge->Evaluate(target->GetMakefile(), "",
                                          false, target);
@@ -421,8 +423,9 @@ void cmExportFileGenerator::PopulateIncludeDirectoriesInterface(
                                                          true);
   if (!prepro.empty())
     {
-    this->ResolveTargetsInGeneratorExpressions(prepro, target,
-                                                missingTargets);
+    this->ResolveTargetsInGeneratorExpressions("INTERFACE_INCLUDE_DIRECTORIES",
+                                               prepro, target,
+                                               missingTargets);
 
     if (!checkInterfaceDirs(prepro, target))
       {
@@ -607,6 +610,7 @@ cmExportFileGenerator::AddTargetNamespace(std::string &input,
 //----------------------------------------------------------------------------
 void
 cmExportFileGenerator::ResolveTargetsInGeneratorExpressions(
+                                    std::string const& propName,
                                     std::string &input,
                                     cmTarget* target,
                                     std::vector<std::string> &missingTargets,
@@ -614,7 +618,8 @@ cmExportFileGenerator::ResolveTargetsInGeneratorExpressions(
 {
   if (replace == NoReplaceFreeTargets)
     {
-    this->ResolveTargetsInGeneratorExpression(input, target, missingTargets);
+    this->ResolveTargetsInGeneratorExpression(propName, input,
+                                              target, missingTargets);
     return;
     }
   std::vector<std::string> parts;
@@ -631,7 +636,7 @@ cmExportFileGenerator::ResolveTargetsInGeneratorExpressions(
       }
     else
       {
-      this->ResolveTargetsInGeneratorExpression(
+      this->ResolveTargetsInGeneratorExpression(propName,
                                     *li,
                                     target,
                                     missingTargets);
@@ -644,6 +649,7 @@ cmExportFileGenerator::ResolveTargetsInGeneratorExpressions(
 //----------------------------------------------------------------------------
 void
 cmExportFileGenerator::ResolveTargetsInGeneratorExpression(
+                                    std::string const& propName,
                                     std::string &input,
                                     cmTarget* target,
                                     std::vector<std::string> &missingTargets)
@@ -709,7 +715,7 @@ cmExportFileGenerator::ResolveTargetsInGeneratorExpression(
     lastPos = endPos;
     }
 
-  this->ReplaceInstallPrefix(input);
+  this->ReplaceInstallPrefix(target, propName, input);
 
   if (!errorString.empty())
     {
@@ -719,7 +725,8 @@ cmExportFileGenerator::ResolveTargetsInGeneratorExpression(
 
 //----------------------------------------------------------------------------
 void
-cmExportFileGenerator::ReplaceInstallPrefix(std::string &)
+cmExportFileGenerator::ReplaceInstallPrefix(cmTarget*,
+                                            std::string const&, std::string &)
 {
   // Do nothing
 }
@@ -792,9 +799,11 @@ cmExportFileGenerator
                                                          preprocessRule);
   if (!prepro.empty())
     {
-    this->ResolveTargetsInGeneratorExpressions(prepro, target,
-                                               missingTargets,
-                                               ReplaceFreeTargets);
+    this->ResolveTargetsInGeneratorExpressions(
+                                          "LINK_INTERFACE_LIBRARIES" + suffix,
+                                          prepro, target,
+                                          missingTargets,
+                                          ReplaceFreeTargets);
     properties["IMPORTED_LINK_INTERFACE_LIBRARIES" + suffix] = prepro;
     }
 }
