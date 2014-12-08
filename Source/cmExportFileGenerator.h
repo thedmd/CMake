@@ -151,7 +151,9 @@ protected:
     NoReplaceFreeTargets
   };
 
-  void ResolveTargetsInGeneratorExpressions(std::string &input,
+  void ResolveTargetsInGeneratorExpressions(
+                          std::string const& propName,
+                          std::string &input,
                           cmTarget* target,
                           std::vector<std::string> &missingTargets,
                           FreeTargetsReplace replace = NoReplaceFreeTargets);
@@ -187,11 +189,15 @@ private:
   bool AddTargetNamespace(std::string &input, cmTarget* target,
                           std::vector<std::string> &missingTargets);
 
-  void ResolveTargetsInGeneratorExpression(std::string &input,
+  void ResolveTargetsInGeneratorExpression(
+                                    std::string const& propName,
+                                    std::string &input,
                                     cmTarget* target,
                                     std::vector<std::string> &missingTargets);
 
-  virtual void ReplaceInstallPrefix(std::string &input);
+  virtual void ReplaceInstallPrefix(cmTarget* target,
+                                    std::string const& propName,
+                                    std::string &input);
 
   virtual std::string InstallNameDir(cmTarget* target,
                                      const std::string& config) = 0;
