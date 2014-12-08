@@ -299,14 +299,80 @@ bool cmExportInstallFileGenerator::GenerateMainFile(std::ostream& os)
 }
 
 //----------------------------------------------------------------------------
+static bool checkCMP0057(cmTarget* target, std::string const& propName,
+                         std::string const& input, cmExportSet* exportSet)
+{
+  cmOStringStream e;
+  cmake::MessageType messageType = cmake::FATAL_ERROR;
+  cmMakefile* mf = target->GetMakefile();
+  switch(target->GetPolicyStatusCMP0057())
+    {
+    case cmPolicies::WARN:
+      e << (mf->GetPolicies()
+            ->GetPolicyWarning(cmPolicies::CMP0057)) << "\n";
+    case cmPolicies::OLD:
+      messageType = cmake::AUTHOR_WARNING;
+      break;
+    case cmPolicies::REQUIRED_ALWAYS:
+    case cmPolicies::REQUIRED_IF_USED:
+    case cmPolicies::NEW:
+      break;
+    }
+  e << "Target \""
+    << target->GetName()
+    << "\" is installed with a path relative to the installation "
+      "prefix\n  \"" << input << "\"\nin its " << propName
+    << " property.  The target is part of export set \""
+    << exportSet->GetName() << "\" which is installed "
+      "with an absolute path as its DESTINATION.  This mixing of "
+      "absolute and relative paths creates unusable target export files.";
+  mf->IssueMessage(messageType, e.str());
+  if (messageType == cmake::FATAL_ERROR)
+    {
+    return false;
+    }
+  return true;
+}
+
+//----------------------------------------------------------------------------
 void
-cmExportInstallFileGenerator::ReplaceInstallPrefix(std::string &input)
+cmExportInstallFileGenerator::ReplaceInstallPrefix(cmTarget* target,
+                                                   std::string const& propName,
+                                                   std::string &input)
 {
   std::string::size_type pos = 0;
   std::string::size_type lastPos = pos;
 
+  if (input.find("${_IMPORT_PREFIX}") != std::string::npos
+      && this->ImportPrefix.empty())
+    {
+    std::string userFacingInput = input;
+    while((pos = userFacingInput.find("${_IMPORT_PREFIX}/", lastPos))
+        != userFacingInput.npos)
+      {
+      std::string::size_type endPos = pos + sizeof("${_IMPORT_PREFIX}/") - 1;
+      userFacingInput.erase(pos, endPos - pos);
+      lastPos = endPos;
+      }
+
+    if (!checkCMP0057(target, propName, userFacingInput, this->IEGen->GetExportSet()))
+      {
+      return;
+      }
+    }
+
+  pos = 0;
+  lastPos = pos;
+
   while((pos = input.find("$<INSTALL_PREFIX>", lastPos)) != input.npos)
     {
+    if (this->ImportPrefix.empty())
+      {
+      if (!checkCMP0057(target, propName, input, this->IEGen->GetExportSet()))
+        {
+        return;
+        }
+      }
     std::string::size_type endPos = pos + sizeof("$<INSTALL_PREFIX>") - 1;
     input.replace(pos, endPos - pos, "${_IMPORT_PREFIX}");
     lastPos = endPos;
