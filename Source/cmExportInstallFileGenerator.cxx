@@ -346,11 +346,23 @@ cmExportInstallFileGenerator::ReplaceInstallPrefix(cmTarget* target,
   if (input.find("${_IMPORT_PREFIX}") != std::string::npos
       && this->ImportPrefix.empty())
     {
-    if (!checkCMP0057(target, propName, input, this->IEGen->GetExportSet()))
+    std::string userFacingInput = input;
+    while((pos = userFacingInput.find("${_IMPORT_PREFIX}/", lastPos))
+        != userFacingInput.npos)
+      {
+      std::string::size_type endPos = pos + sizeof("${_IMPORT_PREFIX}/") - 1;
+      userFacingInput.erase(pos, endPos - pos);
+      lastPos = endPos;
+      }
+
+    if (!checkCMP0057(target, propName, userFacingInput, this->IEGen->GetExportSet()))
       {
       return;
       }
     }
+
+  pos = 0;
+  lastPos = pos;
 
   while((pos = input.find("$<INSTALL_PREFIX>", lastPos)) != input.npos)
     {

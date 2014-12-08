@@ -2,7 +2,7 @@ CMake Error in CMakeLists.txt:
   Target "somelib" is installed with a path relative to the installation
   prefix
 
-    "\${_IMPORT_PREFIX}/include"
+    "include"
 
   in its INTERFACE_INCLUDE_DIRECTORIES property.  The target is part of
   export set "exp" which is installed with an absolute path as its
