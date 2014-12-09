@@ -355,7 +355,8 @@ cmExportInstallFileGenerator::ReplaceInstallPrefix(cmTarget* target,
       lastPos = endPos;
       }
 
-    if (!checkCMP0057(target, propName, userFacingInput, this->IEGen->GetExportSet()))
+    if (!checkCMP0057(target, propName, userFacingInput,
+        this->IEGen->GetExportSet()))
       {
       return;
       }
