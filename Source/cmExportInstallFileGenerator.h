@@ -16,7 +16,6 @@
 
 class cmInstallExportGenerator;
 class cmInstallTargetGenerator;
-class cmExportSet;
 
 /** \class cmExportInstallFileGenerator
  * \brief Generate a file exporting targets from an install tree.
@@ -62,9 +61,7 @@ protected:
                                    cmTarget* depender,
                                    cmTarget* dependee);
 
-  virtual void ReplaceInstallPrefix(cmTarget* target,
-                                    std::string const& propName,
-                                    std::string &input);
+  virtual void ReplaceInstallPrefix(std::string &input);
 
   void ComplainAboutMissingTarget(cmTarget* depender,
                                   cmTarget* dependee,
@@ -89,9 +86,6 @@ protected:
   void ComplainAboutImportPrefix(cmInstallTargetGenerator* itgen);
 
   std::string InstallNameDir(cmTarget* target, const std::string& config);
-
-  bool CheckIncludesDestinationContent(cmTargetExport* tei,
-                                       cmExportSet* exportSet);
 
   cmInstallExportGenerator* IEGen;
 
