@@ -374,11 +374,6 @@ cmPolicies::cmPolicies()
     CMP0056, "CMP0056",
     "Honor link flags in try_compile() source-file signature.",
     3,2,0, cmPolicies::WARN);
-
-  this->DefinePolicy(
-    CMP0057, "CMP0057",
-    "Error on absolute export with relative usage requirements.",
-    3,2,0, cmPolicies::WARN);
 }
 
 cmPolicies::~cmPolicies()

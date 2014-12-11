@@ -37,70 +37,15 @@ std::string cmExportInstallFileGenerator::GetConfigImportFileGlob()
 }
 
 //----------------------------------------------------------------------------
-bool cmExportInstallFileGenerator
-::CheckIncludesDestinationContent(cmTargetExport* tei,
-                                  cmExportSet* exportSet)
-{
-  std::vector<std::string> parts;
-  cmGeneratorExpression::Split(tei->InterfaceIncludeDirectories, parts);
-  for (std::vector<std::string>::const_iterator it = parts.begin();
-       it != parts.end(); ++it)
-    {
-    if (!cmSystemTools::FileIsFullPath(*it))
-      {
-      if (cmGeneratorExpression::Find(*it) != 0)
-        {
-        if (this->ImportPrefix.empty())
-          {
-          cmOStringStream e;
-          cmake::MessageType messageType = cmake::FATAL_ERROR;
-          cmMakefile* mf = tei->Target->GetMakefile();
-          switch(tei->Target->GetPolicyStatusCMP0057())
-            {
-            case cmPolicies::WARN:
-              e << (mf->GetPolicies()
-                    ->GetPolicyWarning(cmPolicies::CMP0057)) << "\n";
-            case cmPolicies::OLD:
-              messageType = cmake::AUTHOR_WARNING;
-              break;
-            case cmPolicies::REQUIRED_ALWAYS:
-            case cmPolicies::REQUIRED_IF_USED:
-            case cmPolicies::NEW:
-              break;
-            }
-          e << "Target \""
-            << tei->Target->GetName()
-            << "\" is installed as part of export set \""
-            << exportSet->GetName() << "\" with an INCLUDES DESTINATION "
-              "containing relative path\n  \"" << *it
-            << "\"\nThe export set \""
-            << exportSet->GetName()
-            << "\" is installed with an absolute path as its DESTINATION.  "
-              "This mixing of absolute and relative paths creates unusable "
-              "target export files.";
-          mf->IssueMessage(messageType, e.str());
-          if (messageType == cmake::FATAL_ERROR)
-            {
-            return false;
-            }
-          }
-        }
-      }
-    }
-  return true;
-}
-
-//----------------------------------------------------------------------------
 bool cmExportInstallFileGenerator::GenerateMainFile(std::ostream& os)
 {
   std::vector<cmTargetExport*> allTargets;
-  cmExportSet* exportSet = this->IEGen->GetExportSet();
   {
   std::string expectedTargets;
   std::string sep;
   for(std::vector<cmTargetExport*>::const_iterator
-        tei = exportSet->GetTargetExports()->begin();
-      tei != exportSet->GetTargetExports()->end(); ++tei)
+        tei = this->IEGen->GetExportSet()->GetTargetExports()->begin();
+      tei != this->IEGen->GetExportSet()->GetTargetExports()->end(); ++tei)
     {
     expectedTargets += sep + this->Namespace + (*tei)->Target->GetExportName();
     sep = " ";
@@ -113,7 +58,7 @@ bool cmExportInstallFileGenerator::GenerateMainFile(std::ostream& os)
       {
       cmOStringStream e;
       e << "install(EXPORT \""
-        << exportSet->GetName()
+        << this->IEGen->GetExportSet()->GetName()
         << "\" ...) " << "includes target \"" << te->Target->GetName()
         << "\" more than once in the export set.";
       cmSystemTools::Error(e.str().c_str());
@@ -195,11 +140,6 @@ bool cmExportInstallFileGenerator::GenerateMainFile(std::ostream& os)
     this->GenerateImportTargetCode(os, te);
 
     ImportPropertyMap properties;
-
-    if (!this->CheckIncludesDestinationContent(*tei, exportSet))
-      {
-      return false;
-      }
 
     this->PopulateIncludeDirectoriesInterface(*tei,
                                   cmGeneratorExpression::InstallInterface,
@@ -299,81 +239,14 @@ bool cmExportInstallFileGenerator::GenerateMainFile(std::ostream& os)
 }
 
 //----------------------------------------------------------------------------
-static bool checkCMP0057(cmTarget* target, std::string const& propName,
-                         std::string const& input, cmExportSet* exportSet)
-{
-  cmOStringStream e;
-  cmake::MessageType messageType = cmake::FATAL_ERROR;
-  cmMakefile* mf = target->GetMakefile();
-  switch(target->GetPolicyStatusCMP0057())
-    {
-    case cmPolicies::WARN:
-      e << (mf->GetPolicies()
-            ->GetPolicyWarning(cmPolicies::CMP0057)) << "\n";
-    case cmPolicies::OLD:
-      messageType = cmake::AUTHOR_WARNING;
-      break;
-    case cmPolicies::REQUIRED_ALWAYS:
-    case cmPolicies::REQUIRED_IF_USED:
-    case cmPolicies::NEW:
-      break;
-    }
-  e << "Target \""
-    << target->GetName()
-    << "\" is installed with a path relative to the installation "
-      "prefix\n  \"" << input << "\"\nin its " << propName
-    << " property.  The target is part of export set \""
-    << exportSet->GetName() << "\" which is installed "
-      "with an absolute path as its DESTINATION.  This mixing of "
-      "absolute and relative paths creates unusable target export files.";
-  mf->IssueMessage(messageType, e.str());
-  if (messageType == cmake::FATAL_ERROR)
-    {
-    return false;
-    }
-  return true;
-}
-
-//----------------------------------------------------------------------------
 void
-cmExportInstallFileGenerator::ReplaceInstallPrefix(cmTarget* target,
-                                                   std::string const& propName,
-                                                   std::string &input)
+cmExportInstallFileGenerator::ReplaceInstallPrefix(std::string &input)
 {
   std::string::size_type pos = 0;
   std::string::size_type lastPos = pos;
 
-  if (input.find("${_IMPORT_PREFIX}") != std::string::npos
-      && this->ImportPrefix.empty())
-    {
-    std::string userFacingInput = input;
-    while((pos = userFacingInput.find("${_IMPORT_PREFIX}/", lastPos))
-        != userFacingInput.npos)
-      {
-      std::string::size_type endPos = pos + sizeof("${_IMPORT_PREFIX}/") - 1;
-      userFacingInput.erase(pos, endPos - pos);
-      lastPos = endPos;
-      }
-
-    if (!checkCMP0057(target, propName, userFacingInput,
-        this->IEGen->GetExportSet()))
-      {
-      return;
-      }
-    }
-
-  pos = 0;
-  lastPos = pos;
-
   while((pos = input.find("$<INSTALL_PREFIX>", lastPos)) != input.npos)
     {
-    if (this->ImportPrefix.empty())
-      {
-      if (!checkCMP0057(target, propName, input, this->IEGen->GetExportSet()))
-        {
-        return;
-        }
-      }
     std::string::size_type endPos = pos + sizeof("$<INSTALL_PREFIX>") - 1;
     input.replace(pos, endPos - pos, "${_IMPORT_PREFIX}");
     lastPos = endPos;
