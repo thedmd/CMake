@@ -475,7 +475,8 @@ elseif(APPLE)
       OUTPUT_STRIP_TRAILING_WHITESPACE
       )
   endif()
-  if(NOT OSX_VERSION VERSION_LESS 10.7)
+  if(NOT OSX_VERSION VERSION_LESS 10.5 AND
+     CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
     add_definitions(-DUSE_DARWINSSL)
     list(APPEND CURL_LIBS
       "-framework CoreFoundation"
