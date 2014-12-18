@@ -634,7 +634,11 @@ void cmLocalGenerator::AddCustomCommandToCreateObject(const char* ofname,
     // Parse the string to get the custom command line.
     cmCustomCommandLine commandLine;
     std::vector<std::string> cmd = cmSystemTools::ParseArguments(i->c_str());
-    commandLine.insert(commandLine.end(), cmd.begin(), cmd.end());
+    for(std::vector<std::string>::iterator a = cmd.begin();
+        a != cmd.end(); ++a)
+      {
+      commandLine.push_back(*a);
+      }
 
     // Store this command line.
     commandLines.push_back(commandLine);
@@ -741,7 +745,11 @@ void cmLocalGenerator::AddBuildTargetRule(const std::string& llang,
     // Parse the string to get the custom command line.
     cmCustomCommandLine commandLine;
     std::vector<std::string> cmd = cmSystemTools::ParseArguments(i->c_str());
-    commandLine.insert(commandLine.end(), cmd.begin(), cmd.end());
+    for(std::vector<std::string>::iterator a = cmd.begin();
+        a != cmd.end(); ++a)
+      {
+      commandLine.push_back(*a);
+      }
 
     // Store this command line.
     commandLines.push_back(commandLine);

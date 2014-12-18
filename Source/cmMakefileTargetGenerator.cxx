@@ -759,10 +759,13 @@ cmMakefileTargetGenerator
   if(const char* extra_outputs_str =
      source.GetProperty("OBJECT_OUTPUTS"))
     {
-    // Register these as extra files to clean.
     cmSystemTools::ExpandListArgument(extra_outputs_str, outputs);
-    this->CleanFiles.insert(this->CleanFiles.end(),
-                            outputs.begin() + 1, outputs.end());
+    for(std::vector<std::string>::const_iterator eoi = outputs.begin()+1;
+        eoi != outputs.end(); ++eoi)
+      {
+      // Register this as an extra file to clean.
+      this->CleanFiles.push_back(*eoi);
+      }
     }
 
   // Write the rule.
@@ -1171,7 +1174,11 @@ cmMakefileTargetGenerator
       {
       cmCustomCommandGenerator ccg(*cc, this->ConfigName, this->Makefile);
       const std::vector<std::string>& outputs = ccg.GetOutputs();
-      depends.insert(depends.end(), outputs.begin(), outputs.end());
+      for(std::vector<std::string>::const_iterator o = outputs.begin();
+          o != outputs.end(); ++o)
+        {
+        depends.push_back(*o);
+        }
       }
     }
 }
@@ -1186,7 +1193,13 @@ void cmMakefileTargetGenerator
   depends.push_back(source.GetFullPath());
   if(const char* objectDeps = source.GetProperty("OBJECT_DEPENDS"))
     {
-    cmSystemTools::ExpandListArgument(objectDeps, depends);
+    std::vector<std::string> deps;
+    cmSystemTools::ExpandListArgument(objectDeps, deps);
+    for(std::vector<std::string>::iterator i = deps.begin();
+        i != deps.end(); ++i)
+      {
+      depends.push_back(*i);
+      }
     }
 }
 
@@ -1455,8 +1468,11 @@ void cmMakefileTargetGenerator::WriteTargetDriverRule(
       }
 
     // Make sure the extra files are built.
-    depends.insert(depends.end(),
-                   this->ExtraFiles.begin(), this->ExtraFiles.end());
+    for(std::set<std::string>::const_iterator i = this->ExtraFiles.begin();
+        i != this->ExtraFiles.end(); ++i)
+      {
+      depends.push_back(*i);
+      }
     }
 
   // Write the driver rule.
@@ -1543,7 +1559,11 @@ void cmMakefileTargetGenerator
   if(cmComputeLinkInformation* cli = this->Target->GetLinkInformation(cfg))
     {
     std::vector<std::string> const& libDeps = cli->GetDepends();
-    depends.insert(depends.end(), libDeps.begin(), libDeps.end());
+    for(std::vector<std::string>::const_iterator j = libDeps.begin();
+        j != libDeps.end(); ++j)
+      {
+      depends.push_back(*j);
+      }
     }
 }
 
@@ -1563,8 +1583,12 @@ void cmMakefileTargetGenerator
     }
 
   // Add dependencies on the external object files.
-  depends.insert(depends.end(),
-                 this->ExternalObjects.begin(), this->ExternalObjects.end());
+  for(std::vector<std::string>::const_iterator obj
+        = this->ExternalObjects.begin();
+      obj != this->ExternalObjects.end(); ++obj)
+    {
+    depends.push_back(*obj);
+    }
 
   // Add a dependency on the rule file itself.
   this->LocalGenerator->AppendRuleDepend(depends,

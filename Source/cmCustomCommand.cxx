@@ -131,14 +131,21 @@ const char* cmCustomCommand::GetComment() const
 //----------------------------------------------------------------------------
 void cmCustomCommand::AppendCommands(const cmCustomCommandLines& commandLines)
 {
-  this->CommandLines.insert(this->CommandLines.end(),
-                            commandLines.begin(), commandLines.end());
+  for(cmCustomCommandLines::const_iterator i=commandLines.begin();
+      i != commandLines.end(); ++i)
+    {
+    this->CommandLines.push_back(*i);
+    }
 }
 
 //----------------------------------------------------------------------------
 void cmCustomCommand::AppendDepends(const std::vector<std::string>& depends)
 {
-  this->Depends.insert(this->Depends.end(), depends.begin(), depends.end());
+  for(std::vector<std::string>::const_iterator i=depends.begin();
+      i != depends.end(); ++i)
+    {
+    this->Depends.push_back(*i);
+    }
 }
 
 //----------------------------------------------------------------------------
