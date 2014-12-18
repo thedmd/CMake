@@ -6456,8 +6456,11 @@ cmTargetInternals::ComputeLinkImplementationLanguages(
   // Get languages used in our source files.
   thisTarget->GetLanguages(languages, config);
   // Copy the set of langauges to the link implementation.
-  impl.Languages.insert(impl.Languages.begin(),
-                        languages.begin(), languages.end());
+  for(std::set<std::string>::iterator li = languages.begin();
+      li != languages.end(); ++li)
+    {
+    impl.Languages.push_back(*li);
+    }
 }
 
 //----------------------------------------------------------------------------

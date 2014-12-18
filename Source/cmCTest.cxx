@@ -2598,14 +2598,16 @@ void cmCTest::PopulateCustomVector(cmMakefile* mf, const std::string& def,
     return;
     }
   cmCTestLog(this, DEBUG, "PopulateCustomVector: " << def << std::endl);
+  std::vector<std::string> slist;
+  cmSystemTools::ExpandListArgument(dval, slist);
+  std::vector<std::string>::iterator it;
 
   vec.clear();
-  cmSystemTools::ExpandListArgument(dval, vec);
 
-  for (std::vector<std::string>::const_iterator it = vec.begin();
-       it != vec.end(); ++it )
+  for ( it = slist.begin(); it != slist.end(); ++it )
     {
     cmCTestLog(this, DEBUG, "  -- " << *it << std::endl);
+    vec.push_back(*it);
     }
 }
 

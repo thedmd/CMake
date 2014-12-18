@@ -1094,8 +1094,11 @@ void cmCTestBuildHandler::ProcessBuffer(const char* data, int length,
       {
       // Create a contiguous array for the line
       this->CurrentProcessingLine.clear();
-      this->CurrentProcessingLine.insert(this->CurrentProcessingLine.end(),
-                                         queue->begin(), queue->end());
+      t_BuildProcessingQueueType::iterator cit;
+      for ( cit = queue->begin(); cit != it; ++cit )
+        {
+        this->CurrentProcessingLine.push_back(*cit);
+        }
       this->CurrentProcessingLine.push_back(0);
       const char* line = &*this->CurrentProcessingLine.begin();
 

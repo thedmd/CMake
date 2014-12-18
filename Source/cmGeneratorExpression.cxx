@@ -15,6 +15,8 @@
 #include "cmTarget.h"
 #include "assert.h"
 
+#include <cmsys/String.h>
+
 #include "cmGeneratorExpressionEvaluator.h"
 #include "cmGeneratorExpressionLexer.h"
 #include "cmGeneratorExpressionParser.h"
