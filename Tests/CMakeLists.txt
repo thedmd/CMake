@@ -1942,6 +1942,7 @@ ${CMake_BINARY_DIR}/bin/cmake -DDIR=dev -P ${CMake_SOURCE_DIR}/Utilities/Release
         --build-two-config
         ${build_generator_args}
         --build-project CFBundleTest
+        --build-config $<CONFIGURATION>
         --build-options ${build_options}
         --test-command
         ${CMAKE_CMAKE_COMMAND} -DCTEST_CONFIGURATION_TYPE=$<CONFIGURATION>
