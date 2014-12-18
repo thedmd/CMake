@@ -3085,6 +3085,3 @@ ${CMake_BINARY_DIR}/bin/cmake -DDIR=dev -P ${CMake_SOURCE_DIR}/Utilities/Release
     add_subdirectory(CMakeTests)
   endif()
 endif()
-
-# Remove a stray source file from a few dashboard machines.
-file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/ExternalProjectUpdate/core)
