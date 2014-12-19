@@ -2363,6 +2363,9 @@ bool cmSystemTools::GuessLibraryInstallName(std::string const& fullPath,
     {
     return macho.GetInstallName(soname);
     }
+#else
+  (void)fullPath;
+  (void)soname;
 #endif
 
   return false;
