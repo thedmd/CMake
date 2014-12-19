@@ -18,6 +18,7 @@
 #include <mach-o/loader.h>
 #include <mach-o/fat.h>
 
+#include <AvailabilityMacros.h>
 
 /**
 
@@ -400,7 +401,9 @@ bool cmMachO::GetInstallName(std::string& install_name)
     uint32_t lc_cmd = cmd.type(macho);
     if(lc_cmd == LC_ID_DYLIB ||
        lc_cmd == LC_LOAD_WEAK_DYLIB ||
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1050
        lc_cmd == LC_REEXPORT_DYLIB ||
+#endif
        lc_cmd == LC_LOAD_DYLIB)
       {
       if(sizeof(dylib_command) < cmd.LoadCommand.size())
