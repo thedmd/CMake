@@ -51,7 +51,8 @@ namespace {
       {
       return false;
       }
-    return fin.seekg(p);
+    fin.seekg(p);
+    return fin.good();
     }
 
   // read from the file and fill a data structure
