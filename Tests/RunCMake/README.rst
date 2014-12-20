@@ -41,7 +41,7 @@ but do not actually build anything.  To add a test:
    ``<SubTest>-stdout.txt``
     Regex matching expected stdout content
    ``<SubTest>-stderr.txt``
-    Regex matching expected stderr content, if not "^$"
+    Regex matching expected stderr content
    ``<SubTest>-check.cmake``
     Custom result check.
 
