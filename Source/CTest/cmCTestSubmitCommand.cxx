@@ -74,8 +74,13 @@ cmCTestGenericHandler* cmCTestSubmitCommand::InitializeHandler()
     std::vector<std::string> notesFiles;
     cmCTest::VectorOfStrings newNotesFiles;
     cmSystemTools::ExpandListArgument(notesFilesVariable,notesFiles);
-    newNotesFiles.insert(newNotesFiles.end(),
-                         notesFiles.begin(), notesFiles.end());
+    std::vector<std::string>::iterator it;
+    for ( it = notesFiles.begin();
+      it != notesFiles.end();
+      ++ it )
+      {
+      newNotesFiles.push_back(*it);
+      }
     this->CTest->GenerateNotesFile(newNotesFiles);
     }
 
@@ -86,8 +91,13 @@ cmCTestGenericHandler* cmCTestSubmitCommand::InitializeHandler()
     std::vector<std::string> extraFiles;
     cmCTest::VectorOfStrings newExtraFiles;
     cmSystemTools::ExpandListArgument(extraFilesVariable,extraFiles);
-    newExtraFiles.insert(newExtraFiles.end(),
-                         extraFiles.begin(), extraFiles.end());
+    std::vector<std::string>::iterator it;
+    for ( it = extraFiles.begin();
+      it != extraFiles.end();
+      ++ it )
+      {
+      newExtraFiles.push_back(*it);
+      }
     if ( !this->CTest->SubmitExtraFiles(newExtraFiles))
       {
       this->SetError("problem submitting extra files.");

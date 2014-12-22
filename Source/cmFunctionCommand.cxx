@@ -271,7 +271,11 @@ bool cmFunctionCommand
 
   // create a function blocker
   cmFunctionFunctionBlocker *f = new cmFunctionFunctionBlocker();
-  f->Args.insert(f->Args.end(), args.begin(), args.end());
+  for(std::vector<std::string>::const_iterator j = args.begin();
+      j != args.end(); ++j)
+    {
+    f->Args.push_back(*j);
+    }
   this->Makefile->AddFunctionBlocker(f);
   return true;
 }

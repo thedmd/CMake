@@ -39,7 +39,10 @@ bool cmRemoveCommand
   // check for REMOVE(VAR v1 v2 ... vn)
   std::vector<std::string> argsExpanded;
   std::vector<std::string> temp;
-  temp.insert(temp.end(), args.begin() + 1, args.end());
+  for(unsigned int j = 1; j < args.size(); ++j)
+    {
+    temp.push_back(args[j]);
+    }
   cmSystemTools::ExpandList(temp, argsExpanded);
 
   // now create the new value

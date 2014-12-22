@@ -1856,8 +1856,13 @@ void cmLocalUnixMakefileGenerator3
         {
         text = "Running external command ...";
         }
-      depends.insert(depends.end(), glIt->second.GetUtilities().begin(),
-                     glIt->second.GetUtilities().end());
+      std::set<std::string>::const_iterator dit;
+      for ( dit = glIt->second.GetUtilities().begin();
+         dit != glIt->second.GetUtilities().end();
+        ++ dit )
+        {
+        depends.push_back(*dit);
+        }
       this->AppendEcho(commands, text,
                        cmLocalUnixMakefileGenerator3::EchoGlobal);
 
