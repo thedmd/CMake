@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1)
 
 project(CompileFeatures)
 
@@ -26,18 +26,30 @@ get_property(c_features GLOBAL PROPERTY CMAKE_C_KNOWN_FEATURES)
 foreach(feature ${c_features})
   run_test(${feature} C)
 endforeach()
+
 get_property(cxx_features GLOBAL PROPERTY CMAKE_CXX_KNOWN_FEATURES)
+
+#blacklist for msvc
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  list(REMOVE_ITEM cxx_features
+    #This test requires auto return type deduction to work properly, but
+    #that is not supported by all versions of MSVC that support decltype
+    #incomplete return types.
+    cxx_decltype_incomplete_return_types
+    )
+endif()
+
 foreach(feature ${cxx_features})
   run_test(${feature} CXX)
 endforeach()
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL GNU
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
     AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.8)
   list(REMOVE_ITEM CXX_non_features
     cxx_alignof
   )
 endif()
-if (CMAKE_CXX_COMPILER_ID STREQUAL GNU
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
     AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
   # GNU prior to 4.9 does not set any preprocessor define to distinguish
   # c++1y from c++11, so CMake does not support c++1y features before GNU 4.9.
@@ -49,6 +61,14 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL GNU
     cxx_lambda_init_captures
     cxx_return_type_deduction
   )
+endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  list(REMOVE_ITEM CXX_non_features
+    #Micrsoft only officially supports this feature in VS2013 and above, due
+    #to new wording of the proposal. We don't test for this with MSVC because
+    #older compiler pass the test but might not actually conform
+    cxx_contextual_conversions
+    )
 endif()
 
 set(C_ext c)
@@ -122,15 +142,15 @@ if (CMAKE_CXX_COMPILE_FEATURES)
 
   add_executable(CompileFeaturesGenex genex_test.cpp)
   set_property(TARGET CompileFeaturesGenex PROPERTY CXX_STANDARD 11)
-  target_compile_definitions(CompileFeaturesGenex PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>)
+  target_compile_definitions(CompileFeaturesGenex PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
 
   add_executable(CompileFeaturesGenex2 genex_test.cpp)
-  target_compile_features(CompileFeaturesGenex2 PRIVATE cxx_constexpr)
-  target_compile_definitions(CompileFeaturesGenex2 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>)
+  target_compile_features(CompileFeaturesGenex2 PRIVATE cxx_static_assert)
+  target_compile_definitions(CompileFeaturesGenex2 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
 
-  add_library(noexcept_iface INTERFACE)
-  target_compile_features(noexcept_iface INTERFACE cxx_noexcept)
+  add_library(nullptr_iface INTERFACE)
+  target_compile_features(nullptr_iface INTERFACE cxx_nullptr)
   add_executable(CompileFeaturesGenex3 genex_test.cpp)
-  target_link_libraries(CompileFeaturesGenex3 PRIVATE noexcept_iface)
-  target_compile_definitions(CompileFeaturesGenex3 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>)
+  target_link_libraries(CompileFeaturesGenex3 PRIVATE nullptr_iface)
+  target_compile_definitions(CompileFeaturesGenex3 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
 endif()
