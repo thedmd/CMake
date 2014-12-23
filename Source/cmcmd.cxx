@@ -729,9 +729,21 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
       std::string flags = args[2];
       std::string outFile = args[3];
       std::vector<std::string> files;
+      std::string mtime;
       for (std::string::size_type cc = 4; cc < args.size(); cc ++)
         {
-        files.push_back(args[cc]);
+        // if the first 8 chars of an arg are --mtime= and that arg
+        // is not a file on disk, treat it is the --mtime= flag and
+        // not a file
+        if( (args[cc].substr(0, 8) == "--mtime=") &&
+            !cmSystemTools::FileExists(args[cc]))
+          {
+          mtime = args[cc].substr(8);
+          }
+        else
+          {
+          files.push_back(args[cc]);
+          }
         }
       cmSystemTools::cmTarCompression compress =
         cmSystemTools::TarCompressNone;
@@ -773,8 +785,13 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
         }
       else if ( flags.find_first_of('c') != flags.npos )
         {
+        const char* mtimestr = 0;
+        if(mtime.size())
+          {
+          mtimestr = mtime.c_str();
+          }
         if ( !cmSystemTools::CreateTar(
-               outFile.c_str(), files, compress, verbose) )
+               outFile.c_str(), files, compress, verbose, mtimestr) )
           {
           cmSystemTools::Error("Problem creating tar: ", outFile.c_str());
           return 1;
