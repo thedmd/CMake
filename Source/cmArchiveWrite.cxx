@@ -247,6 +247,11 @@ bool cmArchiveWrite::AddPath(const char* path,
   return true;
 }
 
+// function from libarchive
+extern "C"
+{
+  time_t __archive_get_date(time_t, const char*);
+}
 //----------------------------------------------------------------------------
 bool cmArchiveWrite::AddFile(const char* file,
                              size_t skip, const char* prefix)
@@ -274,6 +279,17 @@ bool cmArchiveWrite::AddFile(const char* file,
     this->Error = "archive_read_disk_entry_from_file: ";
     this->Error += cm_archive_error_string(this->Disk);
     return false;
+    }
+  if(this->MTime.size())
+    {
+    time_t t = __archive_get_date(0, this->MTime.c_str());
+    if (t == -1)
+      {
+      this->Error = "__archive_get_date: Unable to parse mtime: ";
+      this->Error += "[" + this->MTime + "]";
+      return false;
+      }
+    archive_entry_set_mtime(e, t, 0);
     }
   // Clear acl and xattr fields not useful for distribution.
   archive_entry_acl_clear(e);
