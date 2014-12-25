@@ -3191,7 +3191,7 @@ bool cmCTest::CompressString(std::string& str)
   unsigned char* base64EncodedBuffer
     = new unsigned char[(outSize * 3) / 2];
 
-  unsigned long rlen
+  size_t rlen
     = cmsysBase64_Encode(out, strm.total_out, base64EncodedBuffer, 1);
 
   str = "";
