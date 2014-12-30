@@ -50,6 +50,13 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL GNU
     cxx_return_type_deduction
   )
 endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  list(REMOVE_ITEM CXX_non_features
+    #Micrsoft only officially supports this feature in VS2013 and above, due
+    #to new wording of the proposal. We don't test for this with MSVC because
+    #older compiler pass the test but might not actually conform
+    cxx_contextual_conversions
+    )
 
 set(C_ext c)
 set(C_standard_flag 11)
