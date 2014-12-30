@@ -26,7 +26,19 @@ get_property(c_features GLOBAL PROPERTY CMAKE_C_KNOWN_FEATURES)
 foreach(feature ${c_features})
   run_test(${feature} C)
 endforeach()
+
 get_property(cxx_features GLOBAL PROPERTY CMAKE_CXX_KNOWN_FEATURES)
+
+#blacklist for msvc
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  list(REMOVE_ITEM cxx_features
+    #This test requires auto return type deduction to work properly, but
+    #that is not supported by all versions of MSVC that support decltype
+    #incomplete return types.
+    cxx_decltype_incomplete_return_types
+    )
+endif()
+
 foreach(feature ${cxx_features})
   run_test(${feature} CXX)
 endforeach()
