@@ -37,7 +37,6 @@ set(_cmake_feature_test_cxx_explicit_conversions "${MSVC_2013}")
 set(_cmake_feature_test_cxx_generalized_initializers "${MSVC_2013}")
 set(_cmake_feature_test_cxx_nonstatic_member_init "${MSVC_2013}")
 set(_cmake_feature_test_cxx_raw_string_literals "${MSVC_2013}")
-set(_cmake_feature_test_cxx_trailing_return_types "${MSVC_2013}")
 set(_cmake_feature_test_cxx_uniform_initialization "${MSVC_2013}")
 # Possibly broken:
 # http://thread.gmane.org/gmane.comp.lib.boost.devel/244986/focus=245333
@@ -69,6 +68,7 @@ set(_cmake_feature_test_cxx_right_angle_brackets "${MSVC_2010}")
 set(_cmake_feature_test_cxx_rvalue_references "${MSVC_2010}")
 set(_cmake_feature_test_cxx_static_assert "${MSVC_2010}")
 set(_cmake_feature_test_cxx_template_template_parameters "${MSVC_2010}")
+set(_cmake_feature_test_cxx_trailing_return_types "${MSVC_2010}")
 set(_cmake_feature_test_cxx_variadic_macros "${MSVC_2010}")
 
 # Currently unsupported:
