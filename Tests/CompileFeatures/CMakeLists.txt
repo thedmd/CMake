@@ -26,7 +26,19 @@ get_property(c_features GLOBAL PROPERTY CMAKE_C_KNOWN_FEATURES)
 foreach(feature ${c_features})
   run_test(${feature} C)
 endforeach()
+
 get_property(cxx_features GLOBAL PROPERTY CMAKE_CXX_KNOWN_FEATURES)
+
+#blacklist for msvc
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  list(REMOVE_ITEM cxx_features
+    #This test requires auto return type deduction to work properly, but
+    #that is not supported by all versions of MSVC that support decltype
+    #incomplete return types.
+    cxx_decltype_incomplete_return_types
+    )
+endif()
+
 foreach(feature ${cxx_features})
   run_test(${feature} CXX)
 endforeach()
@@ -136,9 +148,9 @@ if (CMAKE_CXX_COMPILE_FEATURES)
   target_compile_features(CompileFeaturesGenex2 PRIVATE cxx_static_assert)
   target_compile_definitions(CompileFeaturesGenex2 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
 
-  add_library(noexcept_iface INTERFACE)
-  target_compile_features(noexcept_iface INTERFACE cxx_noexcept)
+  add_library(nullptr_iface INTERFACE)
+  target_compile_features(nullptr_iface INTERFACE cxx_nullptr)
   add_executable(CompileFeaturesGenex3 genex_test.cpp)
-  target_link_libraries(CompileFeaturesGenex3 PRIVATE noexcept_iface)
+  target_link_libraries(CompileFeaturesGenex3 PRIVATE nullptr_iface)
   target_compile_definitions(CompileFeaturesGenex3 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
 endif()
