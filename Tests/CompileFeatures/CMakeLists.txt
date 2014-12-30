@@ -50,6 +50,13 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL GNU
     cxx_return_type_deduction
   )
 endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  list(REMOVE_ITEM CXX_non_features
+    #Micrsoft only officially supports this feature in VS2013 and above, due
+    #to new wording of the proposal. We don't test for this with MSVC because
+    #older compiler pass the test but might not actually conform
+    cxx_contextual_conversions
+    )
 
 set(C_ext c)
 set(C_standard_flag 11)
@@ -122,15 +129,15 @@ if (CMAKE_CXX_COMPILE_FEATURES)
 
   add_executable(CompileFeaturesGenex genex_test.cpp)
   set_property(TARGET CompileFeaturesGenex PROPERTY CXX_STANDARD 11)
-  target_compile_definitions(CompileFeaturesGenex PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>)
+  target_compile_definitions(CompileFeaturesGenex PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
 
   add_executable(CompileFeaturesGenex2 genex_test.cpp)
-  target_compile_features(CompileFeaturesGenex2 PRIVATE cxx_constexpr)
-  target_compile_definitions(CompileFeaturesGenex2 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>)
+  target_compile_features(CompileFeaturesGenex2 PRIVATE cxx_static_assert)
+  target_compile_definitions(CompileFeaturesGenex2 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
 
   add_library(noexcept_iface INTERFACE)
   target_compile_features(noexcept_iface INTERFACE cxx_noexcept)
   add_executable(CompileFeaturesGenex3 genex_test.cpp)
   target_link_libraries(CompileFeaturesGenex3 PRIVATE noexcept_iface)
-  target_compile_definitions(CompileFeaturesGenex3 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>)
+  target_compile_definitions(CompileFeaturesGenex3 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
 endif()
