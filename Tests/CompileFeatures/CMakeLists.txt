@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1)
 
 project(CompileFeatures)
 
@@ -31,13 +31,13 @@ foreach(feature ${cxx_features})
   run_test(${feature} CXX)
 endforeach()
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL GNU
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
     AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.8)
   list(REMOVE_ITEM CXX_non_features
     cxx_alignof
   )
 endif()
-if (CMAKE_CXX_COMPILER_ID STREQUAL GNU
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
     AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
   # GNU prior to 4.9 does not set any preprocessor define to distinguish
   # c++1y from c++11, so CMake does not support c++1y features before GNU 4.9.
@@ -57,6 +57,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     #older compiler pass the test but might not actually conform
     cxx_contextual_conversions
     )
+endif()
 
 set(C_ext c)
 set(C_standard_flag 11)
