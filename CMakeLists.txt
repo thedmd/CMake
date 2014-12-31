@@ -44,6 +44,14 @@ if(NOT DEFINED CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
 endif()
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL SunPro)
+  if (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 5.13)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++03")
+  else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -library=stlport4")
+  endif()
+endif()
+
 # option to set the internal encoding of CMake to UTF-8
 option(CMAKE_ENCODING_UTF8 "Use UTF-8 encoding internally (experimental)." OFF)
 mark_as_advanced(CMAKE_ENCODING_UTF8)
