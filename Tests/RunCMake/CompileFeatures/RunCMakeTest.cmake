@@ -27,8 +27,13 @@ if (NOT CXX_FEATURES)
   run_cmake(NoSupportedCxxFeatures)
   run_cmake(NoSupportedCxxFeaturesGenex)
 else()
-  run_cmake(LinkImplementationFeatureCycle)
-  run_cmake(LinkImplementationFeatureCycleSolved)
+  #compilers such as MSVC have no explicit flags to enable C++11 mode,
+  #it just is always on. So only run the link tests with compilers that require
+  #a flag to specify the language version.
+  if(CMAKE_CXX11_STANDARD_COMPILE_OPTION)
+    run_cmake(LinkImplementationFeatureCycle)
+    run_cmake(LinkImplementationFeatureCycleSolved)
+  endif()
 
   if (";${CXX_FEATURES};" MATCHES ";cxx_final;")
     set(RunCMake_TEST_OPTIONS "-DHAVE_FINAL=1")
