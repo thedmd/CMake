@@ -14,6 +14,9 @@
 #   destination for files of a given type
 # ``CMAKE_INSTALL_FULL_<dir>``
 #   corresponding absolute path
+# ``CPACK_PACKAGING_INSTALL_FULL_<dir>``
+#   CMAKE_INSTALL_<dir> prepended (if path is relateive) by
+#   CPACK_PACKAGING_INSTALL_PREFIX for use in CPack (relocatable RPM)
 #
 # where <dir> is one of:
 #
@@ -276,7 +279,9 @@ foreach(dir
     )
   if(NOT IS_ABSOLUTE ${CMAKE_INSTALL_${dir}})
     set(CMAKE_INSTALL_FULL_${dir} "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_${dir}}")
+    set(CPACK_PACKAGING_INSTALL_FULL_${dir} "${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_${dir}}")
   else()
     set(CMAKE_INSTALL_FULL_${dir} "${CMAKE_INSTALL_${dir}}")
+    set(CPACK_PACKAGING_INSTALL_FULL_${dir} "${CMAKE_INSTALL_${dir}}")
   endif()
 endforeach()
