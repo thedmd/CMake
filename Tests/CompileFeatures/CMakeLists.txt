@@ -29,12 +29,11 @@ endforeach()
 
 get_property(cxx_features GLOBAL PROPERTY CMAKE_CXX_KNOWN_FEATURES)
 
-#blacklist for msvc
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   list(REMOVE_ITEM cxx_features
-    #This test requires auto return type deduction to work properly, but
-    #that is not supported by all versions of MSVC that support decltype
-    #incomplete return types.
+    # This test requires auto return type deduction to work properly, but
+    # that is not supported by all versions of MSVC that support decltype
+    # incomplete return types.
     cxx_decltype_incomplete_return_types
     )
 endif()
@@ -64,9 +63,9 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
 endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   list(REMOVE_ITEM CXX_non_features
-    #Micrsoft only officially supports this feature in VS2013 and above, due
-    #to new wording of the proposal. We don't test for this with MSVC because
-    #older compiler pass the test but might not actually conform
+    # Micrsoft only officially supports this feature in VS2013 and above, due
+    # to new wording of the proposal. We don't test for this with MSVC because
+    # older compiler pass the test but might not actually conform
     cxx_contextual_conversions
     )
 endif()

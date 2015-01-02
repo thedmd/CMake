@@ -46,7 +46,7 @@ set(_cmake_feature_test_cxx_uniform_initialization "${MSVC_2013}")
 set(_cmake_feature_test_cxx_variadic_templates "${MSVC_2013}")
 # Microsoft now states they support contextual conversions
 # see footnote 6 at:
-#  http://blogs.msdn.com/b/vcblog/archive/2014/11/17/c-11-14-17-features-in-vs-2015-preview.aspx
+# http://blogs.msdn.com/b/vcblog/archive/2014/11/17/c-11-14-17-features-in-vs-2015-preview.aspx
 set(_cmake_feature_test_cxx_contextual_conversions "${MSVC_2013}")
 
 set(MSVC_2012 "_MSC_VER >= 1700")
@@ -89,8 +89,8 @@ set(_cmake_feature_test_cxx_variadic_macros "${MSVC_2010}")
 # set(_cmake_feature_test_cxx_variable_templates )
 
 
-#Unset all the variables that we don't need exposed.
-#_cmake_oldestSupported is required by WriteCompilerDetectionHeader
+# Unset all the variables that we don't need exposed.
+# _cmake_oldestSupported is required by WriteCompilerDetectionHeader
 set(MSVC_2015)
 set(MSVC_2013)
 set(MSVC_2012)

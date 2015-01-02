@@ -6,7 +6,6 @@
 
 set(_cmake_oldestSupported "_MSC_VER >= 1300")
 
-#currently disabling everything while we test
 set(MSVC_2010 "_MSC_VER >= 1600")
 set(_cmake_feature_test_c_static_assert "${MSVC_2010}")
 set(_cmake_feature_test_c_variadic_macros "${MSVC_2010}")
@@ -15,10 +14,10 @@ set(MSVC_2003 "_MSC_VER >= 1300")
 set(_cmake_feature_test_c_function_prototypes "${MSVC_2003}")
 
 # Currently unsupported:
-#restrict requires the __restrict syntax in msvc
-#set(_cmake_feature_test_c_restrict)
+# restrict requires the __restrict syntax in msvc
+# set(_cmake_feature_test_c_restrict)
 
-#Unset all the variables that we don't need exposed.
-#_cmake_oldestSupported is required by WriteCompilerDetectionHeader
+# Unset all the variables that we don't need exposed.
+# _cmake_oldestSupported is required by WriteCompilerDetectionHeader
 set(MSVC_2010)
 set(MSVC_2003)
