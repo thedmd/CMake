@@ -6,8 +6,9 @@ Try compiling and then running some code.
 ::
 
   try_run(RUN_RESULT_VAR COMPILE_RESULT_VAR
-          bindir srcfile [CMAKE_FLAGS <Flags>]
+          bindir srcfile [CMAKE_FLAGS <flags>]
           [COMPILE_DEFINITIONS <flags>]
+          [LINK_LIBRARIES <libs>]
           [COMPILE_OUTPUT_VARIABLE comp]
           [RUN_OUTPUT_VARIABLE run]
           [OUTPUT_VARIABLE var]
