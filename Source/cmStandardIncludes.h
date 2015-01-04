@@ -442,11 +442,7 @@ struct HasSecondType<T, typename voider<typename T::second_type>::type>
 };
 
 template<typename Container,
-    bool hasSecondType = HasSecondType<
-        typename std::iterator_traits<
-            typename Container::const_iterator
-            >::value_type
-        >::value>
+    bool hasSecondType = HasSecondType<typename Container::value_type>::value>
 struct DefaultDeleter
 {
   void operator()(typename Container::value_type value) {
