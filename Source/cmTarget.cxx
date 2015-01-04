@@ -226,13 +226,7 @@ cmLinkImplItem cmTargetInternals::TargetPropertyEntry::NoLinkImplItem;
 static void deleteAndClear(
       std::vector<cmTargetInternals::TargetPropertyEntry*> &entries)
 {
-  for (std::vector<cmTargetInternals::TargetPropertyEntry*>::const_iterator
-      it = entries.begin(),
-      end = entries.end();
-      it != end; ++it)
-    {
-      delete *it;
-    }
+  cmDeleteAll(entries);
   entries.clear();
 }
 
@@ -544,12 +538,7 @@ void cmTarget::ClearLinkMaps()
   this->Internal->LinkInterfaceMap.clear();
   this->Internal->LinkInterfaceUsageRequirementsOnlyMap.clear();
   this->Internal->LinkClosureMap.clear();
-  for (cmTargetLinkInformationMap::const_iterator it
-      = this->LinkInformation.begin();
-      it != this->LinkInformation.end(); ++it)
-    {
-    delete it->second;
-    }
+  cmDeleteAll(this->LinkInformation);
   this->LinkInformation.clear();
 }
 
@@ -6904,10 +6893,7 @@ cmTargetLinkInformationMap
 //----------------------------------------------------------------------------
 cmTargetLinkInformationMap::~cmTargetLinkInformationMap()
 {
-  for(derived::iterator i = this->begin(); i != this->end(); ++i)
-    {
-    delete i->second;
-    }
+  cmDeleteAll(*this);
 }
 
 //----------------------------------------------------------------------------

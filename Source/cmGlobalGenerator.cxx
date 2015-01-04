@@ -1510,34 +1510,16 @@ void cmGlobalGenerator::CreateGeneratorTargets()
 //----------------------------------------------------------------------------
 void cmGlobalGenerator::ClearGeneratorMembers()
 {
-  for(cmGeneratorTargetsType::iterator i = this->GeneratorTargets.begin();
-      i != this->GeneratorTargets.end(); ++i)
-    {
-    delete i->second;
-    }
+  cmDeleteAll(this->GeneratorTargets);
   this->GeneratorTargets.clear();
 
-  for(std::vector<cmGeneratorExpressionEvaluationFile*>::const_iterator
-      li = this->EvaluationFiles.begin();
-      li != this->EvaluationFiles.end();
-      ++li)
-    {
-    delete *li;
-    }
+  cmDeleteAll(this->EvaluationFiles);
   this->EvaluationFiles.clear();
 
-  for(std::map<std::string, cmExportBuildFileGenerator*>::iterator
-        i = this->BuildExportSets.begin();
-      i != this->BuildExportSets.end(); ++i)
-    {
-    delete i->second;
-    }
+  cmDeleteAll(this->BuildExportSets);
   this->BuildExportSets.clear();
 
-  for (unsigned int i = 0; i < this->LocalGenerators.size(); ++i)
-    {
-    delete this->LocalGenerators[i];
-    }
+  cmDeleteAll(this->LocalGenerators);
   this->LocalGenerators.clear();
 
   this->ExportSets.clear();
