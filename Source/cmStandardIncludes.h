@@ -448,7 +448,26 @@ private:
 
 namespace ContainerAlgorithms {
 
-template<typename Container>
+template<typename> struct voider { typedef void type; };
+
+template<typename T, typename = void>
+struct HasSecondType
+{
+  enum { value = false };
+};
+
+template<typename T>
+struct HasSecondType<T, typename voider<typename T::second_type>::type>
+{
+  enum { value = true };
+};
+
+template<typename Container,
+    bool hasSecondType = HasSecondType<
+        typename std::iterator_traits<
+            typename Container::const_iterator
+            >::value_type
+        >::value>
 struct DefaultDeleter
 {
   void operator()(typename Container::value_type value) {
@@ -456,10 +475,10 @@ struct DefaultDeleter
   }
 };
 
-template<typename K, typename V>
-struct DefaultDeleter<std::map<K, V> >
+template<typename Container>
+struct DefaultDeleter<Container, /* hasSecondType = */ true>
 {
-  void operator()(typename std::map<K, V>::value_type value) {
+  void operator()(typename Container::value_type value) {
     delete value.second;
   }
 };
