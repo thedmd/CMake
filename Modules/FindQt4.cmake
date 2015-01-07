@@ -522,7 +522,7 @@ endfunction()
 
 set(QT4_INSTALLED_VERSION_TOO_OLD FALSE)
 
-set(_QT4_QMAKE_NAMES qmake qmake4 qmake-qt4 qmake-mac)
+set(_QT4_QMAKE_NAMES qmake4 qmake-qt4 qmake qmake-mac)
 _qt4_find_qmake("${_QT4_QMAKE_NAMES}" QT_QMAKE_EXECUTABLE QTVERSION)
 
 if (QT_QMAKE_EXECUTABLE AND
