@@ -1468,7 +1468,8 @@ bool cmSystemTools::IsPathToFramework(const char* path)
 
 bool cmSystemTools::CreateTar(const char* outFileName,
                               const std::vector<std::string>& files,
-                              bool gzip, bool bzip2, bool verbose)
+                              bool gzip, bool bzip2, bool xz,
+                              bool verbose)
 {
 #if defined(CMAKE_BUILD_WITH_CMAKE)
   std::string cwd = cmSystemTools::GetCurrentWorkingDirectory();
@@ -1484,7 +1485,8 @@ bool cmSystemTools::CreateTar(const char* outFileName,
     }
   cmArchiveWrite a(fout, (gzip? cmArchiveWrite::CompressGZip :
                           (bzip2? cmArchiveWrite::CompressBZip2 :
-                           cmArchiveWrite::CompressNone)),
+                           (xz? cmArchiveWrite::CompressXZ :
+                           cmArchiveWrite::CompressNone))),
                            cmArchiveWrite::TypeTAR);
   a.SetVerbose(verbose);
   for(std::vector<std::string>::const_iterator i = files.begin();
