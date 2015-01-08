@@ -1759,22 +1759,12 @@ void cmMakefile::AddIncludeDirectories(const std::vector<std::string> &incs,
     return;
     }
 
-  std::string incString;
-  std::string sep;
-
-  for(std::vector<std::string>::const_iterator li = incs.begin();
-      li != incs.end(); ++li)
-    {
-    incString += sep + *li;
-    sep = ";";
-    }
-
   std::vector<cmValueWithOrigin>::iterator position =
                               before ? this->IncludeDirectoriesEntries.begin()
                                     : this->IncludeDirectoriesEntries.end();
 
   cmListFileBacktrace lfbt = this->GetBacktrace();
-  cmValueWithOrigin entry(incString, lfbt);
+  cmValueWithOrigin entry(cmJoin(incs, ";"), lfbt);
   this->IncludeDirectoriesEntries.insert(position, entry);
 
   // Property on each target:
