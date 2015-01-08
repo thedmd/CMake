@@ -44,6 +44,8 @@ endforeach()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
     AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.8)
+  # The cxx_alignof feature happens to work (for *this* testcase) with
+  # GNU 4.7, but it is first documented as available with GNU 4.8.
   list(REMOVE_ITEM CXX_non_features
     cxx_alignof
   )
@@ -64,6 +66,17 @@ endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   list(REMOVE_ITEM CXX_non_features
     # Micrsoft only officially supports this feature in VS2013 and above, due
+    # to new wording of the proposal. We don't test for this with MSVC because
+    # older compiler pass the test but might not actually conform
+    cxx_contextual_conversions
+    )
+endif()
+
+set(MSVC_)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND
+   MSVC_VERSION LESS 1800)
+  list(REMOVE_ITEM CXX_non_features
+    # Microsoft only officially supports this feature in VS2013 and above, due
     # to new wording of the proposal. We don't test for this with MSVC because
     # older compiler pass the test but might not actually conform
     cxx_contextual_conversions
@@ -139,17 +152,30 @@ if (CMAKE_CXX_COMPILE_FEATURES)
   add_executable(IfaceCompileFeatures main.cpp)
   target_link_libraries(IfaceCompileFeatures iface)
 
+  add_definitions(-DEXPECT_OVERRIDE_CONTROL=1)
+
   add_executable(CompileFeaturesGenex genex_test.cpp)
   set_property(TARGET CompileFeaturesGenex PROPERTY CXX_STANDARD 11)
-  target_compile_definitions(CompileFeaturesGenex PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
+
+  target_compile_definitions(CompileFeaturesGenex PRIVATE
+    HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>
+    HAVE_NULLPTR=$<COMPILE_FEATURES:cxx_nullptr>
+  )
 
   add_executable(CompileFeaturesGenex2 genex_test.cpp)
   target_compile_features(CompileFeaturesGenex2 PRIVATE cxx_static_assert)
-  target_compile_definitions(CompileFeaturesGenex2 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
+  target_compile_definitions(CompileFeaturesGenex2 PRIVATE
+    HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>
+    HAVE_NULLPTR=$<COMPILE_FEATURES:cxx_nullptr>
+  )
 
-  add_library(nullptr_iface INTERFACE)
-  target_compile_features(nullptr_iface INTERFACE cxx_nullptr)
+  add_library(static_assert_iface INTERFACE)
+  target_compile_features(static_assert_iface INTERFACE cxx_static_assert)
   add_executable(CompileFeaturesGenex3 genex_test.cpp)
-  target_link_libraries(CompileFeaturesGenex3 PRIVATE nullptr_iface)
-  target_compile_definitions(CompileFeaturesGenex3 PRIVATE HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_override>)
+  target_link_libraries(CompileFeaturesGenex3 PRIVATE static_assert_iface)
+  target_compile_definitions(CompileFeaturesGenex3 PRIVATE
+    HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>
+    HAVE_NULLPTR=$<COMPILE_FEATURES:cxx_nullptr>
+  )
+
 endif()
