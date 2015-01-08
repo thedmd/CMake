@@ -33,7 +33,7 @@ protected:
   bool SupportsComponentInstallation() const;
 
 
-  bool CopyFile(std::ostringstream& source, cmOStringStream& target);
+  bool CopyFile(std::ostringstream& source, std::ostringstream& target);
   bool RunCommand(std::ostringstream& command, std::string* output = 0);
 
   std::string
