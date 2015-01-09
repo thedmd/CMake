@@ -7,8 +7,9 @@ function (check_cache_property var prop)
 endfunction ()
 
 set(var val CACHE STRING "doc")
-set_property(CACHE var PROPERTY empty "" custom value)
+set_property(CACHE var PROPERTY VALUE "") # empty
+set_property(CACHE var PROPERTY ADVANCED TRUE)
 
-check_cache_property(var empty)
-check_cache_property(var custom)
+check_cache_property(var VALUE)
+check_cache_property(var ADVANCED)
 check_cache_property(var noexist)

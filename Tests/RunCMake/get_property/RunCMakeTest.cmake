@@ -1,6 +1,6 @@
 include(RunCMake)
 
-#run_cmake(cache_properties)
+run_cmake(cache_properties)
 run_cmake(directory_properties)
 run_cmake(global_properties)
 run_cmake(install_properties)
