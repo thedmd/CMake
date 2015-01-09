@@ -733,21 +733,29 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
         {
         files.push_back(args[cc]);
         }
-      bool gzip = false;
-      bool bzip2 = false;
-      bool xz = false;
-      bool verbose = false;
+      cmSystemTools::cmTarCompression compress =
+        cmSystemTools::TarCompressNone;
+      int nCompress = 0;
       if ( flags.find_first_of('j') != flags.npos )
         {
-        bzip2 = true;
+        compress = cmSystemTools::TarCompressBZip2;
+        ++nCompress;
         }
       if ( flags.find_first_of('J') != flags.npos )
         {
-        xz = true;
+        compress = cmSystemTools::TarCompressXZ;
+        ++nCompress;
         }
       if ( flags.find_first_of('z') != flags.npos )
         {
-        gzip = true;
+        compress = cmSystemTools::TarCompressGZip;
+        ++nCompress;
+        }
+      if ( nCompress > 1 )
+        {
+        cmSystemTools::Error("Can only compress a tar file one way; "
+                             "at most one flag of z, j, or J may be used");
+        return 1;
         }
       if ( flags.find_first_of('v') != flags.npos )
         {
@@ -765,7 +773,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
       else if ( flags.find_first_of('c') != flags.npos )
         {
         if ( !cmSystemTools::CreateTar(
-               outFile.c_str(), files, gzip, bzip2, xz, verbose) )
+               outFile.c_str(), files, compress, verbose) )
           {
           cmSystemTools::Error("Problem creating tar: ", outFile.c_str());
           return 1;
