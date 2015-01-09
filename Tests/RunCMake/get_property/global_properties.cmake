@@ -1,8 +1,10 @@
 function (check_global_property prop)
+  get_cmake_property(gcp_val "${prop}")
   get_property(gp_val
     GLOBAL
     PROPERTY "${prop}")
 
+  message("get_cmake_property: -->${gcp_val}<--")
   message("get_property: -->${gp_val}<--")
 endfunction ()
 
