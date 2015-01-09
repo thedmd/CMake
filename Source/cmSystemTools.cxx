@@ -1800,7 +1800,7 @@ bool extract_tar(const char* outFileName, bool verbose,
 #endif
 
 bool cmSystemTools::ExtractTar(const char* outFileName,
-                               bool , bool verbose)
+                               bool verbose)
 {
 #if defined(CMAKE_BUILD_WITH_CMAKE)
   return extract_tar(outFileName, verbose, true);
@@ -1812,7 +1812,6 @@ bool cmSystemTools::ExtractTar(const char* outFileName,
 }
 
 bool cmSystemTools::ListTar(const char* outFileName,
-                            bool ,
                             bool verbose)
 {
 #if defined(CMAKE_BUILD_WITH_CMAKE)
