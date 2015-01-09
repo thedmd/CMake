@@ -735,6 +735,7 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
         }
       cmSystemTools::cmTarCompression compress =
         cmSystemTools::TarCompressNone;
+      bool verbose = false;
       int nCompress = 0;
       if ( flags.find_first_of('j') != flags.npos )
         {
