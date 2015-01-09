@@ -391,11 +391,11 @@ public:
     TarCompressNone
   };
   static bool ListTar(const char* outFileName,
-                      bool gzip, bool verbose);
+                      bool verbose);
   static bool CreateTar(const char* outFileName,
                         const std::vector<std::string>& files,
                         cmTarCompression compressType, bool verbose);
-  static bool ExtractTar(const char* inFileName, bool gzip,
+  static bool ExtractTar(const char* inFileName,
                          bool verbose);
   // This should be called first thing in main
   // it will keep child processes from inheriting the
