@@ -862,7 +862,8 @@ WriteDistributionFile(const char* metapackageFile)
 //----------------------------------------------------------------------
 void
 cmCPackPackageMakerGenerator::
-CreateChoiceOutline(const cmCPackComponentGroup& group, std::ostringstream& out)
+CreateChoiceOutline(const cmCPackComponentGroup& group,
+                    std::ostringstream& out)
 {
   out << "<line choice=\"" << group.Name << "Choice\">" << std::endl;
   std::vector<cmCPackComponentGroup*>::const_iterator groupIt;
