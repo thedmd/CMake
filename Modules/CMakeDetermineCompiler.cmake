@@ -41,8 +41,39 @@ macro(_cmake_find_compiler lang)
     endif()
   endif()
 
+  # Look for directories containing compilers of reference languages.
+  set(_${lang}_COMPILER_HINTS)
+  foreach(l ${_languages})
+    if(CMAKE_${l}_COMPILER AND IS_ABSOLUTE "${CMAKE_${l}_COMPILER}")
+      get_filename_component(_hint "${CMAKE_${l}_COMPILER}" PATH)
+      if(IS_DIRECTORY "${_hint}")
+        list(APPEND _${lang}_COMPILER_HINTS "${_hint}")
+      endif()
+      unset(_hint)
+    endif()
+  endforeach()
+
+  # Find the compiler.
+  if(_${lang}_COMPILER_HINTS)
+    # Prefer directories containing compilers of reference languages.
+    list(REMOVE_DUPLICATES _${lang}_COMPILER_HINTS)
+    find_program(CMAKE_${lang}_COMPILER
+      NAMES ${CMAKE_${lang}_COMPILER_LIST}
+      PATHS ${_${lang}_COMPILER_HINTS}
+      NO_DEFAULT_PATH
+      DOC "${lang} compiler")
+  endif()
+  find_program(CMAKE_${lang}_COMPILER NAMES ${CMAKE_${lang}_COMPILER_LIST} DOC "${lang} compiler")
+  if(CMAKE_${lang}_COMPILER_INIT AND NOT CMAKE_${lang}_COMPILER)
+    set_property(CACHE CMAKE_${lang}_COMPILER PROPERTY VALUE "${CMAKE_${lang}_COMPILER_INIT}")
+  endif()
+  unset(_${lang}_COMPILER_HINTS)
+  unset(_languages)
+
   # Look for a make tool provided by Xcode
-  if(CMAKE_HOST_APPLE)
+  if(CMAKE_HOST_APPLE
+      AND (CMAKE_${lang}_COMPILER STREQUAL "CMAKE_${lang}_COMPILER-NOTFOUND"
+        OR CMAKE_${lang}_COMPILER MATCHES "^/usr/bin"))
     foreach(comp ${CMAKE_${lang}_COMPILER_LIST})
       execute_process(COMMAND xcrun --find ${comp}
         OUTPUT_VARIABLE _xcrun_out OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -53,37 +84,6 @@ macro(_cmake_find_compiler lang)
       endif()
     endforeach()
   endif()
-
-  if(NOT CMAKE_${lang}_COMPILER)
-    # Look for directories containing compilers of reference languages.
-    set(_${lang}_COMPILER_HINTS)
-    foreach(l ${_languages})
-      if(CMAKE_${l}_COMPILER AND IS_ABSOLUTE "${CMAKE_${l}_COMPILER}")
-        get_filename_component(_hint "${CMAKE_${l}_COMPILER}" PATH)
-        if(IS_DIRECTORY "${_hint}")
-          list(APPEND _${lang}_COMPILER_HINTS "${_hint}")
-        endif()
-        unset(_hint)
-      endif()
-    endforeach()
-
-    # Find the compiler.
-    if(_${lang}_COMPILER_HINTS)
-      # Prefer directories containing compilers of reference languages.
-      list(REMOVE_DUPLICATES _${lang}_COMPILER_HINTS)
-      find_program(CMAKE_${lang}_COMPILER
-        NAMES ${CMAKE_${lang}_COMPILER_LIST}
-        PATHS ${_${lang}_COMPILER_HINTS}
-        NO_DEFAULT_PATH
-        DOC "${lang} compiler")
-    endif()
-    find_program(CMAKE_${lang}_COMPILER NAMES ${CMAKE_${lang}_COMPILER_LIST} DOC "${lang} compiler")
-    if(CMAKE_${lang}_COMPILER_INIT AND NOT CMAKE_${lang}_COMPILER)
-      set_property(CACHE CMAKE_${lang}_COMPILER PROPERTY VALUE "${CMAKE_${lang}_COMPILER_INIT}")
-    endif()
-    unset(_${lang}_COMPILER_HINTS)
-  endif()
-  unset(_languages)
 endmacro()
 
 macro(_cmake_find_compiler_path lang)
