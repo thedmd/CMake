@@ -144,7 +144,12 @@ if (CMAKE_CXX_COMPILE_FEATURES)
   add_executable(IfaceCompileFeatures main.cpp)
   target_link_libraries(IfaceCompileFeatures iface)
 
-  add_definitions(-DEXPECT_OVERRIDE_CONTROL=1)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+      AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.7)
+    add_definitions(-DEXPECT_OVERRIDE_CONTROL=1)
+  else()
+    add_definitions(-DEXPECT_OVERRIDE_CONTROL=0)
+  endif()
 
   add_executable(CompileFeaturesGenex genex_test.cpp)
   set_property(TARGET CompileFeaturesGenex PROPERTY CXX_STANDARD 11)
