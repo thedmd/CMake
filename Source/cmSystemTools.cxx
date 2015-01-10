@@ -1525,7 +1525,6 @@ bool cmSystemTools::CreateTar(const char* outFileName,
 #else
   (void)outFileName;
   (void)files;
-  (void)gzip;
   (void)verbose;
   return false;
 #endif
