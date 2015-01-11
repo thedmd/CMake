@@ -83,6 +83,17 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND
     )
 endif()
 
+set(MSVC_)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND
+   MSVC_VERSION LESS 1800)
+  list(REMOVE_ITEM CXX_non_features
+    # Microsoft only officially supports this feature in VS2013 and above, due
+    # to new wording of the proposal. We don't test for this with MSVC because
+    # older compiler pass the test but might not actually conform
+    cxx_contextual_conversions
+    )
+endif()
+
 set(C_ext c)
 set(C_standard_flag 11)
 set(CXX_ext cpp)
