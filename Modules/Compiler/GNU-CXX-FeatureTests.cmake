@@ -49,6 +49,7 @@ set(_cmake_feature_test_cxx_final "${GNU47_CXX11}")
 set(_cmake_feature_test_cxx_nonstatic_member_init "${GNU47_CXX11}")
 set(_cmake_feature_test_cxx_override "${GNU47_CXX11}")
 set(_cmake_feature_test_cxx_user_literals "${GNU47_CXX11}")
+set(_cmake_feature_test_cxx_variadic_templates "${GNU47_CXX11}")
 # NOTE: C++11 was ratified in September 2011. GNU 4.7 is the first minor
 # release following that (March 2012), and the first minor release to
 # support -std=c++11. Prior to that, support for C++11 features is technically
@@ -86,7 +87,6 @@ set(_cmake_feature_test_cxx_strong_enums "${GNU44_CXX11}")
 set(_cmake_feature_test_cxx_trailing_return_types "${GNU44_CXX11}")
 set(_cmake_feature_test_cxx_unicode_literals "${GNU44_CXX11}")
 set(_cmake_feature_test_cxx_uniform_initialization "${GNU44_CXX11}")
-set(_cmake_feature_test_cxx_variadic_templates "${GNU44_CXX11}")
 # TODO: If features are ever recorded for GNU 4.3, there should possibly
 # be a new feature added like cxx_variadic_template_template_parameters,
 # which is implemented by GNU 4.4, but not 4.3. cxx_variadic_templates is
