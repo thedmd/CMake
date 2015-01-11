@@ -14,22 +14,34 @@
 #   LATEX_<component>_FOUND:  whether found <component>
 #   LATEX_COMPILER:       path to the LaTeX compiler
 #   PDFLATEX_COMPILER:    path to the PdfLaTeX compiler
+#   XELATEX_COMPILER:     path to the XeLaTeX compiler
+#   LUALATEX_COMPILER:    path to the LuaLaTeX compiler
 #   BIBTEX_COMPILER:      path to the BibTeX compiler
+#   BIBER_COMPILER:       path to the Biber compiler
 #   MAKEINDEX_COMPILER:   path to the MakeIndex compiler
+#   XINDY_COMPILER:       path to the xindy compiler
 #   DVIPS_CONVERTER:      path to the DVIPS converter
 #   DVIPDF_CONVERTER:     path to the DVIPDF converter
 #   PS2PDF_CONVERTER:     path to the PS2PDF converter
+#   PDFTOPS_CONVERTER:    path to the pdftops converter
 #   LATEX2HTML_CONVERTER: path to the LaTeX2Html converter
+#   HTLATEX_COMPILER:     path to the htlatex compiler
 #
 # Possible components are::
 #
 #   PDFLATEX
+#   XELATEX
+#   LUALATEX
 #   BIBTEX
+#   BIBER
 #   MAKEINDEX
+#   XINDY
 #   DVIPS
 #   DVIPDF
 #   PS2PDF
+#   PDFTOPS
 #   LATEX2HTML
+#   HTLATEX
 #
 # Example Usages::
 #
@@ -38,7 +50,8 @@
 #   find_package(LATEX COMPONENTS BIBTEX PS2PDF)
 
 #=============================================================================
-# Copyright 2002-2014 Kitware, Inc.
+# Copyright 2002-2015 Kitware, Inc.
+# Copyright 2014-2015 Christoph Grüninger <foss@grueninger.de>
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.
@@ -101,6 +114,30 @@ else()
   set(LATEX_PDFLATEX_FOUND FALSE)
 endif()
 
+# find xelatex
+find_program(XELATEX_COMPILER
+  NAMES xelatex
+  PATHS ${MIKTEX_BINARY_PATH}
+        /usr/bin
+)
+if (XELATEX_COMPILER)
+  set(LATEX_XELATEX_FOUND TRUE)
+else()
+  set(LATEX_XELATEX_FOUND FALSE)
+endif()
+
+# find lualatex
+find_program(LUALATEX_COMPILER
+  NAMES lualatex
+  PATHS ${MIKTEX_BINARY_PATH}
+        /usr/bin
+)
+if (LUALATEX_COMPILER)
+  set(LATEX_LUALATEX_FOUND TRUE)
+else()
+  set(LATEX_LUALATEX_FOUND FALSE)
+endif()
+
 # find bibtex
 find_program(BIBTEX_COMPILER
   NAMES bibtex
@@ -113,6 +150,18 @@ else()
   set(LATEX_BIBTEX_FOUND FALSE)
 endif()
 
+# find biber
+find_program(BIBER_COMPILER
+  NAMES biber
+  PATHS ${MIKTEX_BINARY_PATH}
+        /usr/bin
+)
+if (BIBER_COMPILER)
+  set(LATEX_BIBER_FOUND TRUE)
+else()
+  set(LATEX_BIBER_FOUND FALSE)
+endif()
+
 # find makeindex
 find_program(MAKEINDEX_COMPILER
   NAMES makeindex
@@ -123,6 +172,18 @@ if (MAKEINDEX_COMPILER)
   set(LATEX_MAKEINDEX_FOUND TRUE)
 else()
   set(LATEX_MAKEINDEX_FOUND FALSE)
+endif()
+
+# find xindy
+find_program(XINDY_COMPILER
+  NAMES xindy
+  PATHS ${MIKTEX_BINARY_PATH}
+        /usr/bin
+)
+if (XINDY_COMPILER)
+   set(LATEX_XINDY_FOUND TRUE)
+else()
+  set(LATEX_XINDY_FOUND FALSE)
 endif()
 
 # find dvips
@@ -167,6 +228,18 @@ else()
   set(LATEX_PS2PDF_FOUND FALSE)
 endif()
 
+# find pdftops
+find_program(PDFTOPS_CONVERTER
+  NAMES pdftops
+  PATHS ${MIKTEX_BINARY_PATH}
+        /usr/bin
+)
+if (PDFTOPS_CONVERTER)
+  set(LATEX_PDFTOPS_FOUND TRUE)
+else()
+  set(LATEX_PDFTOPS_FOUND FALSE)
+endif()
+
 # find latex2html
 find_program(LATEX2HTML_CONVERTER
   NAMES latex2html
@@ -179,16 +252,34 @@ else()
   set(LATEX_LATEX2HTML_FOUND FALSE)
 endif()
 
+# find htlatex
+find_program(HTLATEX_COMPILER
+  NAMES htlatex
+  PATHS ${MIKTEX_BINARY_PATH}
+        /usr/bin
+)
+if (HTLATEX_COMPILER)
+  set(LATEX_HTLATEX_FOUND TRUE)
+else()
+  set(LATEX_HTLATEX_FOUND FALSE)
+endif()
+
 
 mark_as_advanced(
   LATEX_COMPILER
   PDFLATEX_COMPILER
+  XELATEX_COMPILER
+  LUALATEX_COMPILER
   BIBTEX_COMPILER
+  BIBER_COMPILER
   MAKEINDEX_COMPILER
+  XINDY_COMPILER
   DVIPS_CONVERTER
   DVIPDF_CONVERTER
   PS2PDF_CONVERTER
+  PDFTOPS_CONVERTER
   LATEX2HTML_CONVERTER
+  HTLATEX_COMPILER
 )
 
 # handle variables for found Latex and its components
