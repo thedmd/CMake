@@ -79,7 +79,7 @@ macro(_cmake_find_compiler lang)
         OUTPUT_VARIABLE _xcrun_out OUTPUT_STRIP_TRAILING_WHITESPACE
         ERROR_VARIABLE _xcrun_err)
       if(_xcrun_out)
-        set(CMAKE_${lang}_COMPILER "${_xcrun_out}" CACHE PATH "${lang} compiler")
+        set_property(CACHE CMAKE_${lang}_COMPILER PROPERTY VALUE "${_xcrun_out}")
         break()
       endif()
     endforeach()
