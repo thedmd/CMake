@@ -65,7 +65,7 @@ macro(CMAKE_HANDLE_SYSTEM_LIBRARIES)
 
   # Allow the user to enable/disable all system utility library options by
   # defining CMAKE_USE_SYSTEM_LIBRARIES or CMAKE_USE_SYSTEM_LIBRARY_${util}.
-  set(UTILITIES BZIP2 CURL EXPAT FORM LIBARCHIVE LIBLZMA ZLIB)
+  set(UTILITIES BZIP2 CURL EXPAT FORM LIBARCHIVE LIBLZMA ZLIB JSONCPP)
   foreach(util ${UTILITIES})
     if(NOT DEFINED CMAKE_USE_SYSTEM_LIBRARY_${util}
         AND DEFINED CMAKE_USE_SYSTEM_LIBRARIES)
@@ -369,6 +369,17 @@ macro (CMAKE_BUILD_UTILITIES)
     set(CMAKE_EXPAT_LIBRARIES cmexpat)
     add_subdirectory(Utilities/cmexpat)
     CMAKE_SET_TARGET_FOLDER(cmexpat "Utilities/3rdParty")
+  endif()
+
+  #---------------------------------------------------------------------
+  # Build expat library for CMake and CTest.
+  if(CMAKE_USE_SYSTEM_JSONCPP)
+    message(FATAL_ERROR "System JSONCPP not implemented")
+  else()
+    set(CMAKE_JSONCPP_INCLUDES ${CMake_SOURCE_DIR}/Utilities/cmjsoncpp)
+    set(CMAKE_JSONCPP_LIBRARIES cmjsoncpp)
+    add_subdirectory(Utilities/cmjsoncpp)
+    CMAKE_SET_TARGET_FOLDER(jsoncpp "Utilities/3rdParty")
   endif()
 
   #---------------------------------------------------------------------
