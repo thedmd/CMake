@@ -1209,11 +1209,12 @@ int cmCTestSubmitHandler::HandleCDashUploadFile(std::string const& file,
 //----------------------------------------------------------------------------
 int cmCTestSubmitHandler::ProcessHandler()
 {
-  std::string cdashUploadFile = this->GetOption("CDashUploadFile");
-  std::string cdashUploadType = this->GetOption("CDashUploadType");
-  if(cdashUploadFile.size())
+  const char* cdashUploadFile = this->GetOption("CDashUploadFile");
+  const char* cdashUploadType = this->GetOption("CDashUploadType");
+  if(cdashUploadFile && cdashUploadType)
     {
-    return this->HandleCDashUploadFile(cdashUploadFile, cdashUploadType);
+    return this->HandleCDashUploadFile(std::string(cdashUploadFile),
+                                       std::string(cdashUploadType));
     }
   std::string iscdash = this->CTest->GetCTestConfiguration("IsCDash");
   // cdash does not need to trigger so just return true
