@@ -534,7 +534,8 @@ int cmCPackPackageMakerGenerator::InitializeInternal()
     int res = sscanf(packageCompat, "%u.%u", &majorVersion, &minorVersion);
     if (res == 2)
       {
-      this->PackageCompatibilityVersion = getVersion(majorVersion, minorVersion);
+      this->PackageCompatibilityVersion =
+        getVersion(majorVersion, minorVersion);
       }
     }
   else if (this->GetOption("CPACK_DOWNLOAD_SITE"))
