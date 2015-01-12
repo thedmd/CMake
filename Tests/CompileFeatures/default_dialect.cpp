@@ -14,7 +14,7 @@ Outputter<__cplusplus> o;
 #  if !DEFAULT_CXX98
 #    error Buildsystem error
 #  endif
-#  if __cplusplus != 199711L && __cplusplus != 1 && !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  if __cplusplus != 199711L
 Outputter<__cplusplus> o;
 #  endif
 #endif
