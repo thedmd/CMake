@@ -5141,7 +5141,8 @@ bool cmMakefile::HaveStandardAvailable(cmTarget const* target,
 
 //----------------------------------------------------------------------------
 bool cmMakefile::
-HaveCStandardAvailable(cmTarget const* target, const std::string& feature) const
+HaveCStandardAvailable(cmTarget const* target,
+                       const std::string& feature) const
 {
   bool needC90 = false;
   bool needC99 = false;
