@@ -24,7 +24,7 @@
 // For XML-RPC submission
 #include "cm_xmlrpc.h"
 
-#include <json/reader.h>
+#include <cm_jsoncpp_reader.h>
 // For curl submission
 #include "cm_curl.h"
 #include "cmCTestCurl.h"
