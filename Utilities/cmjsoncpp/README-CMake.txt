@@ -11,7 +11,7 @@ branch, but it is merged into our history.
 Update jsoncpp from upstream as follows.  Create a local branch to
 explicitly reference the upstream snapshot branch head:
 
- git branch jsoncpp-upstream ca64c01e
+ git branch jsoncpp-upstream 53f6ccb0
 
 Use a temporary directory to checkout the branch:
 
@@ -24,7 +24,7 @@ Use a temporary directory to checkout the branch:
 Now place the (reduced) jsoncpp content in this directory.  See
 instructions shown by
 
- git log ca64c01e
+ git log 53f6ccb0
 
 for help extracting the content from the upstream svn repo.  Then run
 the following commands to commit the new version.  Substitute the
