@@ -33,7 +33,7 @@ appropriate date and version number:
  git add --all
 
  GIT_AUTHOR_NAME='JsonCpp Upstream' \
- GIT_AUTHOR_EMAIL='github.com' \
+ GIT_AUTHOR_EMAIL='kwrobot@kitware.com' \
  GIT_AUTHOR_DATE='Thu Nov 20 08:45:58 2014 -0600' \
  git commit -m 'JsonCpp 1.0.0 (reduced)' &&
  git commit --amend
