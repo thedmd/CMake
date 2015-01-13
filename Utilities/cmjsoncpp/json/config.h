@@ -6,6 +6,10 @@
 #ifndef JSON_CONFIG_H_INCLUDED
 #define JSON_CONFIG_H_INCLUDED
 
+#if defined(_MSC_VER)
+# pragma warning(push,1)
+#endif
+
 /// If defined, indicates that json library is embedded in CppTL library.
 //# define JSON_IN_CPPTL 1
 
