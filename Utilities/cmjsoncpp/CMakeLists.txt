@@ -1,4 +1,4 @@
-project(JsonCpp)
+project(JsonCpp CXX)
 
 # Disable warnings to avoid changing 3rd party code.
 if(CMAKE_CXX_COMPILER_ID MATCHES
@@ -9,14 +9,14 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "PathScale")
 endif()
 
 set(JSONCPP_SOURCES
-  json_tool.h
-  json_reader.cpp
-  json_batchallocator.h
-  json_valueiterator.inl
-  json_value.cpp
-  json_writer.cpp
-)
+  src/lib_json/json_batchallocator.h
+  src/lib_json/json_reader.cpp
+  src/lib_json/json_tool.h
+  src/lib_json/json_value.cpp
+  src/lib_json/json_valueiterator.inl
+  src/lib_json/json_writer.cpp
+  )
 
-include_directories(${JsonCpp_SOURCE_DIR})
+include_directories(${JsonCpp_SOURCE_DIR}/include)
 
 add_library(cmjsoncpp ${JSONCPP_SOURCES})

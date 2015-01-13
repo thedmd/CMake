@@ -1,28 +1,28 @@
 #.rst:
 # CTestGCOV
-# -----------------------------
+# ---------
 #
-# CTestGCOV.cmake
+# This module provides the function ``run_gcov_and_package_for_cdash``.
+# The function will run gcov on the .gcda files in a binary tree and then
+# package all of the .gcov files into a tar file with a data.json.
+# This file can be sent to a CDash server for display with the
+# :command:`ctest_submit(CDASH_UPLOAD)` command.
 #
-# This module provides the function run_gcov_and_package_for_cdash. The
-# function will run gcov on the .gcda files in a binary tree and then
-# package all of the .gcov files into a tar file with a data.json. This
-# file can be sent to a CDash server for display with ctest_submit
-# CDASH_UPLOAD.
+# .. command:: run_gcov_and_package_for_cdash
 #
-# ::
+#   ::
 #
-#  run_gcov_and_package_for_cdash(<tarfile> <source_dir> <binary_dir>
-#                                 <gcov_command>)
+#     run_gcov_and_package_for_cdash(<tarfile> <source_dir> <binary_dir>
+#                                    <gcov_command>)
 #
-#  Run gcov and package a tar gz file for cdash. tarfile is the name
-#  of the tarfile that is created and it will be placed in binary_dir.
-#  source_dir is the source directory for the build and binary_dir is
-#  the binary directory for the build. The gcov_command is a full path
-#  to gcov for the machine.
+#   Run gcov and package a tar gz file for cdash. ``<tarfile>`` is the name
+#   of the tarfile that is created and it will be placed in ``<binary_dir>``.
+#   ``<source_dir>`` is the source directory for the build and ``<binary_dir>``
+#   is the binary directory for the build. The ``<gcov_command>`` is a full
+#   path to ``gcov`` for the machine.
 
 #=============================================================================
-# Copyright 2008-2009 Kitware, Inc.
+# Copyright 2014-2015 Kitware, Inc.
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.
