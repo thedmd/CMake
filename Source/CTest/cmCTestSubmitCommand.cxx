@@ -145,10 +145,13 @@ cmCTestGenericHandler* cmCTestSubmitCommand::InitializeHandler()
   static_cast<cmCTestSubmitHandler*>(handler)->SetOption("InternalTest",
     this->InternalTest ? "ON" : "OFF");
 
-  static_cast<cmCTestSubmitHandler*>(handler)->
-    SetOption("CDashUploadFile", this->CDashUploadFile.c_str());
-  static_cast<cmCTestSubmitHandler*>(handler)->
-    SetOption("CDashUploadType", this->CDashUploadType.c_str());
+  if(this->CDashUploadFile.size())
+    {
+    static_cast<cmCTestSubmitHandler*>(handler)->
+      SetOption("CDashUploadFile", this->CDashUploadFile.c_str());
+    static_cast<cmCTestSubmitHandler*>(handler)->
+      SetOption("CDashUploadType", this->CDashUploadType.c_str());
+    }
   return handler;
 }
 
