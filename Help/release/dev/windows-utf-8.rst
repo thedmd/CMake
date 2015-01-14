@@ -11,7 +11,7 @@ windows-utf-8
   Latin 1 languages such as those found in North and South America and Western
   Europe.  With UTF-8, additional languages are supported.
 
-  The CMakeLists.txt file and other files read by CMake file are expected
-  to be UTF-8 encoded.  If files are already ASCII, they will be compatible.
-  If files were in a different encoding, including Latin 1, they will need to
-  be converted.
+  Files written in the :manual:`cmake-language(7)`, such as
+  ``CMakeLists.txt`` for ``*.cmake`` files are expected to be UTF-8 encoded.
+  If files are already ASCII, they will be compatible.  If files were in a
+  different encoding, including Latin 1, they will need to be converted.
