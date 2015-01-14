@@ -65,6 +65,29 @@ else()
     "file(STRINGS) incorrectly read from utf8 file [${infile_strings}]")
 endif()
 
+# check files with UTF-16 or UTF-32 content
+foreach(bit 16 32)
+  foreach(endian LE BE)
+    set(file_to_check UTF-${bit}${endian}.txt)
+    foreach(bit_check 16 32)
+      foreach(endian_check LE BE)
+        file(STRINGS ${file_to_check} str ENCODING UTF-${bit_check}${endian_check})
+        if("${bit}" STREQUAL "${bitcheck}")
+          if(NOT str MATCHES "Hello World")
+            message(SEND_ERROR
+              "file(STRINGS) incorrectly read from ${file_to_check} file [${str}]")
+          endif()
+        else()
+          if(NOT "${str}" STREQUAL "")
+            message(SEND_ERROR
+              "file(STRINGS) incorrectly read from ${file_to_check} file [${str}]")
+          endif()
+        endif()
+      endforeach()
+    endforeach()
+  endforeach()
+endforeach()
+
 # String test
 string(REGEX MATCH "[cC][mM][aA][kK][eE]" rmvar "CMake is great")
 string(REGEX MATCHALL "[cC][mM][aA][kK][eE]" rmallvar "CMake is better than cmake or CMake")
