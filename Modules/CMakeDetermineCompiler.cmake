@@ -72,22 +72,22 @@ macro(_cmake_find_compiler lang)
 
   # Look for a make tool provided by Xcode
   if(CMAKE_HOST_APPLE)
-    macro(_query_xrun compiler_name result_var_keyword result_var)
-      if(NOT result_var_keyword STREQUAL "RESULT_VAR")
+    macro(_query_xcrun compiler_name result_var_keyword result_var)
+      if(NOT "x${result_var_keyword}" STREQUAL "xRESULT_VAR")
         message(FATAL_ERROR "Bad arguments to macro")
       endif()
       execute_process(COMMAND xcrun --find ${compiler_name}
         OUTPUT_VARIABLE _xcrun_out OUTPUT_STRIP_TRAILING_WHITESPACE
         ERROR_VARIABLE _xcrun_err)
-      set(${result_var} ${_xcrun_out})
+      set("${result_var}" "${_xcrun_out}")
     endmacro()
 
     set(xcrun_result)
     if (CMAKE_${lang}_COMPILER MATCHES "^/usr/bin/(.+)$")
-      _query_xrun(${CMAKE_MATCH_1} RESULT_VAR xcrun_result)
+      _query_xcrun("${CMAKE_MATCH_1}" RESULT_VAR xcrun_result)
     elseif (CMAKE_${lang}_COMPILER STREQUAL "CMAKE_${lang}_COMPILER-NOTFOUND")
       foreach(comp ${CMAKE_${lang}_COMPILER_LIST})
-        _query_xrun(${comp} RESULT_VAR xcrun_result)
+        _query_xcrun("${comp}" RESULT_VAR xcrun_result)
         if(xcrun_result)
           break()
         endif()
