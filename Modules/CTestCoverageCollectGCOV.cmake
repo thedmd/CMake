@@ -94,6 +94,7 @@ function(ctest_coverage_collect_gcov)
   # call gcov on each .gcda file
   foreach (gcda_file ${gcda_files})
     # get the directory of the gcda file
+    get_filename_component(gcda_file ${binary_dir}/${gcda_file} ABSOLUTE)
     get_filename_component(gcov_dir ${gcda_file} DIRECTORY)
     # run gcov, this will produce the .gcov file in the current
     # working directory
@@ -115,7 +116,7 @@ function(ctest_coverage_collect_gcov)
   # sum will be the same for the tar file independent of file time
   # stamps
   execute_process(COMMAND
-    ${CMAKE_COMMAND} -E tar cvf ${GCOV_TARBALL}
+    ${CMAKE_COMMAND} -E tar cvfj ${GCOV_TARBALL}
     --mtime=1970-01-01\ 0:0:0\ UTC ${gcov_files}
     ${coverage_dir}/data.json  ${label_files}
     WORKING_DIRECTORY ${binary_dir})
