@@ -207,6 +207,7 @@ if (CMAKE_CXX_COMPILE_FEATURES)
         -DEXPECT_FINAL=0
         -DEXPECT_INHERITING_CONSTRUCTORS_AND_FINAL=0
       )
+    endif()
   endif()
 
   add_executable(CompileFeaturesGenex genex_test.cpp)
