@@ -1,10 +1,12 @@
 windows-utf-8
 -------------
 
-* On Windows, CMake learned to support Unicode characters.  This allows using
-  characters from multiple (spoken) languages in CMake code and in paths to
-  source files.  Because CMake interoperates with many other tools, there may
-  still be some limitations when using certain Unicode characters.
+* On Windows, CMake learned to support international characters.  This allows using
+  characters from multiple (spoken) languages in CMake code such as CMakeLists.txt
+  and .cmake  files, in paths to source files, configured files such as .h.in files
+  and other files read and written by CMake.  Because CMake interoperates with many
+  other tools, there may still be some limitations when using certain international
+  characters.
 
   Files written in the :manual:`cmake-language(7)`, such as ``CMakeLists.txt``
   or ``*.cmake`` files, are expected to be encoded as UTF-8.  If files are
