@@ -67,9 +67,10 @@ as input files are read.
 
 Note that the implementation is 8-bit clean so source files may
 be encoded as UTF-8 on platforms with system APIs supporting this
-encoding.  In addition, CMake 3.2 and above support UTF-8 files on
-Windows while using UTF-16 to call system APIs.  Furthermore, CMake 3.0
-and above allow a leading UTF-8 `Byte-Order Mark`_ in source files.
+encoding.  In addition, CMake 3.2 and above support source files
+encoded in UTF-8 on Windows (using UTF-16 to call system APIs).
+Furthermore, CMake 3.0 and above allow a leading UTF-8
+`Byte-Order Mark`_ in source files.
 
 .. _`Byte-Order Mark`: http://en.wikipedia.org/wiki/Byte_order_mark
 
