@@ -17,6 +17,9 @@ set(JSONCPP_SOURCES
   src/lib_json/json_writer.cpp
   )
 
-include_directories(${JsonCpp_SOURCE_DIR}/include)
+include_directories(
+  ${JsonCpp_SOURCE_DIR}/include
+  ${KWSYS_HEADER_ROOT}
+  )
 
 add_library(cmjsoncpp ${JSONCPP_SOURCES})

@@ -6,6 +6,9 @@
 #ifndef JSON_CONFIG_H_INCLUDED
 #define JSON_CONFIG_H_INCLUDED
 
+// Include KWSys Large File Support configuration.
+#include <cmsys/Configure.h>
+
 #if defined(_MSC_VER)
 # pragma warning(push,1)
 #endif
