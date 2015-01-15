@@ -63,7 +63,7 @@ All Modules
    /module/CPack
    /module/CPackWIX
    /module/CTest
-   /module/CTestGCOV
+   /module/CTestCoverageCollectGCOV
    /module/CTestScriptMode
    /module/CTestUseLaunchers
    /module/Dart

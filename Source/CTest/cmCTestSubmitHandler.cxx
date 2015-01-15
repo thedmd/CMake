@@ -1088,6 +1088,7 @@ int cmCTestSubmitHandler::HandleCDashUploadFile(std::string const& file,
     {
     cmCTestLog(this->CTest, ERROR_MESSAGE,
                "Upload file not found: " << file << "\n");
+    return -1;
     }
   cmCTestCurl curl(this->CTest);
   std::string curlopt(this->CTest->GetCTestConfiguration("CurlOptions"));
