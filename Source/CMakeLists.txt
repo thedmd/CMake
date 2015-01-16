@@ -500,7 +500,9 @@ add_library(CMakeLib ${SRCS})
 target_link_libraries(CMakeLib cmsys
   ${CMAKE_EXPAT_LIBRARIES} ${CMAKE_ZLIB_LIBRARIES}
   ${CMAKE_TAR_LIBRARIES} ${CMAKE_COMPRESS_LIBRARIES}
-  ${CMAKE_CURL_LIBRARIES} )
+  ${CMAKE_CURL_LIBRARIES}
+  cmjsoncpp
+  )
 
 # On Apple we need CoreFoundation
 if(APPLE)
@@ -584,7 +586,7 @@ set(CTEST_SRCS cmCTest.cxx
 
 # Build CTestLib
 add_library(CTestLib ${CTEST_SRCS})
-target_link_libraries(CTestLib CMakeLib ${CMAKE_CURL_LIBRARIES} ${CMAKE_XMLRPC_LIBRARIES} cmjsoncpp)
+target_link_libraries(CTestLib CMakeLib ${CMAKE_CURL_LIBRARIES} ${CMAKE_XMLRPC_LIBRARIES})
 
 #
 # Sources for CPack
