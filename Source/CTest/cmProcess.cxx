@@ -39,7 +39,7 @@ void cmProcess::SetCommandArguments(std::vector<std::string> const& args)
 
 bool cmProcess::StartProcess()
 {
-  if(this->Command.empty())
+  if(this->Command.size() == 0)
     {
     return false;
     }
@@ -56,7 +56,7 @@ bool cmProcess::StartProcess()
   this->ProcessArgs.push_back(0); // null terminate the list
   this->Process = cmsysProcess_New();
   cmsysProcess_SetCommand(this->Process, &*this->ProcessArgs.begin());
-  if(!this->WorkingDirectory.empty())
+  if(this->WorkingDirectory.size())
     {
     cmsysProcess_SetWorkingDirectory(this->Process,
                                      this->WorkingDirectory.c_str());

@@ -61,7 +61,7 @@ bool cmAuxSourceDirectoryCommand::InitialPass
         std::string ext = file.substr(dotpos+1);
         std::string base = file.substr(0, dotpos);
         // Process only source files
-        if(!base.empty()
+        if( base.size() != 0
             && std::find( this->Makefile->GetSourceExtensions().begin(),
                           this->Makefile->GetSourceExtensions().end(), ext )
                  != this->Makefile->GetSourceExtensions().end() )

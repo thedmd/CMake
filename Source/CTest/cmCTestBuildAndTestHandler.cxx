@@ -62,7 +62,7 @@ int cmCTestBuildAndTestHandler::RunCMake(std::string* outstring,
   std::vector<std::string> args;
   args.push_back(cmSystemTools::GetCMakeCommand());
   args.push_back(this->SourceDir);
-  if(!this->BuildGenerator.empty())
+  if(this->BuildGenerator.size())
     {
     std::string generator = "-G";
     generator += this->BuildGenerator;
@@ -74,7 +74,7 @@ int cmCTestBuildAndTestHandler::RunCMake(std::string* outstring,
     platform += this->BuildGeneratorPlatform;
     args.push_back(platform);
     }
-  if(!this->BuildGeneratorToolset.empty())
+  if(this->BuildGeneratorToolset.size())
     {
     std::string toolset = "-T";
     toolset += this->BuildGeneratorToolset;
@@ -82,7 +82,7 @@ int cmCTestBuildAndTestHandler::RunCMake(std::string* outstring,
     }
 
   const char* config = 0;
-  if (!this->CTest->GetConfigType().empty())
+  if ( this->CTest->GetConfigType().size() > 0 )
     {
     config = this->CTest->GetConfigType().c_str();
     }
@@ -193,7 +193,7 @@ public:
 int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
 {
   // if the generator and make program are not specified then it is an error
-  if (this->BuildGenerator.empty())
+  if (!this->BuildGenerator.size())
     {
     if(outstring)
       {
@@ -211,8 +211,8 @@ int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
   static_cast<void>(captureRAII);
   std::ostringstream out;
 
-  if ( this->CTest->GetConfigType().empty() &&
-       !this->ConfigSample.empty())
+  if ( this->CTest->GetConfigType().size() == 0 &&
+       this->ConfigSample.size())
     {
     // use the config sample to set the ConfigType
     std::string fullPath;
@@ -225,7 +225,7 @@ int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
                                          resultingConfig,
                                          extraPaths,
                                          failed);
-    if (!fullPath.empty() && !resultingConfig.empty())
+    if (fullPath.size() && resultingConfig.size())
       {
       this->CTest->SetConfigType(resultingConfig.c_str());
       }
@@ -269,7 +269,7 @@ int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
 
   // do the build
   std::vector<std::string>::iterator tarIt;
-  if (this->BuildTargets.empty())
+  if ( this->BuildTargets.size() == 0 )
     {
     this->BuildTargets.push_back("");
     }
@@ -291,7 +291,7 @@ int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
       }
     std::string output;
     const char* config = 0;
-    if (!this->CTest->GetConfigType().empty())
+    if ( this->CTest->GetConfigType().size() > 0 )
       {
       config = this->CTest->GetConfigType().c_str();
       }
@@ -329,7 +329,7 @@ int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
     }
 
   // if no test was specified then we are done
-  if (this->TestCommand.empty())
+  if (!this->TestCommand.size())
     {
     return 0;
     }
@@ -340,7 +340,7 @@ int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
   std::string resultingConfig;
   std::vector<std::string> extraPaths;
   // if this->ExecutableDirectory is set try that as well
-  if (!this->ExecutableDirectory.empty())
+  if (this->ExecutableDirectory.size())
     {
     std::string tempPath = this->ExecutableDirectory;
     tempPath += "/";
@@ -388,7 +388,7 @@ int cmCTestBuildAndTestHandler::RunCMakeAndTest(std::string* outstring)
   std::string outs;
   int retval = 0;
   // run the test from the this->BuildRunDir if set
-  if(!this->BuildRunDir.empty())
+  if(this->BuildRunDir.size())
     {
     out << "Run test in directory: " << this->BuildRunDir << "\n";
     cmSystemTools::ChangeDirectory(this->BuildRunDir);

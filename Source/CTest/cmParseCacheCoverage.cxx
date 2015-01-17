@@ -163,7 +163,7 @@ bool cmParseCacheCoverage::ReadCMCovFile(const char* file)
       }
     // if we do not have a routine yet, then it should be
     // the first argument in the vector
-    if(routine.empty())
+    if(routine.size() == 0)
       {
       routine = separateLine[0];
       // Find the full path to the file
@@ -191,7 +191,7 @@ bool cmParseCacheCoverage::ReadCMCovFile(const char* file)
     // move to next line. We should have already warned
     // after the call to FindMumpsFile that we did not find
     // it, so don't report again to cut down on output
-    if(filepath.empty())
+    if(filepath.size() == 0)
       {
       continue;
       }

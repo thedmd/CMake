@@ -316,7 +316,7 @@ bool cmake::SetCacheArgs(const std::vector<std::string>& args)
     if(arg.find("-D",0) == 0)
       {
       std::string entry = arg.substr(2);
-      if(entry.empty())
+      if(entry.size() == 0)
         {
         ++i;
         if(i < args.size())
@@ -380,7 +380,7 @@ bool cmake::SetCacheArgs(const std::vector<std::string>& args)
     else if(arg.find("-U",0) == 0)
       {
       std::string entryPattern = arg.substr(2);
-      if(entryPattern.empty())
+      if(entryPattern.size() == 0)
         {
         ++i;
         if(i < args.size())
@@ -424,7 +424,7 @@ bool cmake::SetCacheArgs(const std::vector<std::string>& args)
     else if(arg.find("-C",0) == 0)
       {
       std::string path = arg.substr(2);
-      if (path.empty())
+      if ( path.size() == 0 )
         {
         ++i;
         if(i < args.size())
@@ -449,7 +449,7 @@ bool cmake::SetCacheArgs(const std::vector<std::string>& args)
         return false;
         }
       std::string path = args[i];
-      if (path.empty())
+      if ( path.size() == 0 )
         {
         cmSystemTools::Error("No cmake script provided.");
         return false;
@@ -763,7 +763,7 @@ void cmake::SetArgs(const std::vector<std::string>& args,
     else if(arg.find("-A",0) == 0)
       {
       std::string value = arg.substr(2);
-      if(value.empty())
+      if(value.size() == 0)
         {
         ++i;
         if(i >= args.size())
@@ -784,7 +784,7 @@ void cmake::SetArgs(const std::vector<std::string>& args,
     else if(arg.find("-T",0) == 0)
       {
       std::string value = arg.substr(2);
-      if(value.empty())
+      if(value.size() == 0)
         {
         ++i;
         if(i >= args.size())
@@ -805,7 +805,7 @@ void cmake::SetArgs(const std::vector<std::string>& args,
     else if(arg.find("-G",0) == 0)
       {
       std::string value = arg.substr(2);
-      if(value.empty())
+      if(value.size() == 0)
         {
         ++i;
         if(i >= args.size())
@@ -909,7 +909,7 @@ void cmake::SetDirectoriesFromFile(const char* arg)
     }
 
   // If there is a CMakeCache.txt file, use its settings.
-  if(!cachePath.empty())
+  if(cachePath.length() > 0)
     {
     cmCacheManager* cachem = this->GetCacheManager();
     cmCacheManager::CacheIterator it = cachem->NewIterator();
@@ -925,7 +925,7 @@ void cmake::SetDirectoriesFromFile(const char* arg)
     }
 
   // If there is a CMakeLists.txt file, use it as the source tree.
-  if(!listPath.empty())
+  if(listPath.length() > 0)
     {
     this->SetHomeDirectory(listPath);
     this->SetStartDirectory(listPath);
@@ -1123,13 +1123,13 @@ void cmake::SetGlobalGenerator(cmGlobalGenerator *gg)
     // restore the original environment variables CXX and CC
     // Restore CC
     std::string env = "CC=";
-    if(!this->CCEnvironment.empty())
+    if(this->CCEnvironment.size())
       {
       env += this->CCEnvironment;
       }
     cmSystemTools::PutEnv(env);
     env = "CXX=";
-    if(!this->CXXEnvironment.empty())
+    if(this->CXXEnvironment.size())
       {
       env += this->CXXEnvironment;
       }
@@ -1608,7 +1608,7 @@ void cmake::PreLoadCMakeFiles()
 {
   std::vector<std::string> args;
   std::string pre_load = this->GetHomeDirectory();
-  if (!pre_load.empty())
+  if ( pre_load.size() > 0 )
     {
     pre_load += "/PreLoad.cmake";
     if ( cmSystemTools::FileExists(pre_load.c_str()) )
@@ -1617,7 +1617,7 @@ void cmake::PreLoadCMakeFiles()
       }
     }
   pre_load = this->GetHomeOutputDirectory();
-  if (!pre_load.empty())
+  if ( pre_load.size() > 0 )
     {
     pre_load += "/PreLoad.cmake";
     if ( cmSystemTools::FileExists(pre_load.c_str()) )
@@ -1959,7 +1959,7 @@ int cmake::CheckBuildSystem()
   // determine whether CMake should rerun.
 
   // If no file is provided for the check, we have to rerun.
-  if(this->CheckBuildSystemArgument.empty())
+  if(this->CheckBuildSystemArgument.size() == 0)
     {
     if(verbose)
       {
@@ -2277,7 +2277,7 @@ const char *cmake::GetProperty(const std::string& prop,
       this->GetCacheManager()->GetCacheIterator();
     for ( cit.Begin(); !cit.IsAtEnd(); cit.Next() )
       {
-      if (!output.empty())
+      if ( output.size() )
         {
         output += ";";
         }
@@ -2395,7 +2395,7 @@ int cmake::GetSystemInformation(std::vector<std::string>& args)
     else if(arg.find("-G",0) == 0)
       {
       std::string value = arg.substr(2);
-      if(value.empty())
+      if(value.size() == 0)
         {
         ++i;
         if(i >= args.size())
@@ -2450,7 +2450,7 @@ int cmake::GetSystemInformation(std::vector<std::string>& args)
     }
 
   // do we write to a file or to stdout?
-  if (resultFile.empty())
+  if (resultFile.size() == 0)
     {
     resultFile = cwd;
     resultFile += "/__cmake_systeminformation/results.txt";
@@ -2531,7 +2531,7 @@ static bool cmakeCheckStampFile(const char* stampName)
   while(cmSystemTools::GetLineFromStream(fin, dep))
     {
     int result;
-    if(!dep.empty() && dep[0] != '#' &&
+    if(dep.length() >= 1 && dep[0] != '#' &&
        (!ftc.FileTimeCompare(stampDepends.c_str(), dep.c_str(), &result)
         || result < 0))
       {

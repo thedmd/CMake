@@ -66,7 +66,7 @@ void cmUuid::CreateHashInput(std::vector<unsigned char> const& uuidNamespace,
 {
   output = uuidNamespace;
 
-  if(!name.empty())
+  if(name.size())
     {
     output.resize(output.size() + name.size());
 

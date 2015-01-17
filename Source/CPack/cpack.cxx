@@ -117,7 +117,7 @@ int main (int argc, char const* const* argv)
 
   cmSystemTools::EnableMSVCDebugHook();
 
-  if (cmSystemTools::GetCurrentWorkingDirectory().empty())
+  if ( cmSystemTools::GetCurrentWorkingDirectory().size() == 0 )
     {
     cmCPack_Log(&log, cmCPackLog::LOG_ERROR,
       "Current working directory cannot be established." << std::endl);

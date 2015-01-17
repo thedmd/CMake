@@ -223,7 +223,7 @@ void cmCTestMemCheckHandler::GenerateTestCommand(
     this->MemoryTesterEnvironmentVariable;
   for ( pp = 0; pp < this->MemoryTesterOptions.size(); pp ++ )
     {
-    if(!memTesterEnvironmentVariable.empty())
+    if(memTesterEnvironmentVariable.size())
       {
       // If we are using env to pass options, append all the options to
       // this string with space separation.
@@ -241,7 +241,7 @@ void cmCTestMemCheckHandler::GenerateTestCommand(
     }
   // if this is an env option type, then add the env string as a single
   // argument.
-  if(!memTesterEnvironmentVariable.empty())
+  if(memTesterEnvironmentVariable.size())
     {
     std::string::size_type pos = memTesterEnvironmentVariable.find("??");
     if (pos != std::string::npos)
@@ -592,7 +592,7 @@ bool cmCTestMemCheckHandler::InitializeMemoryChecking()
       this->MemoryTesterStyle = cmCTestMemCheckHandler::VALGRIND;
       }
     }
-  if(this->MemoryTester.empty())
+  if(this->MemoryTester.size() == 0 )
     {
     cmCTestLog(this->CTest, WARNING,
                "Memory checker (MemoryCheckCommand) "
@@ -848,10 +848,10 @@ bool cmCTestMemCheckHandler::ProcessMemCheckSanitizerOutput(
       {
       resultFound = sanitizerWarning.match(1);
       }
-    if(!resultFound.empty())
+    if(resultFound.size())
       {
       std::vector<int>::size_type idx = this->FindOrAddWarning(resultFound);
-      if(result.empty() || idx > result.size()-1)
+      if(result.size() == 0 || idx > result.size()-1)
         {
         result.push_back(1);
         }
@@ -1197,7 +1197,7 @@ cmCTestMemCheckHandler::PostProcessBoundsCheckerTest(cmCTestTestResult& res,
              << res.Name << std::endl);
   std::vector<std::string> files;
   this->TestOutputFileNames(test, files);
-  if (files.empty())
+  if ( files.size() == 0 )
     {
     return;
     }
@@ -1280,7 +1280,7 @@ void cmCTestMemCheckHandler::TestOutputFileNames(int test,
     ofile += ".*";
     cmsys::Glob g;
     g.FindFiles(ofile);
-    if(g.GetFiles().empty())
+    if(g.GetFiles().size() == 0)
       {
       std::string log = "Cannot find memory tester output file: "
         + ofile;

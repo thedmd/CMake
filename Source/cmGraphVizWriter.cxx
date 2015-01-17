@@ -125,7 +125,7 @@ void cmGraphVizWriter::ReadSettings(const char* settingsFileName,
   __set_if_set(ignoreTargetsRegexes, "GRAPHVIZ_IGNORE_TARGETS");
 
   this->TargetsToIgnoreRegex.clear();
-  if (!ignoreTargetsRegexes.empty())
+  if (ignoreTargetsRegexes.size() > 0)
     {
     std::vector<std::string> ignoreTargetsRegExVector;
     cmSystemTools::ExpandListArgument(ignoreTargetsRegexes,

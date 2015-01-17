@@ -893,7 +893,7 @@ void cmCursesMainForm::HandleInput()
       if ( key == 10 || key == KEY_ENTER )
         {
         this->SearchMode = false;
-        if (!this->SearchString.empty())
+        if ( this->SearchString.size() > 0 )
           {
           this->JumpToCacheEntry(this->SearchString.c_str());
           this->OldSearchString = this->SearchString;
@@ -918,7 +918,7 @@ void cmCursesMainForm::HandleInput()
         }
       else if ( key == ctrl('h') || key == KEY_BACKSPACE || key == KEY_DC )
         {
-        if (!this->SearchString.empty())
+        if ( this->SearchString.size() > 0 )
           {
           this->SearchString.resize(this->SearchString.size()-1);
           }
@@ -1067,7 +1067,7 @@ void cmCursesMainForm::HandleInput()
         }
       else if ( key == 'n' )
         {
-        if (!this->OldSearchString.empty())
+        if ( this->OldSearchString.size() > 0 )
           {
           this->JumpToCacheEntry(this->OldSearchString.c_str());
           }
@@ -1201,7 +1201,7 @@ void cmCursesMainForm::JumpToCacheEntry(const char* astr)
   int findex = start_index;
   for(;;)
     {
-    if (!str.empty())
+    if ( str.size() > 0 )
       {
       cmCursesWidget* lbl = 0;
       if ( findex >= 0 )

@@ -66,7 +66,7 @@ bool cmSiteNameCommand
       &host, 0, 0, cmSystemTools::OUTPUT_NONE);
 
     // got the hostname
-    if (!host.empty())
+    if (host.length())
       {
       // remove any white space from the host name
       std::string hostRegExp = "[ \t\n\r]*([^\t\n\r ]*)[ \t\n\r]*";
@@ -77,7 +77,7 @@ bool cmSiteNameCommand
         host = hostReg.match(1);
         }
 
-      if(!host.empty())
+      if(host.length())
         {
         siteName = host;
         }

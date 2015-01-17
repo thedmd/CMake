@@ -87,7 +87,7 @@ public:
         }
       args.push_back(0); // null terminate
       cmsysProcess_SetCommand(this->Process, &*args.begin());
-      if(!this->WorkingDirectory.empty())
+      if(this->WorkingDirectory.size())
         {
         cmsysProcess_SetWorkingDirectory(this->Process,
                                          this->WorkingDirectory.c_str());
@@ -270,7 +270,7 @@ bool cmCTestCoverageHandler::ShouldIDoCoverage(const char* file,
   std::string ndc
     = cmSystemTools::FileExistsInParentDirectories(".NoDartCoverage",
       fFile.c_str(), checkDir.c_str());
-  if (!ndc.empty())
+  if ( ndc.size() )
     {
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, "Found: " << ndc
       << " so skip coverage of " << file << std::endl);
@@ -281,7 +281,7 @@ bool cmCTestCoverageHandler::ShouldIDoCoverage(const char* file,
   // Get the relative path to the file an apply it to the opposite directory.
   // If it is the same as fileDir, then ignore, otherwise check.
   std::string relPath;
-  if(!checkDir.empty())
+  if(checkDir.size() )
     {
     relPath = cmSystemTools::RelativePath(checkDir.c_str(),
                                           fFile.c_str());
@@ -309,7 +309,7 @@ bool cmCTestCoverageHandler::ShouldIDoCoverage(const char* file,
 
   ndc = cmSystemTools::FileExistsInParentDirectories(".NoDartCoverage",
     fFile.c_str(), checkDir.c_str());
-  if (!ndc.empty())
+  if ( ndc.size() )
     {
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, "Found: " << ndc
       << " so skip coverage of: " << file << std::endl);
@@ -665,7 +665,7 @@ int cmCTestCoverageHandler::ProcessHandler()
 
   this->EndCoverageLogFile(covLogFile, logFileCount);
 
-  if (!errorsWhileAccumulating.empty())
+  if ( errorsWhileAccumulating.size() > 0 )
     {
     cmCTestLog(this->CTest, ERROR_MESSAGE, std::endl);
     cmCTestLog(this->CTest, ERROR_MESSAGE,
@@ -910,7 +910,7 @@ int cmCTestCoverageHandler::HandleJacocoCoverage(
 
   g.FindFiles(coverageFile);
   files=g.GetFiles();
-  if (!files.empty())
+  if (files.size() > 0)
     {
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
       "Found Jacoco Files, Performing Coverage" << std::endl);
@@ -943,7 +943,7 @@ int cmCTestCoverageHandler::HandleDelphiCoverage(
 
   g.FindFiles(coverageFile);
   files=g.GetFiles();
-  if (!files.empty())
+  if (files.size() > 0)
     {
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
       "Found Delphi HTML Files, Performing Coverage" << std::endl);
@@ -973,7 +973,7 @@ int cmCTestCoverageHandler::HandleBlanketJSCoverage(
   std::vector<std::string> files;
   g.FindFiles(coverageFile);
   files=g.GetFiles();
-  if (!files.empty())
+  if (files.size() > 0)
     {
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
       "Found BlanketJS output JSON, Performing Coverage" << std::endl);
@@ -1037,7 +1037,7 @@ int cmCTestCoverageHandler::HandleGCovCoverage(
   this->FindGCovFiles(files);
   std::vector<std::string>::iterator it;
 
-  if (files.empty())
+  if ( files.size() == 0 )
     {
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
       " Cannot find any GCov coverage files."
@@ -1131,7 +1131,7 @@ int cmCTestCoverageHandler::HandleGCovCoverage(
       cmCTestLog(this->CTest, DEBUG, "Line: [" << *line << "]"
         << std::endl);
 
-      if (line->empty())
+      if ( line->size() == 0 )
         {
         // Ignore empty line; probably style 2
         }
@@ -1311,7 +1311,7 @@ int cmCTestCoverageHandler::HandleGCovCoverage(
             //TODO: Handle gcov 3.0 non-coverage lines
 
             // Skip empty lines
-            if (nl.empty())
+            if ( !nl.size() )
               {
               continue;
               }
@@ -1456,7 +1456,7 @@ int cmCTestCoverageHandler::HandleLCovCoverage(
   this->FindLCovFiles(files);
   std::vector<std::string>::iterator it;
 
-  if (files.empty())
+  if ( files.size() == 0 )
     {
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
       " Cannot find any LCov coverage files."
@@ -1538,7 +1538,7 @@ int cmCTestCoverageHandler::HandleLCovCoverage(
       std::string sourceFile;
       std::string lcovFile;
 
-      if (line->empty())
+      if ( line->size() == 0 )
         {
         // Ignore empty line
         }
@@ -1627,7 +1627,7 @@ int cmCTestCoverageHandler::HandleLCovCoverage(
               cnt ++;
 
               // Skip empty lines
-              if (nl.empty())
+              if ( !nl.size() )
                 {
                 continue;
                 }
@@ -1759,7 +1759,7 @@ int cmCTestCoverageHandler::HandleTracePyCoverage(
   gl.FindFiles(daGlob);
   std::vector<std::string> files = gl.GetFiles();
 
-  if (files.empty())
+  if ( files.size() == 0 )
     {
     cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT,
       " Cannot find any Python Trace.py coverage files."
@@ -1813,7 +1813,7 @@ int cmCTestCoverageHandler::HandleTracePyCoverage(
         cnt ++;
 
         // Skip empty lines
-        if (nl.empty())
+        if ( !nl.size() )
           {
           continue;
           }
@@ -2076,7 +2076,7 @@ int cmCTestCoverageHandler::RunBullseyeCommand(
   std::string& outputFile)
 {
   std::string program = cmSystemTools::FindProgram(cmd);
-  if(program.empty())
+  if(program.size() == 0)
     {
     cmCTestLog(this->CTest, ERROR_MESSAGE, "Cannot find :" << cmd << "\n");
     return 0;
@@ -2183,7 +2183,7 @@ int cmCTestCoverageHandler::RunBullseyeSourceSummary(
   while(cmSystemTools::GetLineFromStream(fin, stdline))
     {
     // if we have a line of output from stdout
-    if(!stdline.empty())
+    if(stdline.size())
       {
       // parse the comma separated output
       this->ParseBullsEyeCovsrcLine(stdline,
@@ -2596,7 +2596,7 @@ std::set<std::string> cmCTestCoverageHandler::FindUncoveredFiles(
       }
     }
 
-  if(!extraMatches.empty())
+  if(extraMatches.size())
     {
     for(cmCTestCoverageHandlerContainer::TotalCoverageMap::iterator i =
         cont->TotalCoverage.begin(); i != cont->TotalCoverage.end(); ++i)
