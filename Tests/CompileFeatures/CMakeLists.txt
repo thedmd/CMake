@@ -212,7 +212,7 @@ if (CMAKE_CXX_COMPILE_FEATURES)
   set_property(TARGET CompileFeaturesGenex PROPERTY CXX_STANDARD 11)
   target_compile_definitions(CompileFeaturesGenex PRIVATE
     HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>
-    HAVE_NULLPTR=$<COMPILE_FEATURES:cxx_nullptr>
+    HAVE_AUTO_TYPE=$<COMPILE_FEATURES:cxx_auto_type>
     HAVE_INHERITING_CONSTRUCTORS=$<COMPILE_FEATURES:cxx_inheriting_constructors>
     HAVE_FINAL=$<COMPILE_FEATURES:cxx_final>
     HAVE_INHERITING_CONSTRUCTORS_AND_FINAL=$<COMPILE_FEATURES:cxx_inheriting_constructors,cxx_final>
@@ -222,7 +222,7 @@ if (CMAKE_CXX_COMPILE_FEATURES)
   target_compile_features(CompileFeaturesGenex2 PRIVATE cxx_static_assert)
   target_compile_definitions(CompileFeaturesGenex2 PRIVATE
     HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>
-    HAVE_NULLPTR=$<COMPILE_FEATURES:cxx_nullptr>
+    HAVE_AUTO_TYPE=$<COMPILE_FEATURES:cxx_auto_type>
     HAVE_INHERITING_CONSTRUCTORS=$<COMPILE_FEATURES:cxx_inheriting_constructors>
     HAVE_FINAL=$<COMPILE_FEATURES:cxx_final>
     HAVE_INHERITING_CONSTRUCTORS_AND_FINAL=$<COMPILE_FEATURES:cxx_inheriting_constructors,cxx_final>
@@ -234,7 +234,7 @@ if (CMAKE_CXX_COMPILE_FEATURES)
   target_link_libraries(CompileFeaturesGenex3 PRIVATE static_assert_iface)
   target_compile_definitions(CompileFeaturesGenex3 PRIVATE
     HAVE_OVERRIDE_CONTROL=$<COMPILE_FEATURES:cxx_final,cxx_override>
-    HAVE_NULLPTR=$<COMPILE_FEATURES:cxx_nullptr>
+    HAVE_AUTO_TYPE=$<COMPILE_FEATURES:cxx_auto_type>
     HAVE_INHERITING_CONSTRUCTORS=$<COMPILE_FEATURES:cxx_inheriting_constructors>
     HAVE_FINAL=$<COMPILE_FEATURES:cxx_final>
     HAVE_INHERITING_CONSTRUCTORS_AND_FINAL=$<COMPILE_FEATURES:cxx_inheriting_constructors,cxx_final>
