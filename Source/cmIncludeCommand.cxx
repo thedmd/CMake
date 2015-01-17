@@ -40,7 +40,7 @@ bool cmIncludeCommand
       }
     else if(args[i] == "RESULT_VARIABLE")
       {
-      if (!resultVarName.empty())
+      if (resultVarName.size() > 0)
         {
         this->SetError("called with invalid arguments: "
             "only one result variable allowed");
@@ -83,7 +83,7 @@ bool cmIncludeCommand
     std::string module = fname;
     module += ".cmake";
     std::string mfile = this->Makefile->GetModulesFile(module.c_str());
-    if (!mfile.empty())
+    if ( mfile.size() )
       {
       fname = mfile.c_str();
       }
@@ -137,7 +137,7 @@ bool cmIncludeCommand
                                   noPolicyScope);
 
   // add the location of the included file if a result variable was given
-  if (!resultVarName.empty())
+  if (resultVarName.size())
     {
       this->Makefile->AddDefinition(resultVarName,
                                     readit?fullFilePath.c_str():"NOTFOUND");

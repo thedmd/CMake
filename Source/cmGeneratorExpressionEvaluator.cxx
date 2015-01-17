@@ -429,7 +429,7 @@ struct CompilerIdNode : public cmGeneratorExpressionNode
   {
     const char *compilerId =
       context->Makefile->GetSafeDefinition("CMAKE_" + lang + "_COMPILER_ID");
-    if (parameters.empty())
+    if (parameters.size() == 0)
       {
       return compilerId ? compilerId : "";
       }
@@ -534,7 +534,7 @@ struct CompilerVersionNode : public cmGeneratorExpressionNode
   {
     const char *compilerVersion = context->Makefile->GetSafeDefinition(
         "CMAKE_" + lang + "_COMPILER_VERSION");
-    if (parameters.empty())
+    if (parameters.size() == 0)
       {
       return compilerVersion ? compilerVersion : "";
       }
@@ -616,7 +616,7 @@ struct PlatformIdNode : public cmGeneratorExpressionNode
   {
     const char *platformId =
       context->Makefile->GetSafeDefinition("CMAKE_SYSTEM_NAME");
-    if (parameters.empty())
+    if (parameters.size() == 0)
       {
       return platformId ? platformId : "";
       }

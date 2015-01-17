@@ -116,7 +116,7 @@ IsFunctionBlocked(const cmListFileFunction& lff,
             bool isTrue = conditionEvaluator.IsTrue(
               expandedArguments, errorString, messType);
 
-            if (!errorString.empty())
+            if (errorString.size())
               {
               std::string err = cmIfCommandError(&mf, expandedArguments);
               err += errorString;
@@ -177,7 +177,7 @@ bool cmIfFunctionBlocker::ShouldRemove(const cmListFileFunction& lff,
     {
     // if the endif has arguments, then make sure
     // they match the arguments of the matching if
-    if (lff.Arguments.empty() ||
+    if (lff.Arguments.size() == 0 ||
         lff.Arguments == this->Args)
       {
       return true;
@@ -204,7 +204,7 @@ bool cmIfCommand
   bool isTrue = conditionEvaluator.IsTrue(
     expandedArguments, errorString, status);
 
-  if (!errorString.empty())
+  if (errorString.size())
     {
     std::string err = cmIfCommandError(this->Makefile, expandedArguments);
     err += errorString;

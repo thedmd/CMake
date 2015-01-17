@@ -46,7 +46,7 @@ void cmDocumentationFormatter::PrintFormatted(std::ostream& os,
         preformatted.append(1, '\n');
         }
       }
-    if(!preformatted.empty())
+    if(preformatted.length())
       {
       this->PrintPreformatted(os, preformatted.c_str());
       }
@@ -62,7 +62,7 @@ void cmDocumentationFormatter::PrintFormatted(std::ostream& os,
       ++ptr;
       paragraph.append(1, '\n');
       }
-    if(!paragraph.empty())
+    if(paragraph.length())
       {
       this->PrintParagraph(os, paragraph.c_str());
       }
@@ -201,7 +201,7 @@ void cmDocumentationFormatter
   for(std::vector<cmDocumentationEntry>::const_iterator op = entries.begin();
       op != entries.end(); ++op)
     {
-    if(!op->Name.empty())
+    if(op->Name.size())
       {
       os << "  " << op->Name;
       this->TextIndent = "                                ";

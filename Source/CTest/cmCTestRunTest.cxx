@@ -155,7 +155,7 @@ bool cmCTestRunTest::EndTest(size_t completed, size_t total, bool started)
     std::string> >::iterator passIt;
   bool forceFail = false;
   bool outputTestErrorsToConsole = false;
-  if (!this->TestProperties->RequiredRegularExpressions.empty())
+  if ( this->TestProperties->RequiredRegularExpressions.size() > 0 )
     {
     bool found = false;
     for ( passIt = this->TestProperties->RequiredRegularExpressions.begin();
@@ -184,7 +184,7 @@ bool cmCTestRunTest::EndTest(size_t completed, size_t total, bool started)
       }
     reason += "]";
     }
-  if (!this->TestProperties->ErrorRegularExpressions.empty())
+  if ( this->TestProperties->ErrorRegularExpressions.size() > 0 )
     {
     for ( passIt = this->TestProperties->ErrorRegularExpressions.begin();
           passIt != this->TestProperties->ErrorRegularExpressions.end();
@@ -318,7 +318,7 @@ bool cmCTestRunTest::EndTest(size_t completed, size_t total, bool started)
     *this->TestHandler->LogFile
       << "----------------------------------------------------------"
       << std::endl;
-    if(!this->TestResult.Reason.empty())
+    if(this->TestResult.Reason.size())
       {
       *this->TestHandler->LogFile << reasonType << ":\n"
         << this->TestResult.Reason << "\n";
@@ -670,7 +670,7 @@ bool cmCTestRunTest::ForkProcess(double testTimeOut, bool explicitTimeout,
   cmSystemTools::SaveRestoreEnvironment sre;
 #endif
 
-  if (environment && !environment->empty())
+  if (environment && environment->size()>0)
     {
     cmSystemTools::AppendEnv(*environment);
     }

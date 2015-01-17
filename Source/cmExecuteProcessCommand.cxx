@@ -324,12 +324,12 @@ bool cmExecuteProcessCommand
                                  error_strip_trailing_whitespace);
 
   // Store the output obtained.
-  if(!output_variable.empty() && !tempOutput.empty())
+  if(!output_variable.empty() && tempOutput.size())
     {
     this->Makefile->AddDefinition(output_variable,
                                   &*tempOutput.begin());
     }
-  if(!merge_output && !error_variable.empty() && !tempError.empty())
+  if(!merge_output && !error_variable.empty() && tempError.size())
     {
     this->Makefile->AddDefinition(error_variable,
                                   &*tempError.begin());

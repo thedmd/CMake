@@ -334,7 +334,7 @@ std::string cmExtraKateGenerator::GenerateProjectName(const std::string& name,
 std::string cmExtraKateGenerator::GetPathBasename(const std::string& path)const
 {
   std::string outputBasename = path;
-  while (!outputBasename.empty() &&
+  while (outputBasename.size() > 0 &&
          (outputBasename[outputBasename.size() - 1] == '/' ||
           outputBasename[outputBasename.size() - 1] == '\\'))
     {

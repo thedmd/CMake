@@ -92,7 +92,7 @@ void cmCTestMultiProcessHandler::RunTests()
     }
   this->TestHandler->SetMaxIndex(this->FindMaxIndex());
   this->StartNextTests();
-  while(!this->Tests.empty())
+  while(this->Tests.size() != 0)
     {
     if(this->StopTimePassed)
       {
@@ -265,7 +265,7 @@ void cmCTestMultiProcessHandler::StartNextTests()
 bool cmCTestMultiProcessHandler::CheckOutput()
 {
   // no more output we are done
-  if(this->RunningTests.empty())
+  if(this->RunningTests.size() == 0)
     {
     return false;
     }
@@ -636,7 +636,7 @@ void cmCTestMultiProcessHandler::PrintTestList()
     testRun.SetTestProperties(&p);
     testRun.ComputeArguments(); //logs the command in verbose mode
 
-    if(!p.Labels.empty()) //print the labels
+    if(p.Labels.size()) //print the labels
       {
       cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, "Labels:");
       }
@@ -645,7 +645,7 @@ void cmCTestMultiProcessHandler::PrintTestList()
       {
       cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, " " << *label);
       }
-    if(!p.Labels.empty()) //print the labels
+    if(p.Labels.size()) //print the labels
       {
       cmCTestLog(this->CTest, HANDLER_VERBOSE_OUTPUT, std::endl);
       }
@@ -683,7 +683,7 @@ void cmCTestMultiProcessHandler::PrintLabels()
     allLabels.insert(p.Labels.begin(), p.Labels.end());
     }
 
-  if(!allLabels.empty())
+  if(allLabels.size())
     {
     cmCTestLog(this->CTest, HANDLER_OUTPUT, "All Labels:" << std::endl);
     }

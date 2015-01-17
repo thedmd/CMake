@@ -95,7 +95,7 @@ bool cmUtilitySourceCommand
     {
     exePath = this->Makefile->GetDefinition("EXECUTABLE_OUTPUT_PATH");
     }
-  if(!exePath.empty())
+  if(exePath.size())
     {
     utilityDirectory = exePath;
     }

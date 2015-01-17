@@ -116,7 +116,7 @@ bool cmMacroHelperCommand::InvokeInitialPass
   std::string argnDef;
   bool argnDefInitialized = false;
   bool argvDefInitialized = false;
-  if(!this->Functions.empty())
+  if( this->Functions.size())
     {
     this->FilePath = this->Functions[0].FilePath;
     }
@@ -170,7 +170,7 @@ bool cmMacroHelperCommand::InvokeInitialPass
               {
               if ( cnt >= this->Args.size()-1 )
                 {
-                if (!argnDef.empty())
+                if ( argnDef.size() > 0 )
                   {
                   argnDef += ";";
                   }
@@ -195,7 +195,7 @@ bool cmMacroHelperCommand::InvokeInitialPass
             std::vector<std::string>::const_iterator eit;
             for(eit = expandedArgs.begin(); eit != expandedArgs.end(); ++eit)
               {
-              if (!argvDef.empty())
+              if ( argvDef.size() > 0 )
                 {
                 argvDef += ";";
                 }

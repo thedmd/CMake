@@ -160,7 +160,7 @@ bool cmLoadCacheCommand::ReadWithPrefix(std::vector<std::string> const& args)
         }
       }
     }
-  if(!line.empty())
+  if(line.length())
     {
     // Partial last line.
     this->CheckLine(line.c_str());
@@ -184,7 +184,7 @@ void cmLoadCacheCommand::CheckLine(const char* line)
       // This was requested.  Set this variable locally with the given
       // prefix.
       var = this->Prefix + var;
-      if(!value.empty())
+      if(value.length())
         {
         this->Makefile->AddDefinition(var, value.c_str());
         }

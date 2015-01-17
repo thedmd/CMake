@@ -37,7 +37,7 @@ bool cmAddSubDirectoryCommand::InitialPass
       excludeFromAll = true;
       continue;
       }
-    else if (binArg.empty())
+    else if (!binArg.size())
       {
       binArg = *i;
       }

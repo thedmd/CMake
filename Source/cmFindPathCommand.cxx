@@ -48,7 +48,7 @@ bool cmFindPathCommand
     }
 
   std::string result = this->FindHeader();
-  if(!result.empty())
+  if(result.size() != 0)
     {
     this->Makefile->AddCacheDefinition
       (this->VariableName, result.c_str(),
@@ -108,7 +108,7 @@ cmFindPathCommand::FindHeaderInFramework(std::string const& file,
       fileName = file;
       frameWorkName = "";
       }
-    if(!frameWorkName.empty())
+    if(frameWorkName.size())
       {
       std::string fpath = dir;
       fpath += frameWorkName;
@@ -134,7 +134,7 @@ cmFindPathCommand::FindHeaderInFramework(std::string const& file,
   cmsys::Glob globIt;
   globIt.FindFiles(glob);
   std::vector<std::string> files = globIt.GetFiles();
-  if(!files.empty())
+  if(files.size())
     {
     std::string fheader = cmSystemTools::CollapseFullPath(files[0]);
     if(this->IncludeFileInPath)

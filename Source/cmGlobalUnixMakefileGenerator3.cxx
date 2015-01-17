@@ -572,7 +572,7 @@ void cmGlobalUnixMakefileGenerator3
   if (!targetName.empty())
     {
     cmLocalUnixMakefileGenerator3 *lg;
-    if (!this->LocalGenerators.empty())
+    if (this->LocalGenerators.size())
       {
       lg = static_cast<cmLocalUnixMakefileGenerator3 *>
         (this->LocalGenerators[0]);
@@ -597,7 +597,7 @@ void cmGlobalUnixMakefileGenerator3
     tname = lg->Convert(tname,cmLocalGenerator::HOME_OUTPUT);
     cmSystemTools::ConvertToOutputSlashes(tname);
     makeCommand.push_back(tname);
-    if (this->LocalGenerators.empty())
+    if (!this->LocalGenerators.size())
       {
       delete lg;
       }

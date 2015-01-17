@@ -212,7 +212,7 @@ int cmCTest::HTTPRequest(std::string url, HTTPMethod method,
       ::curl_easy_setopt(curl, CURLOPT_INFILE, file);
       //fall through to append GET fields
     case cmCTest::HTTP_GET:
-      if(!fields.empty())
+      if(fields.size())
         {
         url += "?" + fields;
         }
@@ -580,7 +580,7 @@ int cmCTest::Initialize(const char* binary_dir, cmCTestStartCommand* command)
           }
         tfin.close();
         }
-      if (tag.empty() || (0 != command) || this->Parts[PartStart])
+      if (tag.size() == 0 || (0 != command) || this->Parts[PartStart])
         {
         cmCTestLog(this, DEBUG, "TestModel: " << this->GetTestModelString()
           << std::endl);
@@ -772,7 +772,7 @@ bool cmCTest::UpdateCTestConfiguration()
       fin.getline(buffer, 1023);
       buffer[1023] = 0;
       std::string line = cmCTest::CleanString(buffer);
-      if(line.empty())
+      if(line.size() == 0)
         {
         continue;
         }
@@ -872,7 +872,7 @@ bool cmCTest::OpenOutputFile(const std::string& path,
                      bool compress)
 {
   std::string testingDir = this->BinaryDir + "/Testing";
-  if (!path.empty())
+  if ( path.size() > 0 )
     {
     testingDir += "/" + path;
     }
@@ -1067,7 +1067,7 @@ int cmCTest::ProcessTests()
         if ( cmSystemTools::FileExists(fullname.c_str()) &&
           !cmSystemTools::FileIsDirectory(fullname) )
           {
-          if (!this->NotesFiles.empty())
+          if ( this->NotesFiles.size() > 0 )
             {
             this->NotesFiles += ";";
             }
@@ -1080,7 +1080,7 @@ int cmCTest::ProcessTests()
   if (this->Parts[PartNotes])
     {
     this->UpdateCTestConfiguration();
-    if (!this->NotesFiles.empty())
+    if ( this->NotesFiles.size() )
       {
       this->GenerateNotesFile(this->NotesFiles.c_str());
       }
@@ -1266,7 +1266,7 @@ int cmCTest::RunTest(std::vector<const char*> argv,
                      std::ostream* log, double testTimeOut,
                      std::vector<std::string>* environment)
 {
-  bool modifyEnv = (environment && !environment->empty());
+  bool modifyEnv = (environment && environment->size()>0);
 
   // determine how much time we have
   double timeout = this->GetRemainingTimeAllowed() - 120;
@@ -1653,7 +1653,7 @@ int cmCTest::GenerateNotesFile(const char* cfiles)
   cmCTestLog(this, OUTPUT, "Create notes file" << std::endl);
 
   files = cmSystemTools::SplitString(cfiles, ';');
-  if (files.empty())
+  if ( files.size() == 0 )
     {
     return 1;
     }
@@ -1744,7 +1744,7 @@ bool cmCTest::SubmitExtraFiles(const char* cfiles)
   cmCTestLog(this, OUTPUT, "Submit extra files" << std::endl);
 
   files = cmSystemTools::SplitString(cfiles, ';');
-  if (files.empty())
+  if ( files.size() == 0 )
     {
     return 1;
     }
@@ -2936,11 +2936,11 @@ bool cmCTest::RunCommand(
     }
 
   cmsysProcess_WaitForExit(cp, 0);
-  if (!tempOutput.empty())
+  if ( tempOutput.size() > 0 )
     {
     stdOut->append(&*tempOutput.begin(), tempOutput.size());
     }
-  if (!tempError.empty())
+  if ( tempError.size() > 0 )
     {
     stdErr->append(&*tempError.begin(), tempError.size());
     }
@@ -3136,7 +3136,7 @@ double cmCTest::GetRemainingTimeAllowed()
 void cmCTest::OutputTestErrors(std::vector<char> const &process_output)
 {
   std::string test_outputs("\n*** Test Failed:\n");
-  if(!process_output.empty())
+  if(process_output.size())
     {
     test_outputs.append(&*process_output.begin(), process_output.size());
     }

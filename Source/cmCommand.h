@@ -155,7 +155,7 @@ public:
    */
   const char* GetError()
     {
-      if(this->Error.empty())
+      if(this->Error.length() == 0)
         {
         this->Error = this->GetName();
         this->Error += " unknown error.";
