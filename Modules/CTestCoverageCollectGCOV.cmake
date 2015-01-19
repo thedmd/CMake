@@ -12,18 +12,29 @@
 #
 #   ::
 #
-#     ctest_coverage_collect_gcov(
-#           TARBALL <tarfile> # required
-#           SOURCE <source_dir> # optional, else CTEST_SOURCE_DIRECTORY
-#           BUILD <build_dir> # optional, else CTEST_BINARY_DIRECTORY
-#           GCOV_COMMAND <gcov_command> # optional, else CTEST_COVERAGE_COMMAND
-#     )
+#     ctest_coverage_collect_gcov(TARBALL <tarfile>
+#       [SOURCE <source_dir>][BUILD <build_dir>]
+#       [GCOV_COMMAND <gcov_command>]
+#       )
 #
-#   Run gcov and package a tar file for cdash. ``<tarfile>`` is the name
-#   of the tarfile that is created and it will be placed in ``<binary_dir>``.
-#   ``<source_dir>`` is the source directory for the build and ``<binary_dir>``
-#   is the binary directory for the build. The ``<gcov_command>`` is a full
-#   path to ``gcov`` for the machine.
+#   Run gcov and package a tar file for CDash.  The options are:
+#
+#   ``TARBALL <tarfile>``
+#     Specify the location of the ``.tar`` file to be created for later
+#     upload to CDash.  Relative paths will be interpreted with respect
+#     to the top-level build directory.
+#
+#   ``SOURCE <source_dir>``
+#     Specify the top-level source directory for the build.
+#     Default is the value of :variable:`CTEST_SOURCE_DIRECTORY`.
+#
+#   ``BUILD <build_dir>``
+#     Specify the top-level build directory for the build.
+#     Default is the value of :variable:`CTEST_BINARY_DIRECTORY`.
+#
+#   ``GCOV_COMMAND <gcov_command>``
+#     Specify the full path to the ``gcov`` command on the machine.
+#     Default is the value of :variable:`CTEST_COVERAGE_COMMAND`.
 
 #=============================================================================
 # Copyright 2014-2015 Kitware, Inc.
@@ -117,7 +128,7 @@ function(ctest_coverage_collect_gcov)
   # stamps
   execute_process(COMMAND
     ${CMAKE_COMMAND} -E tar cvfj ${GCOV_TARBALL}
-    --mtime=1970-01-01\ 0:0:0\ UTC ${gcov_files}
+    "--mtime=1970-01-01 0:0:0 UTC" ${gcov_files}
     ${coverage_dir}/data.json  ${label_files}
     WORKING_DIRECTORY ${binary_dir})
 endfunction()

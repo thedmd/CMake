@@ -74,7 +74,7 @@ public:
   // std::cout.
   void SetVerbose(bool v) { this->Verbose = v; }
 
-  void SetMTime(const char* t) { if(t) {this->MTime = t;}}
+  void SetMTime(std::string const& t) { this->MTime = t; }
 private:
   bool Okay() const { return this->Error.empty(); }
   bool AddPath(const char* path, size_t skip, const char* prefix);
