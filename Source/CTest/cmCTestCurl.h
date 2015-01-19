@@ -1,6 +1,6 @@
 /*============================================================================
   CMake - Cross Platform Makefile Generator
-  Copyright 2000-2009 Kitware, Inc.
+  Copyright 2000-2015 Kitware, Inc.
 
   Distributed under the OSI-approved BSD License (the "License");
   see accompanying file Copyright.txt for details.
@@ -11,8 +11,11 @@
 ============================================================================*/
 #ifndef cmCTestCurl_h
 #define cmCTestCurl_h
-#include "cm_curl.h"
+
 #include "cmStandardIncludes.h"
+
+#include "cm_curl.h"
+
 class cmCTest;
 
 class cmCTestCurl
@@ -45,6 +48,5 @@ private:
   bool UseHttp10;
   int TimeOutSeconds;
 };
-
 
 #endif

@@ -16,6 +16,7 @@
 #include <cmsys/Directory.hxx>
 #include <cmsys/FStream.hxx>
 #include <cm_libarchive.h>
+#include "cm_get_date.h"
 
 //----------------------------------------------------------------------------
 static std::string cm_archive_error_string(struct archive* a)
@@ -247,11 +248,6 @@ bool cmArchiveWrite::AddPath(const char* path,
   return true;
 }
 
-// function from libarchive
-extern "C"
-{
-  time_t __archive_get_date(time_t, const char*);
-}
 //----------------------------------------------------------------------------
 bool cmArchiveWrite::AddFile(const char* file,
                              size_t skip, const char* prefix)
@@ -280,13 +276,16 @@ bool cmArchiveWrite::AddFile(const char* file,
     this->Error += cm_archive_error_string(this->Disk);
     return false;
     }
-  if(this->MTime.size())
+  if (!this->MTime.empty())
     {
-    time_t t = __archive_get_date(0, this->MTime.c_str());
+    time_t now;
+    time(&now);
+    time_t t = cm_get_date(now, this->MTime.c_str());
     if (t == -1)
       {
-      this->Error = "__archive_get_date: Unable to parse mtime: ";
-      this->Error += "[" + this->MTime + "]";
+      this->Error = "unable to parse mtime '";
+      this->Error += this->MTime;
+      this->Error += "'";
       return false;
       }
     archive_entry_set_mtime(e, t, 0);

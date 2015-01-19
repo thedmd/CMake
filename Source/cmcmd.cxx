@@ -730,19 +730,29 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
       std::string outFile = args[3];
       std::vector<std::string> files;
       std::string mtime;
+      bool doing_options = true;
       for (std::string::size_type cc = 4; cc < args.size(); cc ++)
         {
-        // if the first 8 chars of an arg are --mtime= and that arg
-        // is not a file on disk, treat it is the --mtime= flag and
-        // not a file
-        if( (args[cc].substr(0, 8) == "--mtime=") &&
-            !cmSystemTools::FileExists(args[cc]))
+        std::string const& arg = args[cc];
+        if (doing_options && cmHasLiteralPrefix(arg, "--"))
           {
-          mtime = args[cc].substr(8);
+          if (arg == "--")
+            {
+            doing_options = false;
+            }
+          else if (cmHasLiteralPrefix(arg, "--mtime="))
+            {
+            mtime = arg.substr(8);
+            }
+          else
+            {
+            cmSystemTools::Error("Unknown option to -E tar: ", arg.c_str());
+            return 1;
+            }
           }
         else
           {
-          files.push_back(args[cc]);
+          files.push_back(arg);
           }
         }
       cmSystemTools::cmTarCompression compress =
@@ -785,13 +795,8 @@ int cmcmd::ExecuteCMakeCommand(std::vector<std::string>& args)
         }
       else if ( flags.find_first_of('c') != flags.npos )
         {
-        const char* mtimestr = 0;
-        if(mtime.size())
-          {
-          mtimestr = mtime.c_str();
-          }
         if ( !cmSystemTools::CreateTar(
-               outFile.c_str(), files, compress, verbose, mtimestr) )
+               outFile.c_str(), files, compress, verbose, mtime) )
           {
           cmSystemTools::Error("Problem creating tar: ", outFile.c_str());
           return 1;
