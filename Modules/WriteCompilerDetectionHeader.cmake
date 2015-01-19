@@ -322,6 +322,7 @@ function(write_compiler_detection_header
     Clang
     AppleClang
     MSVC
+    SunPro
   )
 
   set(_hex_compilers ADSP Borland Embarcadero SunPro)
