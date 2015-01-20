@@ -4,8 +4,12 @@
 #
 # This module provides the function ``ctest_coverage_collect_gcov``.
 # The function will run gcov on the .gcda files in a binary tree and then
-# package all of the .gcov files into a tar file with a data.json.
-# This file can be sent to a CDash server for display with the
+# package all of the .gcov files into a tar file with a data.json that
+# contains the source and build directories for CDash to use in parsing
+# the coverage data. In addtion the Labels.json files for targets that
+# have coverage information are also put in the tar file for CDash to
+# asign the correct labels. This file can be sent to a CDash server for
+# display with the
 # :command:`ctest_submit(CDASH_UPLOAD)` command.
 #
 # .. command:: cdash_coverage_collect_gcov
@@ -87,7 +91,7 @@ function(ctest_coverage_collect_gcov)
     # if we have gcda files then also grab the labels file for that target
     if(${len} GREATER 0)
       file(GLOB_RECURSE lfiles RELATIVE ${binary_dir}
-        "${target_dir}/Labels.txt")
+        "${target_dir}/Labels.json")
       list(APPEND gcda_files ${gfiles})
       list(APPEND label_files ${lfiles})
     endif()
