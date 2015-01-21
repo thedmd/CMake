@@ -3,4 +3,7 @@
 ninja: no work to do.
 <--
 -->FALSE
-<--$
+<--
+-->ninja: no work to do.
+<--
+--><--$
