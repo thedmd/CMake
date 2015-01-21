@@ -126,7 +126,7 @@ function(ctest_coverage_collect_gcov)
 }")
   # collect the gcov files
   set(gcov_files)
-  file(GLOB_RECURSE gcov_files RELATIVE ${binary_dir} "${binary_dir}/*.gcov")
+  file(GLOB_RECURSE gcov_files RELATIVE ${binary_dir} "${coverage_dir}/*.gcov")
   # tar up the coverage info with the same date so that the md5
   # sum will be the same for the tar file independent of file time
   # stamps
