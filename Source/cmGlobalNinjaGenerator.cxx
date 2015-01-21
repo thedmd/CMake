@@ -1119,11 +1119,12 @@ void cmGlobalNinjaGenerator::WriteTargetRebuildManifest(std::ostream& os)
             /*deptype=*/ "",
             /*rspfile=*/ "",
             /*rspcontent*/ "",
-            /*restat=*/ "",
+            /*restat=*/ "1",
             /*generator=*/ true);
 
   cmLocalNinjaGenerator *ng = static_cast<cmLocalNinjaGenerator *>(lg);
 
+  cmNinjaDeps outputs;
   cmNinjaDeps implicitDeps;
   for(std::vector<cmLocalGenerator*>::const_iterator i =
         this->LocalGenerators.begin(); i != this->LocalGenerators.end(); ++i)
@@ -1134,12 +1135,29 @@ void cmGlobalNinjaGenerator::WriteTargetRebuildManifest(std::ostream& os)
       {
       implicitDeps.push_back(ng->ConvertToNinjaPath(*fi));
       }
+    std::vector<std::string> const& localOutputs =
+      (*i)->GetMakefile()->GetOutputFiles();
+    for(std::vector<std::string>::const_iterator o = localOutputs.begin();
+        o != localOutputs.end(); ++o)
+      {
+      outputs.push_back(ng->ConvertToNinjaPath(*o));
+      }
     }
+  outputs.push_back(NINJA_BUILD_FILE);
   implicitDeps.push_back("CMakeCache.txt");
 
   std::sort(implicitDeps.begin(), implicitDeps.end());
   implicitDeps.erase(std::unique(implicitDeps.begin(), implicitDeps.end()),
                      implicitDeps.end());
+
+  std::sort(outputs.begin(), outputs.end());
+  outputs.erase(std::unique(outputs.begin(), outputs.end()),
+                outputs.end());
+
+  cmNinjaDeps filteredOutputs;
+  std::set_difference(outputs.begin(), outputs.end(),
+                      implicitDeps.begin(), implicitDeps.end(),
+                      std::back_inserter(filteredOutputs));
 
   cmNinjaVars variables;
   // Use 'console' pool to get non buffered output of the CMake re-run call
@@ -1152,7 +1170,7 @@ void cmGlobalNinjaGenerator::WriteTargetRebuildManifest(std::ostream& os)
   this->WriteBuild(os,
                    "Re-run CMake if any of its inputs changed.",
                    "RERUN_CMAKE",
-                   /*outputs=*/ cmNinjaDeps(1, NINJA_BUILD_FILE),
+                   /*outputs=*/ filteredOutputs,
                    /*explicitDeps=*/ cmNinjaDeps(),
                    implicitDeps,
                    /*orderOnlyDeps=*/ cmNinjaDeps(),
