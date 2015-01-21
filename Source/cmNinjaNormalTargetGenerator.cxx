@@ -359,29 +359,29 @@ cmNinjaNormalTargetGenerator
 
 static int calculateCommandLineLengthLimit(int linkRuleLength)
 {
-  static int limits[] = {
+  static int const limits[] = {
 #ifdef _WIN32
-    8000 - linkRuleLength,
+    8000,
 #endif
 #if defined(__APPLE__) || defined(__HAIKU__) || defined(__linux)
     // for instance ARG_MAX is 2096152 on Ubuntu or 262144 on Mac
-    ((int)sysconf(_SC_ARG_MAX)) - linkRuleLength - 1000,
+    ((int)sysconf(_SC_ARG_MAX)) - 1000,
 #endif
 #if defined(__linux)
     // #define MAX_ARG_STRLEN (PAGE_SIZE * 32) in Linux's binfmts.h
-    ((int)sysconf(_SC_PAGESIZE) * 32) - linkRuleLength - 1000,
+    ((int)sysconf(_SC_PAGESIZE) * 32) - 1000,
 #endif
     std::numeric_limits<int>::max()
   };
 
-  size_t arrSz = cmArraySize(limits);
-  int sz = *std::min_element(limits, limits + arrSz);
+  size_t const arrSz = cmArraySize(limits);
+  int const sz = *std::min_element(limits, limits + arrSz);
   if (sz == std::numeric_limits<int>::max())
     {
     return -1;
     }
 
-  return sz;
+  return sz - linkRuleLength;
 }
 
 
