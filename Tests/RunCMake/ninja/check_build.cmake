@@ -10,7 +10,8 @@ busy_loop()
 # Force NINJA_STATUS to be a certain style to not break the regex.
 set(ENV{NINJA_STATUS} "[%s/%t] ")
 execute_process(
-  COMMAND           "${CMAKE_MAKE_PROGRAM}"
+  COMMAND           "${CMAKE_COMMAND}"
+                    --build .
   OUTPUT_VARIABLE   out
   ERROR_VARIABLE    err
   WORKING_DIRECTORY "${test_binary_dir}")
