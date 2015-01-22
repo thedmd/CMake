@@ -21,19 +21,6 @@ if(TARGET NotATarget)
   message(FATAL_ERROR "if(TARGET NotATarget) returned true!")
 endif()
 
-# Test if(TEST...
-add_test(NAME TestThatExists COMMAND ${CMAKE_COMMAND} -E echo "A CMake Test")
-if(TEST TestThatExists)
-  message(STATUS "if(TestThatExists) is true")
-else()
-  message(FATAL_ERROR "if(TestThatExists is false")
-endif()
-if(TEST TestThatDoesNotExist)
-  message(FATAL_ERROR "if(TestThatDoesNotExist is true")
-else()
-  message(STATUS "if(TestThatDoesNotExist) is false")
-endif()
-
 # Use LINK_LIBRARIES instead of TARGET_LINK_LIBRARIES to
 set(COMPLEX_LIBS CMakeTestLibrary;CMakeTestLibraryShared;CMakeTestCLibraryShared)
 link_libraries(${COMPLEX_LIBS})
