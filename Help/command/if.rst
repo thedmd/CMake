@@ -70,7 +70,7 @@ Possible expressions are:
  created by the :command:`add_executable`, :command:`add_library`, or
  :command:`add_custom_target` commands.
 
-``if(TEST test)``
+``if(TEST test-name)``
  True if the given name is an existing test name created by the
  :command:`add_test` command.
 
