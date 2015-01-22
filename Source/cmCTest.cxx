@@ -9,6 +9,8 @@
   implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   See the License for more information.
 ============================================================================*/
+#include "cm_curl.h"
+
 #include "cmCTest.h"
 #include "cmake.h"
 #include "cmMakefile.h"
@@ -24,7 +26,6 @@
 #include "cmVersionMacros.h"
 #include "cmCTestCommand.h"
 #include "cmCTestStartCommand.h"
-#include "cmCurl.h"
 
 #include "cmCTestBuildHandler.h"
 #include "cmCTestBuildAndTestHandler.h"
@@ -191,7 +192,6 @@ int cmCTest::HTTPRequest(std::string url, HTTPMethod method,
   FILE* file;
   ::curl_global_init(CURL_GLOBAL_ALL);
   curl = ::curl_easy_init();
-  cmCurlSetCAInfo(curl);
 
   //set request options based on method
   switch(method)
