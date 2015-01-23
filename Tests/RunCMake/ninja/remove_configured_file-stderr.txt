@@ -1,9 +1,0 @@
-^-->\[1/1\] Re-running CMake\.\.\.
-.*
-ninja: no work to do.
-<--
--->FALSE
-<--
--->ninja: no work to do.
-<--
---><--$
