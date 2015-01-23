@@ -321,8 +321,8 @@ if (((CMAKE_C_COMPILER_ID STREQUAL GNU AND CMAKE_C_COMPILER_VERSION VERSION_GREA
         LINK_LIBRARIES exp_systemlib
         OUTPUT_VARIABLE OUTPUT
         )
-      if(NOT EXP_COMPILE_VAR OR NOT EXP_RUN_VAR EQUAL 0)
-        message(SEND_ERROR "try_run failed, but it was expected to succeed ${OUTPUT}.")
+      if(NOT EXP_COMPILE_VAR)
+        message(SEND_ERROR "try_run compile failed, but it was expected to succeed ${OUTPUT}.")
       endif()
     endif()
 
@@ -352,8 +352,8 @@ if (((CMAKE_C_COMPILER_ID STREQUAL GNU AND CMAKE_C_COMPILER_VERSION VERSION_GREA
         LINK_LIBRARIES bld_systemlib
         OUTPUT_VARIABLE OUTPUT
         )
-      if(NOT BLD_COMPILE_VAR OR NOT BLD_RUN_VAR EQUAL 0)
-        message(SEND_ERROR "try_run failed, but it was expected to succeed ${OUTPUT}.")
+      if(NOT BLD_COMPILE_VAR)
+        message(SEND_ERROR "try_run compile failed, but it was expected to succeed ${OUTPUT}.")
       endif()
     endif()
   endif()
