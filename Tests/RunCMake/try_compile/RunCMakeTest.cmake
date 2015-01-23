@@ -17,3 +17,26 @@ run_cmake(NonSourceCopyFile)
 run_cmake(NonSourceCompileDefinitions)
 
 run_cmake(CMP0056)
+
+if(RunCMake_GENERATOR MATCHES "Make|Ninja")
+  # Use a single build tree for a few tests without cleaning.
+  set(RunCMake_TEST_BINARY_DIR ${RunCMake_BINARY_DIR}/RerunCMake-build)
+  set(RunCMake_TEST_NO_CLEAN 1)
+  file(REMOVE_RECURSE "${RunCMake_TEST_BINARY_DIR}")
+  file(MAKE_DIRECTORY "${RunCMake_TEST_BINARY_DIR}")
+  set(in_tc  "${RunCMake_TEST_BINARY_DIR}/TryCompileInput.c")
+  file(WRITE "${in_tc}" "int main(void) { return 0; }\n")
+
+  message(STATUS "RerunCMake: first configuration...")
+  run_cmake(RerunCMake)
+  run_cmake_command(RerunCMake-nowork ${CMAKE_COMMAND} --build .)
+
+  execute_process(COMMAND ${CMAKE_COMMAND} -E sleep 1) # handle 1s resolution
+  message(STATUS "RerunCMake: modify try_compile input...")
+  file(WRITE "${in_tc}" "does-not-compile\n")
+  run_cmake_command(RerunCMake-rerun ${CMAKE_COMMAND} --build .)
+  run_cmake_command(RerunCMake-nowork ${CMAKE_COMMAND} --build .)
+
+  unset(RunCMake_TEST_BINARY_DIR)
+  unset(RunCMake_TEST_NO_CLEAN)
+endif()
