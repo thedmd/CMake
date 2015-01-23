@@ -141,6 +141,8 @@ if(CPackGen MATCHES "RPM")
 
   if(${CPackComponentWay} STREQUAL "IgnoreGroup")
     # set gnu install prefixes to what they are set during rpm creation
+    # CMAKE_SIZEOF_VOID_P is not set here but lib is prefix of lib64 so
+    # relocation path test won't fail on OSes with lib64 library location
     include(GNUInstallDirs)
     set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
 

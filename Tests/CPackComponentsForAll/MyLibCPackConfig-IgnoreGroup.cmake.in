@@ -6,12 +6,7 @@ if(CPACK_GENERATOR MATCHES "ZIP")
 endif()
 
 if(CPACK_GENERATOR MATCHES "RPM")
-  # set gnu install prefixes
-  include(GNUInstallDirs)
-
   set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
-  set(CPACK_RPM_RELOCATION_PATHS "${CMAKE_INSTALL_INCLUDEDIR}"
-    "${CMAKE_INSTALL_LIBDIR}" "${CMAKE_INSTALL_BINDIR}")
 
   set(CPACK_RPM_COMPONENT_INSTALL "ON")
   set(CPACK_RPM_applications_PACKAGE_REQUIRES "mylib-libraries")
