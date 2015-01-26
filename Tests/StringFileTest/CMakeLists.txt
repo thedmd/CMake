@@ -69,7 +69,7 @@ endif()
 foreach(bit 16 32)
   foreach(endian LE BE)
     set(file_to_check UTF-${bit}${endian}.txt)
-    file(STRINGS ${file_to_check} str ENCODING UTF-${bit}${endian} REGEX "....")
+    file(STRINGS ${file_to_check} str ENCODING UTF-${bit}${endian} LENGTH_MINIMUM 4)
     message("${file_to_check} as UTF-${bit}${endian}: ${str}")
     if(NOT str MATCHES "Hello World")
         message(SEND_ERROR
