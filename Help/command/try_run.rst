@@ -23,6 +23,12 @@ where the output from the compile step goes.  RUN_OUTPUT_VARIABLE
 specifies the variable where the output from the running executable
 goes.
 
+The srcfile signature also accepts a LINK_LIBRARIES argument which may
+contain a list of libraries or IMPORTED targets which will be linked
+to in the generated project.  If LINK_LIBRARIES is specified as a
+parameter to try_run, then any LINK_LIBRARIES passed as
+CMAKE_FLAGS will be ignored.
+
 For compatibility reasons OUTPUT_VARIABLE is still supported, which
 gives you the output from the compile and run step combined.
 
