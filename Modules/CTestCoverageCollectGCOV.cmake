@@ -19,6 +19,7 @@
 #     ctest_coverage_collect_gcov(TARBALL <tarfile>
 #       [SOURCE <source_dir>][BUILD <build_dir>]
 #       [GCOV_COMMAND <gcov_command>]
+#       [GCOV_EXTRA_OPTIONS <extra_options>...]
 #       )
 #
 #   Run gcov and package a tar file for CDash.  The options are:
@@ -39,6 +40,13 @@
 #   ``GCOV_COMMAND <gcov_command>``
 #     Specify the full path to the ``gcov`` command on the machine.
 #     Default is the value of :variable:`CTEST_COVERAGE_COMMAND`.
+#
+#   ``GCOV_EXTRA_OPTIONS <extra_options>...``
+#     Specify extra options to be passed to gcov.  By default
+#     gcov is run as ``gcov -b -o <gcov-dir> <file>.gcda``.
+#     If GCOV_EXTRA_OPTIONS is specified, gcov will be run as
+#     ``gcov <extra_options>... -o <gcov-dir> <file>.gcda``.
+
 
 #=============================================================================
 # Copyright 2014-2015 Kitware, Inc.
@@ -56,7 +64,7 @@ include(CMakeParseArguments)
 function(ctest_coverage_collect_gcov)
   set(options "")
   set(oneValueArgs TARBALL SOURCE BUILD GCOV_COMMAND)
-  set(multiValueArgs "")
+  set(multiValueArgs GCOV_EXTRA_OPTIONS)
   cmake_parse_arguments(GCOV  "${options}" "${oneValueArgs}"
     "${multiValueArgs}" "" ${ARGN} )
   if(NOT DEFINED GCOV_TARBALL)
@@ -113,11 +121,18 @@ function(ctest_coverage_collect_gcov)
     get_filename_component(gcov_dir ${gcda_file} DIRECTORY)
     # run gcov, this will produce the .gcov file in the current
     # working directory
+    if(NOT DEFINED GCOV_GCOV_EXTRA_OPTIONS)
+      set(GCOV_GCOV_EXTRA_OPTIONS -b)
+    endif()
     execute_process(COMMAND
-      ${gcov_command} -b -o ${gcov_dir} ${gcda_file}
+      ${gcov_command} ${GCOV_GCOV_EXTRA_OPTIONS} -o ${gcov_dir} ${gcda_file}
       OUTPUT_VARIABLE out
+      RESULT_VARIABLE res
       WORKING_DIRECTORY ${coverage_dir})
   endforeach()
+  if(NOT "${res}" EQUAL 0)
+    message(STATUS "Error running gcov: ${res} ${out}")
+  endif()
   # create json file with project information
   file(WRITE ${coverage_dir}/data.json
     "{
