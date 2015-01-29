@@ -832,15 +832,6 @@ ${CMake_BINARY_DIR}/bin/cmake -DDIR=dev -P ${CMake_SOURCE_DIR}/Utilities/Release
   # Do not try to build RPM
   if (NOT RPMBUILD)
     set(CPACK_BINARY_RPM OFF)
-  else()
-    add_test(CPack-RPM ${CMAKE_CMAKE_COMMAND}
-        -D dir=${CMake_BINARY_DIR}/Tests/CPackRPM
-        -D CMake_SOURCE_DIR=${CMake_SOURCE_DIR}
-        -D CMAKE_CMAKE_COMMAND=${CMAKE_CMAKE_COMMAND}
-        -P ${CMake_SOURCE_DIR}/Tests/CPackRPM/RunCPack.cmake
-      )
-    list(APPEND TEST_BUILD_DIRS
-      "${CMake_BINARY_DIR}/Tests/CPackRPM")
   endif()
 
   find_program(NSIS_MAKENSIS_EXECUTABLE NAMES makensis
