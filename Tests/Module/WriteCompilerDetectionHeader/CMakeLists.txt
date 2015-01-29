@@ -68,15 +68,14 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
 endif()
 
 # for msvc the compiler version determines which c++11 features are available.
-# Both variadic templates and delegating constructors support exist in
-# all versions that we write compile headers for.
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND
-    ";${CMAKE_CXX_COMPILE_FEATURES};" MATCHES ";cxx_delegating_constructors;")
-  list(APPEND true_defs EXPECTED_COMPILER_CXX_DELEGATING_CONSTRUCTORS)
-  list(APPEND true_defs EXPECTED_COMPILER_CXX_VARIADIC_TEMPLATES)
-else(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-  list(APPEND false_defs EXPECTED_COMPILER_CXX_DELEGATING_CONSTRUCTORS)
-  list(APPEND false_defs EXPECTED_COMPILER_CXX_VARIADIC_TEMPLATES)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  if(";${CMAKE_CXX_COMPILE_FEATURES};" MATCHES ";cxx_delegating_constructors;")
+    list(APPEND true_defs EXPECTED_COMPILER_CXX_DELEGATING_CONSTRUCTORS)
+    list(APPEND true_defs EXPECTED_COMPILER_CXX_VARIADIC_TEMPLATES)
+  else()
+    list(APPEND false_defs EXPECTED_COMPILER_CXX_DELEGATING_CONSTRUCTORS)
+    list(APPEND false_defs EXPECTED_COMPILER_CXX_VARIADIC_TEMPLATES)
+  endif()
 endif()
 
 if (CMAKE_C_COMPILER_ID STREQUAL "GNU"
