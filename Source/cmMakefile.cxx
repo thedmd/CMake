@@ -5264,12 +5264,6 @@ HaveCStandardAvailable(cmTarget const* target,
     // Return true so the caller does not try to lookup the default standard.
     return true;
     }
-  if (!*defaultCStandard)
-    {
-    // This compiler has no notion of language standard levels.
-    // All features known for the language are always available.
-    return true;
-    }
   if (std::find_if(cmArrayBegin(C_STANDARDS), cmArrayEnd(C_STANDARDS),
                 cmStrCmp(defaultCStandard)) == cmArrayEnd(C_STANDARDS))
     {
@@ -5367,12 +5361,6 @@ bool cmMakefile::HaveCxxStandardAvailable(cmTarget const* target,
       "not fully configured for this compiler.";
     this->IssueMessage(cmake::INTERNAL_ERROR, e.str());
     // Return true so the caller does not try to lookup the default standard.
-    return true;
-    }
-  if (!*defaultCxxStandard)
-    {
-    // This compiler has no notion of language standard levels.
-    // All features known for the language are always available.
     return true;
     }
   if (std::find_if(cmArrayBegin(CXX_STANDARDS), cmArrayEnd(CXX_STANDARDS),
