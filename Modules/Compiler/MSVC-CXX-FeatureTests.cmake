@@ -21,7 +21,8 @@ set(_cmake_feature_test_cxx_func_identifier "${MSVC_2015}")
 # http://blogs.msdn.com/b/vcblog/archive/2014/11/17/c-11-14-17-features-in-vs-2015-preview.aspx
 # Note 1. While previous version of VisualStudio said they supported this
 # they silently produced bad code, and are now marked as having partial
-# support
+# support in previous versions. The footnote says the support will be complete
+# in MSVC 2015, so support the feature for that version, assuming that is true.
 set(_cmake_feature_test_cxx_generalized_initializers "${MSVC_2015}")
 set(_cmake_feature_test_cxx_generic_lambdas "${MSVC_2015}")
 set(_cmake_feature_test_cxx_inheriting_constructors "${MSVC_2015}")
@@ -37,6 +38,10 @@ set(_cmake_feature_test_cxx_user_literals "${MSVC_2015}")
 
 set(MSVC_2013 "_MSC_VER >= 1800")
 set(_cmake_feature_test_cxx_alias_templates "${MSVC_2013}")
+# Microsoft now states they support contextual conversions in 2013 and above.
+# See footnote 6 at:
+# http://blogs.msdn.com/b/vcblog/archive/2014/11/17/c-11-14-17-features-in-vs-2015-preview.aspx
+set(_cmake_feature_test_cxx_contextual_conversions "${MSVC_2013}")
 set(_cmake_feature_test_cxx_default_function_template_args "${MSVC_2013}")
 set(_cmake_feature_test_cxx_defaulted_functions "${MSVC_2013}")
 set(_cmake_feature_test_cxx_delegating_constructors "${MSVC_2013}")
@@ -45,7 +50,8 @@ set(_cmake_feature_test_cxx_explicit_conversions "${MSVC_2013}")
 set(_cmake_feature_test_cxx_nonstatic_member_init "${MSVC_2013}")
 set(_cmake_feature_test_cxx_raw_string_literals "${MSVC_2013}")
 set(_cmake_feature_test_cxx_uniform_initialization "${MSVC_2013}")
-# Possibly broken:
+# Support is documented, but possibly partly broken:
+# https://msdn.microsoft.com/en-us/library/hh567368.aspx
 # http://thread.gmane.org/gmane.comp.lib.boost.devel/244986/focus=245333
 set(_cmake_feature_test_cxx_variadic_templates "${MSVC_2013}")
 
@@ -58,10 +64,6 @@ set(_cmake_feature_test_cxx_strong_enums "${MSVC_2012}")
 set(MSVC_2010 "_MSC_VER >= 1600")
 set(_cmake_feature_test_cxx_auto_function "${MSVC_2010}")
 set(_cmake_feature_test_cxx_auto_type "${MSVC_2010}")
-# Microsoft now states they support contextual conversions
-# see footnote 6 at:
-# http://blogs.msdn.com/b/vcblog/archive/2014/11/17/c-11-14-17-features-in-vs-2015-preview.aspx
-set(_cmake_feature_test_cxx_contextual_conversions "${MSVC_2010}")
 set(_cmake_feature_test_cxx_decltype "${MSVC_2010}")
 set(_cmake_feature_test_cxx_extended_friend_declarations "${MSVC_2010}")
 set(_cmake_feature_test_cxx_extern_templates "${MSVC_2010}")

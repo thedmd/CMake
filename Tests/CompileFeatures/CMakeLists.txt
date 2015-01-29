@@ -91,6 +91,15 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
     cxx_return_type_deduction
   )
 endif()
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC"
+    AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 18.0)
+  list(REMOVE_ITEM CXX_non_features
+    # The cxx_contextual_conversions feature happens to work
+    # (for *this* testcase) with VS 2010 and VS 2012, but
+    # they do not document support until VS 2013.
+    cxx_contextual_conversions
+  )
+endif()
 
 set(C_ext c)
 set(C_standard_flag 11)
