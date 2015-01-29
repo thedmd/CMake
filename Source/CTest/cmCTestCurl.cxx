@@ -174,7 +174,6 @@ bool cmCTestCurl::UploadFile(std::string const& local_file,
   // Now run off and do what you've been told!
   ::curl_easy_perform(this->Curl);
   ::fclose(ftpfile);
-  ::curl_global_cleanup();
 
   if ( responseData.size() > 0 )
     {
@@ -227,8 +226,6 @@ bool cmCTestCurl::HttpRequest(std::string const& url,
 
   CURLcode res = ::curl_easy_perform(this->Curl);
 
-  ::curl_easy_cleanup(this->Curl);
-  ::curl_global_cleanup();
   if ( responseData.size() > 0 )
     {
     response = std::string(responseData.begin(), responseData.end());
