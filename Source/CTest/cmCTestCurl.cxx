@@ -25,6 +25,21 @@ cmCTestCurl::cmCTestCurl(cmCTest* ctest)
   this->VerifyPeerOff = false;
   this->VerifyHostOff = false;
   this->TimeOutSeconds = 0;
+  this->Curl = curl_easy_init();
+}
+
+cmCTestCurl::~cmCTestCurl()
+{
+  ::curl_easy_cleanup(this->Curl);
+  ::curl_global_cleanup();
+}
+
+std::string cmCTestCurl::Escape(std::string const& source)
+{
+  char* data1 = curl_easy_escape(this->Curl, source.c_str(), 0);
+  std::string ret = data1;
+  curl_free(data1);
+  return ret;
 }
 
 namespace
@@ -73,7 +88,6 @@ void cmCTestCurl::SetCurlOptions(std::vector<std::string> const& args)
 
 bool cmCTestCurl::InitCurl()
 {
-  this->Curl = curl_easy_init();
   if(!this->Curl)
     {
     return false;
