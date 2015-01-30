@@ -19,6 +19,7 @@
 #     ctest_coverage_collect_gcov(TARBALL <tarfile>
 #       [SOURCE <source_dir>][BUILD <build_dir>]
 #       [GCOV_COMMAND <gcov_command>]
+#       [GCOV_EXTRA_OPTIONS <extra_options>...]
 #       )
 #
 #   Run gcov and package a tar file for CDash.  The options are:
@@ -40,11 +41,11 @@
 #     Specify the full path to the ``gcov`` command on the machine.
 #     Default is the value of :variable:`CTEST_COVERAGE_COMMAND`.
 #
-#   ``GCOV_EXTRA_OPTIONS <extra options>``
+#   ``GCOV_EXTRA_OPTIONS <extra_options>...``
 #     Specify extra options to be passed to gcov.  By default
-#     gcov is run like this gcov -b -o ${gcov_dir} ${gcda_file_path}
-#     If GCOV_EXTRA_OPTIONS are specified, it will be run like this:
-#     ``gcov`` ${GCOV_EXTRA_OPTIONS} -o ${gcov_dir} ${gcda_file_path}
+#     gcov is run as ``gcov -b -o <gcov-dir> <file>.gcda``.
+#     If GCOV_EXTRA_OPTIONS is specified, gcov will be run as
+#     ``gcov <extra_options>... -o <gcov-dir> <file>.gcda``.
 
 
 #=============================================================================
@@ -93,7 +94,7 @@ function(ctest_coverage_collect_gcov)
   # this will be faster and only look where the files will be
   file(STRINGS "${binary_dir}/CMakeFiles/TargetDirectories.txt" target_dirs)
   foreach(target_dir ${target_dirs})
-    file(GLOB_RECURSE gfiles RELATIVE "${binary_dir}" ${target_dir}/*.gcda)
+    file(GLOB_RECURSE gfiles RELATIVE ${binary_dir} "${target_dir}/*.gcda")
     list(LENGTH gfiles len)
     # if we have gcda files then also grab the labels file for that target
     if(${len} GREATER 0)
