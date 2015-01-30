@@ -44,7 +44,7 @@
 #     Specify extra options to be passed to gcov.  By default
 #     gcov is run like this gcov -b -o ${gcov_dir} ${gcda_file_path}
 #     If GCOV_EXTRA_OPTIONS are specified, it will be run like this:
-#     ``gcov`` ${GCOV_EXTRA_OPTIONS}  ${gcov_dir} ${gcda_file_path}
+#     ``gcov`` ${GCOV_EXTRA_OPTIONS} -o ${gcov_dir} ${gcda_file_path}
 
 
 #=============================================================================
@@ -121,10 +121,10 @@ function(ctest_coverage_collect_gcov)
     # run gcov, this will produce the .gcov file in the current
     # working directory
     if(NOT DEFINED GCOV_GCOV_EXTRA_OPTIONS)
-      set(GCOV_GCOV_EXTRA_OPTIONS -b -o)
+      set(GCOV_GCOV_EXTRA_OPTIONS -b)
     endif()
     execute_process(COMMAND
-      ${gcov_command} ${GCOV_GCOV_EXTRA_OPTIONS} ${gcov_dir} ${gcda_file}
+      ${gcov_command} ${GCOV_GCOV_EXTRA_OPTIONS} -o ${gcov_dir} ${gcda_file}
       OUTPUT_VARIABLE out
       RESULT_VARIABLE res
       WORKING_DIRECTORY ${coverage_dir})
