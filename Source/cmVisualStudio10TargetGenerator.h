@@ -66,6 +66,7 @@ private:
   void WriteAllSources();
   void WriteDotNetReferences();
   void WriteEmbeddedResourceGroup();
+  void WriteReswGroup();
   void WriteWinRTReferences();
   void WriteWinRTPackageCertificateKeyFile();
   void WriteXamlFilesGroup();
