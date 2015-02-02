@@ -425,7 +425,7 @@ void cmLocalGenerator::GenerateInstallRules()
     {
     default_config = configurationTypes[0].c_str();
     }
-  if(!default_config)
+  if(!default_config || !*default_config)
     {
     default_config = "Release";
     }
