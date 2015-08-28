@@ -30,6 +30,7 @@ public:
 
   virtual const char* GetToolsVersion() { return "14.0"; }
 protected:
+  virtual bool IsWindowsDesktopToolsetInstalled() const;
   virtual const char* GetIDEVersion() { return "14.0"; }
 private:
   class Factory;

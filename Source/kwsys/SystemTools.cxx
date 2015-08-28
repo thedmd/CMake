@@ -1035,6 +1035,68 @@ bool SystemTools::ReadRegistryValue(const kwsys_stl::string&, kwsys_stl::string 
 #endif
 
 
+// Read a registry value.
+// Example :
+//      HKEY_LOCAL_MACHINE\SOFTWARE\Python\PythonCore\2.1\InstallPath
+//      =>  will return the data of the "default" value of the key
+//      HKEY_LOCAL_MACHINE\SOFTWARE\Scriptics\Tcl\8.4;Root
+//      =>  will return the data of the "Root" value of the key
+
+#if defined(_WIN32) && !defined(__CYGWIN__)
+bool SystemTools::ReadRegistryValue(const kwsys_stl::string& key, kwsys_stl::uint32_t &value,
+                                    KeyWOW64 view)
+{
+  bool valueset = false;
+  HKEY primaryKey = HKEY_CURRENT_USER;
+  kwsys_stl::string second;
+  kwsys_stl::string valuename;
+  if (!SystemToolsParseRegistryKey(key, primaryKey, second, valuename))
+    {
+    return false;
+    }
+
+  HKEY hKey;
+  if(RegOpenKeyExW(primaryKey,
+                  Encoding::ToWide(second).c_str(),
+                  0,
+                  SystemToolsMakeRegistryMode(KEY_READ, view),
+                  &hKey) != ERROR_SUCCESS)
+    {
+    return false;
+    }
+  else
+    {
+    DWORD dwType, dwSize;
+    dwSize = sizeof(DWORD);
+    DWORD data;
+    if(RegQueryValueExW(hKey,
+                       Encoding::ToWide(valuename).c_str(),
+                       NULL,
+                       &dwType,
+                       (BYTE *)&data,
+                       &dwSize) == ERROR_SUCCESS)
+      {
+      if (dwType == REG_DWORD)
+        {
+        value = (int)data;
+        valueset = true;
+        }
+      }
+
+    RegCloseKey(hKey);
+    }
+
+  return valueset;
+}
+#else
+bool SystemTools::ReadRegistryValue(const kwsys_stl::string&, int &,
+                                    KeyWOW64)
+{
+  return false;
+}
+#endif
+
+
 // Write a registry value.
 // Example :
 //      HKEY_LOCAL_MACHINE\SOFTWARE\Python\PythonCore\2.1\InstallPath

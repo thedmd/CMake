@@ -124,3 +124,24 @@ void cmGlobalVisualStudio14Generator::WriteSLNHeader(std::ostream& fout)
     fout << "# Visual Studio 14\n";
     }
 }
+
+//----------------------------------------------------------------------------
+bool
+cmGlobalVisualStudio14Generator::IsWindowsDesktopToolsetInstalled() const
+{
+  const char desktop100Key[] =
+    "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\"
+    "VisualStudio\\VC\\OptionalFeatures\\14.0;VCOptionalInstalled";
+
+  uint32_t value;
+  bool exists = cmSystemTools::ReadRegistryValue(desktop100Key,
+                                                 value,
+                                                 cmSystemTools::KeyWOW64_32);
+
+  if (!exists)
+    {
+      return false;
+    }
+
+  return value != 0;
+}
