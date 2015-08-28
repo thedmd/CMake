@@ -37,10 +37,10 @@ protected:
   virtual bool InitializeWindowsStore(cmMakefile* mf);
   virtual bool SelectWindowsPhoneToolset(std::string& toolset) const;
   virtual bool SelectWindowsStoreToolset(std::string& toolset) const;
+  virtual bool IsWindowsDesktopToolsetInstalled() const;
 
   // These aren't virtual because we need to check if the selected version
   // of the toolset is installed
-  bool IsWindowsDesktopToolsetInstalled() const;
   bool IsWindowsPhoneToolsetInstalled() const;
   bool IsWindowsStoreToolsetInstalled() const;
   virtual const char* GetIDEVersion() { return "12.0"; }
