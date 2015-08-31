@@ -1078,7 +1078,7 @@ bool SystemTools::ReadRegistryValue(const kwsys_stl::string& key, kwsys_stl::uin
       {
       if (dwType == REG_DWORD)
         {
-        value = (int)data;
+        value = (kwsys_stl::uint32_t)data;
         valueset = true;
         }
       }
